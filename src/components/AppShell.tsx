@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
-import { Search, Shuffle, Star, StarOff } from 'lucide-react';
+import { Menu, Search, Shuffle, Star, StarOff, X } from 'lucide-react';
+import { useState } from 'react';
 import type { ToolId } from '../types';
 import { tools } from '../config/tools';
 
@@ -20,6 +21,7 @@ export function AppShell({
   setQuery: (query: string) => void;
   children: ReactNode;
 }) {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const active = tools.find((tool) => tool.id === activeTool) ?? tools[0];
   const filteredTools = tools.filter((tool) => `${tool.name} ${tool.shortName} ${tool.group}`.toLowerCase().includes(query.toLowerCase()));
   const favorites = tools.filter((tool) => favoriteIds.includes(tool.id));
@@ -30,79 +32,97 @@ export function AppShell({
 
   return (
     <div className="app-shell">
-      <aside className="sidebar">
-        <div className="brand">
-          <div className="brand-mark">
-            <Shuffle size={20} />
+      <aside className={`sidebar ${sidebarOpen ? 'open' : ''}`}>
+        <div className="sidebar-header">
+          <div className="brand">
+            <div className="brand-mark">
+              <Shuffle size={20} />
+            </div>
+            <div>
+              <h1>Tools Hub</h1>
+              <p>{tools.length} tools</p>
+            </div>
           </div>
-          <div>
-            <h1>Tools Hub</h1>
-            <p>{tools.length} tools</p>
-          </div>
+          <button
+            className="sidebar-toggle"
+            type="button"
+            onClick={() => setSidebarOpen((open) => !open)}
+            title={sidebarOpen ? 'Close tools menu' : 'Open tools menu'}
+          >
+            {sidebarOpen ? <X size={18} /> : <Menu size={18} />}
+          </button>
         </div>
 
-        <label className="search-box">
-          <Search size={16} />
-          <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search" />
-        </label>
+        <div className="sidebar-content">
+          <label className="search-box">
+            <Search size={16} />
+            <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search" />
+          </label>
 
-        {favorites.length > 0 && (
-          <section className="nav-section">
-            <h2>Favorites</h2>
-            <div className="tool-grid compact-grid">
-              {favorites.map((tool) => (
-                <button
-                  className={`tool-chip ${activeTool === tool.id ? 'active' : ''}`}
-                  key={tool.id}
-                  type="button"
-                  onClick={() => setActiveTool(tool.id)}
-                  title={tool.name}
-                >
-                  {tool.icon}
-                  <span>{tool.shortName}</span>
-                </button>
-              ))}
-            </div>
-          </section>
-        )}
-
-        <nav className="tool-nav">
-          {Object.entries(groupedTools).map(([group, groupTools]) => (
-            <section className="nav-section" key={group}>
-              <h2>{group}</h2>
-              {groupTools.map((tool) => (
-                <button
-                  className={`tool-row ${activeTool === tool.id ? 'active' : ''}`}
-                  key={tool.id}
-                  type="button"
-                  onClick={() => setActiveTool(tool.id)}
-                >
-                  <span className="tool-icon">{tool.icon}</span>
-                  <span>{tool.name}</span>
-                  <span
-                    className="favorite-toggle"
-                    role="button"
-                    tabIndex={0}
-                    title={favoriteIds.includes(tool.id) ? 'Remove favorite' : 'Add favorite'}
-                    onClick={(event) => {
-                      event.stopPropagation();
-                      toggleFavorite(tool.id);
+          {favorites.length > 0 && (
+            <section className="nav-section">
+              <h2>Favorites</h2>
+              <div className="tool-grid compact-grid">
+                {favorites.map((tool) => (
+                  <button
+                    className={`tool-chip ${activeTool === tool.id ? 'active' : ''}`}
+                    key={tool.id}
+                    type="button"
+                    onClick={() => {
+                      setActiveTool(tool.id);
+                      setSidebarOpen(false);
                     }}
-                    onKeyDown={(event) => {
-                      if (event.key === 'Enter' || event.key === ' ') {
-                        event.preventDefault();
-                        event.stopPropagation();
-                        toggleFavorite(tool.id);
-                      }
+                    title={tool.name}
+                  >
+                    {tool.icon}
+                    <span>{tool.shortName}</span>
+                  </button>
+                ))}
+              </div>
+            </section>
+          )}
+
+          <nav className="tool-nav">
+            {Object.entries(groupedTools).map(([group, groupTools]) => (
+              <section className="nav-section" key={group}>
+                <h2>{group}</h2>
+                {groupTools.map((tool) => (
+                  <button
+                    className={`tool-row ${activeTool === tool.id ? 'active' : ''}`}
+                    key={tool.id}
+                    type="button"
+                    onClick={() => {
+                      setActiveTool(tool.id);
+                      setSidebarOpen(false);
                     }}
                   >
-                    {favoriteIds.includes(tool.id) ? <Star size={15} fill="currentColor" /> : <StarOff size={15} />}
-                  </span>
-                </button>
-              ))}
-            </section>
-          ))}
-        </nav>
+                    <span className="tool-icon">{tool.icon}</span>
+                    <span>{tool.name}</span>
+                    <span
+                      className="favorite-toggle"
+                      role="button"
+                      tabIndex={0}
+                      title={favoriteIds.includes(tool.id) ? 'Remove favorite' : 'Add favorite'}
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        toggleFavorite(tool.id);
+                      }}
+                      onKeyDown={(event) => {
+                        if (event.key === 'Enter' || event.key === ' ') {
+                          event.preventDefault();
+                          event.stopPropagation();
+                          toggleFavorite(tool.id);
+                        }
+                      }}
+                    >
+                      {favoriteIds.includes(tool.id) ? <Star size={15} fill="currentColor" /> : <StarOff size={15} />}
+                    </span>
+                  </button>
+                ))}
+              </section>
+            ))}
+          </nav>
+        </div>
       </aside>
 
       <main className="workspace">

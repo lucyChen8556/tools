@@ -25,7 +25,23 @@
   }
 
   .sidebar {
-    @apply sticky top-0 flex h-screen flex-col gap-5 border-r border-ink-200 bg-white px-4 py-5 max-lg:static max-lg:h-auto;
+    @apply sticky top-0 flex h-screen flex-col gap-5 border-r border-ink-200 bg-white px-4 py-5 max-lg:static max-lg:h-auto max-lg:border-b max-lg:border-r-0;
+  }
+
+  .sidebar-header {
+    @apply flex items-center justify-between gap-3;
+  }
+
+  .sidebar-content {
+    @apply flex min-h-0 flex-1 flex-col gap-5;
+  }
+
+  .sidebar:not(.open) .sidebar-content {
+    @apply max-lg:hidden;
+  }
+
+  .sidebar-toggle {
+    @apply hidden size-10 items-center justify-center rounded-md border border-ink-200 bg-white text-ink-700 hover:border-teal-600 hover:text-teal-700 max-lg:inline-flex;
   }
 
   .brand {
@@ -310,6 +326,18 @@
 
   .image-preview-grid img {
     @apply block h-96 w-full object-contain;
+  }
+
+  .dropzone {
+    @apply flex min-h-36 cursor-pointer flex-col items-center justify-center gap-2 rounded-md border border-dashed border-ink-300 bg-ink-50 px-4 py-6 text-center text-sm font-medium text-ink-600 transition hover:border-teal-600 hover:bg-teal-50;
+  }
+
+  .dropzone.active {
+    @apply border-teal-600 bg-teal-50 text-teal-700;
+  }
+
+  .dropzone input {
+    @apply hidden;
   }
 
   .color-picker {
