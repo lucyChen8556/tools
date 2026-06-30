@@ -1,0 +1,351 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply box-border;
+  }
+
+  body {
+    @apply m-0 min-h-screen bg-ink-50 text-ink-950 antialiased;
+  }
+
+  button,
+  input,
+  select,
+  textarea {
+    font: inherit;
+  }
+}
+
+@layer components {
+  .app-shell {
+    @apply grid min-h-screen grid-cols-[280px_1fr] bg-ink-50 max-lg:grid-cols-1;
+  }
+
+  .sidebar {
+    @apply sticky top-0 flex h-screen flex-col gap-5 border-r border-ink-200 bg-white px-4 py-5 max-lg:static max-lg:h-auto;
+  }
+
+  .brand {
+    @apply flex items-center gap-3 px-1;
+  }
+
+  .brand-mark {
+    @apply grid size-10 place-items-center rounded-md bg-ink-950 text-white;
+  }
+
+  .brand h1 {
+    @apply m-0 text-lg font-semibold tracking-normal;
+  }
+
+  .brand p,
+  .workspace-header p {
+    @apply m-0 text-xs font-medium uppercase tracking-normal text-ink-500;
+  }
+
+  .search-box {
+    @apply flex h-10 items-center gap-2 rounded-md border border-ink-200 bg-ink-50 px-3 text-ink-500 focus-within:border-teal-600 focus-within:bg-white;
+  }
+
+  .search-box input {
+    @apply h-full min-w-0 flex-1 border-0 bg-transparent text-sm text-ink-950 outline-none placeholder:text-ink-500;
+  }
+
+  .tool-nav {
+    @apply min-h-0 flex-1 overflow-auto pr-1;
+  }
+
+  .nav-section {
+    @apply mb-5;
+  }
+
+  .nav-section h2 {
+    @apply mb-2 px-1 text-xs font-semibold uppercase tracking-normal text-ink-500;
+  }
+
+  .tool-grid {
+    @apply grid gap-2;
+  }
+
+  .compact-grid {
+    @apply grid-cols-3;
+  }
+
+  .tool-chip,
+  .tool-row,
+  .ghost-button,
+  .toolbar-button,
+  .segmented button {
+    @apply inline-flex items-center justify-center gap-2 rounded-md border text-sm font-medium transition;
+  }
+
+  .tool-chip {
+    @apply h-9 border-ink-200 bg-white text-ink-600 hover:border-teal-600 hover:text-teal-700;
+  }
+
+  .tool-chip.active,
+  .tool-row.active,
+  .segmented button.active {
+    @apply border-teal-600 bg-teal-50 text-teal-700;
+  }
+
+  .tool-row {
+    @apply mb-1 h-10 w-full justify-start border-transparent px-2 text-ink-600 hover:bg-ink-50 hover:text-ink-950;
+  }
+
+  .tool-icon {
+    @apply grid size-7 place-items-center rounded-md bg-ink-100 text-ink-600;
+  }
+
+  .favorite-toggle {
+    @apply ml-auto grid size-7 place-items-center rounded-md text-ink-500 hover:bg-white hover:text-teal-700;
+  }
+
+  .workspace {
+    @apply min-w-0 px-8 py-6 max-md:px-4;
+  }
+
+  .workspace-header {
+    @apply mb-5 flex items-center justify-between gap-4;
+  }
+
+  .workspace-header h2 {
+    @apply m-0 text-2xl font-semibold tracking-normal text-ink-950;
+  }
+
+  .ghost-button {
+    @apply h-10 border-ink-200 bg-white px-3 text-ink-600 hover:border-teal-600 hover:text-teal-700;
+  }
+
+  .tool-surface {
+    @apply flex flex-col gap-4 rounded-md border border-ink-200 bg-white p-4 shadow-soft;
+  }
+
+  .segmented {
+    @apply inline-grid w-fit grid-cols-3 rounded-md border border-ink-200 bg-ink-50 p-1;
+  }
+
+  .segmented.two {
+    @apply grid-cols-2;
+  }
+
+  .segmented button {
+    @apply h-8 border-transparent px-4 text-ink-600 hover:text-ink-950;
+  }
+
+  .split-editor {
+    @apply grid grid-cols-2 gap-4 max-lg:grid-cols-1;
+  }
+
+  .compact-preview textarea {
+    @apply min-h-56;
+  }
+
+  .field {
+    @apply flex flex-col gap-2 text-sm font-medium text-ink-700;
+  }
+
+  .field.compact {
+    @apply min-w-32;
+  }
+
+  .field > span {
+    @apply text-xs font-semibold uppercase tracking-normal text-ink-500;
+  }
+
+  textarea,
+  input,
+  select {
+    @apply rounded-md border border-ink-200 bg-white px-3 py-2 text-sm text-ink-950 outline-none transition focus:border-teal-600 focus:ring-2 focus:ring-teal-50;
+  }
+
+  textarea {
+    @apply min-h-80 resize-y font-mono leading-6;
+  }
+
+  .result-output {
+    @apply min-h-72;
+  }
+
+  .inline-controls,
+  .action-bar {
+    @apply flex flex-wrap items-end gap-3;
+  }
+
+  .inline-controls.wide {
+    @apply grid grid-cols-[minmax(180px,1fr)_auto_auto_auto] items-end max-xl:grid-cols-2 max-md:grid-cols-1;
+  }
+
+  .toolbar-button {
+    @apply h-10 border-ink-200 bg-white px-3 text-ink-700 hover:border-teal-600 hover:text-teal-700 disabled:cursor-not-allowed disabled:opacity-40;
+  }
+
+  .toolbar-button.primary {
+    @apply border-ink-950 bg-ink-950 text-white hover:border-teal-700 hover:bg-teal-700 hover:text-white;
+  }
+
+  .toolbar-button.danger {
+    @apply border-red-200 bg-red-50 text-red-700 hover:border-red-400;
+  }
+
+  .check-control {
+    @apply flex h-10 items-center gap-2 rounded-md border border-ink-200 px-3 text-sm font-medium text-ink-700;
+  }
+
+  .check-control input {
+    @apply size-4 accent-teal-700;
+  }
+
+  .cleaner-panel {
+    @apply grid grid-cols-4 gap-2 max-xl:grid-cols-3 max-lg:grid-cols-2 max-sm:grid-cols-1;
+  }
+
+  .cleaner-panel .check-control {
+    @apply h-auto min-h-10 justify-start bg-ink-50;
+  }
+
+  .metrics-row {
+    @apply grid grid-cols-4 gap-3 max-lg:grid-cols-2 max-sm:grid-cols-1;
+  }
+
+  .stat {
+    @apply rounded-md border border-ink-200 bg-ink-50 px-3 py-2;
+  }
+
+  .stat span {
+    @apply block text-xs font-medium uppercase tracking-normal text-ink-500;
+  }
+
+  .stat strong {
+    @apply block truncate text-base font-semibold text-ink-950;
+  }
+
+  .notice {
+    @apply rounded-md border px-3 py-2 text-sm;
+  }
+
+  .notice.error {
+    @apply border-red-200 bg-red-50 text-red-700;
+  }
+
+  .diff-list,
+  .text-diff-view,
+  .regex-preview,
+  .match-list,
+  .table-wrap {
+    @apply overflow-auto rounded-md border border-ink-200;
+  }
+
+  .diff-row {
+    @apply grid grid-cols-[minmax(130px,1fr)_90px_minmax(120px,1fr)_minmax(120px,1fr)] gap-3 border-b border-ink-100 px-3 py-2 text-sm last:border-b-0 max-lg:grid-cols-1;
+  }
+
+  .diff-row strong {
+    @apply font-mono text-ink-950;
+  }
+
+  .diff-row span {
+    @apply w-fit rounded bg-ink-100 px-2 py-1 text-xs font-semibold uppercase text-ink-600;
+  }
+
+  .diff-row code,
+  .line-diff code,
+  .match-row code {
+    @apply whitespace-pre-wrap break-words font-mono text-sm;
+  }
+
+  .diff-row.added span,
+  .line-diff.added > span {
+    @apply bg-green-100 text-green-700;
+  }
+
+  .diff-row.removed span,
+  .line-diff.removed > span {
+    @apply bg-red-100 text-red-700;
+  }
+
+  .diff-row.changed span,
+  .line-diff.changed > span {
+    @apply bg-amber-100 text-amber-700;
+  }
+
+  .line-diff {
+    @apply grid grid-cols-[28px_1fr] gap-2 border-b border-ink-100 px-3 py-2 text-sm last:border-b-0;
+  }
+
+  .line-diff > span {
+    @apply grid size-6 place-items-center rounded bg-ink-100 text-xs font-bold text-ink-600;
+  }
+
+  .line-diff del,
+  .line-diff ins {
+    @apply block whitespace-pre-wrap break-words rounded px-2 py-1 font-mono no-underline;
+  }
+
+  .line-diff del {
+    @apply bg-red-50 text-red-700;
+  }
+
+  .line-diff ins {
+    @apply mt-1 bg-green-50 text-green-700;
+  }
+
+  .empty-state {
+    @apply grid min-h-36 place-items-center bg-ink-50 p-4 text-sm font-medium text-ink-500;
+  }
+
+  .output-grid {
+    @apply grid grid-cols-3 gap-4 max-lg:grid-cols-1;
+  }
+
+  .image-preview-grid {
+    @apply grid grid-cols-2 gap-4 max-lg:grid-cols-1;
+  }
+
+  .image-preview-grid > div {
+    @apply overflow-hidden rounded-md border border-ink-200 bg-ink-50;
+  }
+
+  .image-preview-grid img {
+    @apply block h-96 w-full object-contain;
+  }
+
+  .color-picker {
+    @apply h-10 w-12 cursor-pointer p-1;
+  }
+
+  .color-panel {
+    @apply grid grid-cols-[180px_1fr] gap-4 max-md:grid-cols-1;
+  }
+
+  .swatch {
+    @apply min-h-44 rounded-md border border-ink-200;
+  }
+
+  .match-row {
+    @apply grid grid-cols-[64px_1fr_80px] gap-3 border-b border-ink-100 px-3 py-2 text-sm last:border-b-0 max-sm:grid-cols-1;
+  }
+
+  .regex-preview {
+    @apply min-h-32 whitespace-pre-wrap bg-ink-50 p-3 font-mono text-sm leading-6 text-ink-800;
+  }
+
+  .regex-preview mark {
+    @apply rounded bg-amber-200 px-1 text-ink-950;
+  }
+
+  table {
+    @apply w-full border-collapse text-left text-sm;
+  }
+
+  th,
+  td {
+    @apply border-b border-r border-ink-100 px-3 py-2 last:border-r-0;
+  }
+
+  th {
+    @apply bg-ink-50 font-semibold text-ink-950;
+  }
+}
