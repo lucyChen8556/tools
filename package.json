@@ -6,7 +6,6 @@
   "scripts": {
     "dev": "vite --host 127.0.0.1",
     "build": "tsc --noEmit && vite build",
-    "build:pages": "tsc --noEmit && vite build --outDir docs",
     "audit": "pnpm audit",
     "install:safe": "pnpm install --frozen-lockfile --ignore-scripts",
     "serve:dist": "vite preview --host 127.0.0.1",
