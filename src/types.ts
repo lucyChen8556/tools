@@ -7,6 +7,7 @@ export type ToolId =
   | 'image'
   | 'color'
   | 'regex'
+  | 'jwt'
   | 'encode'
   | 'csv';
 

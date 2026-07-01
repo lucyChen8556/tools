@@ -8,6 +8,7 @@ import { CsvTool } from './tools/CsvTool';
 import { EncodeTool } from './tools/EncodeTool';
 import { ImageTool } from './tools/ImageTool';
 import { JsonTool } from './tools/JsonTool';
+import { JwtTool } from './tools/JwtTool';
 import { RegexTool } from './tools/RegexTool';
 import { TextCleanerTool } from './tools/TextCleanerTool';
 import { TextDiffTool } from './tools/TextDiffTool';
@@ -41,6 +42,7 @@ export function App() {
     image: <ImageTool />,
     color: <ColorTool />,
     regex: <RegexTool />,
+    jwt: <JwtTool />,
     encode: <EncodeTool />,
     csv: <CsvTool />,
   }[activeTool];

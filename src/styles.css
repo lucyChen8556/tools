@@ -364,6 +364,10 @@
     @apply border-red-200 bg-red-50 text-red-700;
   }
 
+  .notice.warning {
+    @apply flex items-center gap-2 border-amber-200 bg-amber-50 text-amber-800;
+  }
+
   .diff-list,
   .text-diff-view,
   .regex-preview,
@@ -537,6 +541,22 @@
 
   .regex-legend strong {
     @apply ml-0.5 rounded bg-ink-100 px-1.5 py-0.5 text-[11px] text-ink-700;
+  }
+
+  .jwt-claims {
+    @apply grid grid-cols-4 gap-3 max-xl:grid-cols-2 max-md:grid-cols-1;
+  }
+
+  .jwt-claim {
+    @apply min-w-0 rounded-md border border-ink-200 bg-ink-50 px-3 py-2 shadow-sm;
+  }
+
+  .jwt-claim span {
+    @apply block text-xs font-medium uppercase tracking-normal text-ink-500;
+  }
+
+  .jwt-claim strong {
+    @apply block truncate text-sm font-semibold text-ink-950;
   }
 
   table {

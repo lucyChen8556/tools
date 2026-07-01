@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { Braces, Clock3, Code2, Diff, Eraser, FileSpreadsheet, ImageDown, Palette, Regex, Type } from 'lucide-react';
+import { Braces, Clock3, Code2, Diff, Eraser, FileSpreadsheet, ImageDown, KeyRound, Palette, Regex, Type } from 'lucide-react';
 import type { ToolId } from '../types';
 
 export const tools: Array<{
@@ -17,6 +17,7 @@ export const tools: Array<{
   { id: 'image', name: 'Image Compressor', shortName: 'Image', group: 'Media', icon: <ImageDown size={18} /> },
   { id: 'color', name: 'Color Converter', shortName: 'Color', group: 'Design', icon: <Palette size={18} /> },
   { id: 'regex', name: 'Regex Tester', shortName: 'Regex', group: 'Code', icon: <Regex size={18} /> },
+  { id: 'jwt', name: 'JWT Decoder', shortName: 'JWT', group: 'Code', icon: <KeyRound size={18} /> },
   { id: 'encode', name: 'Encode / Decode', shortName: 'Codec', group: 'Code', icon: <Code2 size={18} /> },
   { id: 'csv', name: 'CSV / Excel Helper', shortName: 'CSV', group: 'Data', icon: <FileSpreadsheet size={18} /> },
 ];

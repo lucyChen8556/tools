@@ -25,9 +25,7 @@ function EncodeTool() {
                   ? escapeHtml(input)
                   : action === 'html-decode'
                     ? decodeHtml(input)
-                    : action === 'jwt'
-                      ? JSON.stringify(JSON.parse(fromBase64(input.split('.')[1] ?? '')), null, 2)
-                      : input;
+                    : input;
       setOutput(next);
       setError('');
     } catch (err) {
@@ -53,7 +51,6 @@ function EncodeTool() {
           ['b64-decode', 'Base64 -'],
           ['html-encode', 'HTML +'],
           ['html-decode', 'HTML -'],
-          ['jwt', 'JWT'],
         ].map(([action, label]) => (
           <ToolbarButton key={action} title={label} onClick={() => run(action)}>
             <Code2 size={16} />
