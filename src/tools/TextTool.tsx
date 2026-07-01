@@ -3,9 +3,9 @@ import { CaseSensitive, Copy, Repeat2 } from 'lucide-react';
 import { Field } from '../components/Field';
 import { Stat } from '../components/Stat';
 import { ToolbarButton } from '../components/ToolbarButton';
+import { textCaseOptions, type TextCaseMode } from '../config/options';
 import { copyText } from '../utils/clipboard';
 
-type TextCaseMode = 'none' | 'upper' | 'lower' | 'title';
 type TextTransformId = 'trim' | 'sort' | 'dedupe';
 
 const textTransforms: Array<{ id: TextTransformId; label: string }> = [
@@ -70,10 +70,11 @@ function TextTool() {
       <div className="inline-controls">
         <Field label="Case" compact>
           <select value={caseMode} onChange={(event) => setCaseMode(event.target.value as TextCaseMode)}>
-            <option value="none">No change</option>
-            <option value="upper">Uppercase</option>
-            <option value="lower">Lowercase</option>
-            <option value="title">Title Case</option>
+            {textCaseOptions.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
           </select>
         </Field>
       </div>

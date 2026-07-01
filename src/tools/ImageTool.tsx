@@ -3,11 +3,19 @@ import { Download, Eraser, ImageDown } from 'lucide-react';
 import { Field } from '../components/Field';
 import { Stat } from '../components/Stat';
 import { ToolbarButton } from '../components/ToolbarButton';
+import {
+  compressionPresetOptions,
+  outputFormatOptions,
+  type CompressionPreset,
+  type OutputFormat,
+} from '../config/options';
 import { downloadBlob } from '../utils/file';
 
 function ImageTool() {
   const [file, setFile] = useState<File | null>(null);
   const [fileName, setFileName] = useState('');
+  const [preset, setPreset] = useState<CompressionPreset>('balanced');
+  const [outputFormat, setOutputFormat] = useState<OutputFormat>('image/jpeg');
   const [quality, setQuality] = useState(0.8);
   const [maxWidth, setMaxWidth] = useState(1600);
   const [preview, setPreview] = useState('');
@@ -16,6 +24,7 @@ function ImageTool() {
   const [status, setStatus] = useState('');
   const [dragActive, setDragActive] = useState(false);
   const [inputKey, setInputKey] = useState(0);
+  const selectedFormat = outputFormatOptions.find((option) => option.value === outputFormat) ?? outputFormatOptions[0];
 
   async function readImagePreview(nextFile: File) {
     const dataUrl = await new Promise<string>((resolve, reject) => {
@@ -55,7 +64,7 @@ function ImageTool() {
     if (!context) return;
 
     context.drawImage(image, 0, 0, width, height);
-    const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, 'image/jpeg', quality));
+    const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, outputFormat, quality));
     if (!blob) return;
 
     if (resultUrl) URL.revokeObjectURL(resultUrl);
@@ -63,6 +72,24 @@ function ImageTool() {
     setResultUrl(nextUrl);
     setStats({ original: file.size, compressed: blob.size, width, height });
     setStatus('Ready');
+  }
+
+  function updatePreset(nextPreset: CompressionPreset) {
+    setPreset(nextPreset);
+    const selectedPreset = compressionPresetOptions.find((option) => option.value === nextPreset);
+    if (selectedPreset && 'quality' in selectedPreset) {
+      setQuality(selectedPreset.quality);
+      setMaxWidth(selectedPreset.maxWidth);
+    }
+  }
+
+  function resetOptions() {
+    updatePreset('balanced');
+    setOutputFormat('image/jpeg');
+    setStatus(file ? 'Selected' : '');
+    if (resultUrl) URL.revokeObjectURL(resultUrl);
+    setResultUrl('');
+    setStats((current) => ({ ...current, compressed: 0, width: 0, height: 0 }));
   }
 
   function clearImage() {
@@ -117,11 +144,47 @@ function ImageTool() {
       </label>
 
       <div className="inline-controls wide">
+        <Field label="Preset" compact>
+          <select value={preset} onChange={(event) => updatePreset(event.target.value as CompressionPreset)}>
+            {compressionPresetOptions.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        </Field>
+        <Field label="Format" compact>
+          <select value={outputFormat} onChange={(event) => setOutputFormat(event.target.value as OutputFormat)}>
+            {outputFormatOptions.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        </Field>
         <Field label="Quality" compact>
-          <input type="range" min="0.1" max="1" step="0.05" value={quality} onChange={(event) => setQuality(Number(event.target.value))} />
+          <input
+            type="range"
+            min="0.1"
+            max="1"
+            step="0.05"
+            value={quality}
+            onChange={(event) => {
+              setPreset('custom');
+              setQuality(Number(event.target.value));
+            }}
+          />
         </Field>
         <Field label="Max width" compact>
-          <input type="number" min="100" value={maxWidth} onChange={(event) => setMaxWidth(Number(event.target.value))} />
+          <input
+            type="number"
+            min="100"
+            value={maxWidth}
+            onChange={(event) => {
+              setPreset('custom');
+              setMaxWidth(Number(event.target.value));
+            }}
+          />
         </Field>
         <ToolbarButton title="Compress image" variant="primary" disabled={!file} onClick={() => void compressImage()}>
           <ImageDown size={16} />
@@ -134,12 +197,16 @@ function ImageTool() {
             if (resultUrl) {
               fetch(resultUrl)
                 .then((response) => response.blob())
-                .then((blob) => downloadBlob(blob, `${fileName.replace(/\.[^.]+$/, '') || 'image'}-compressed.jpg`));
+                .then((blob) => downloadBlob(blob, `${fileName.replace(/\.[^.]+$/, '') || 'image'}-compressed.${selectedFormat.extension}`));
             }
           }}
         >
           <Download size={16} />
           <span>Download</span>
+        </ToolbarButton>
+        <ToolbarButton title="Reset compression options" onClick={resetOptions}>
+          <Eraser size={16} />
+          <span>Reset</span>
         </ToolbarButton>
         <ToolbarButton title="Clear image" onClick={clearImage} disabled={!file && !resultUrl}>
           <Eraser size={16} />
@@ -151,6 +218,7 @@ function ImageTool() {
         <Stat label="Original" value={stats.original ? `${Math.round(stats.original / 1024)} KB` : '-'} />
         <Stat label="Compressed" value={stats.compressed ? `${Math.round(stats.compressed / 1024)} KB` : '-'} />
         <Stat label="Size" value={stats.width ? `${stats.width} x ${stats.height}` : '-'} />
+        <Stat label="Format" value={selectedFormat.extension.toUpperCase()} />
       </div>
       <div className="image-preview-grid">
         <div>{preview ? <img src={preview} alt="Original preview" /> : <div className="empty-state">Original</div>}</div>

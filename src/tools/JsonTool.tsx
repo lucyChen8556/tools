@@ -3,6 +3,7 @@ import { ArrowDownUp, Copy, FileJson, Repeat2 } from 'lucide-react';
 import { Field } from '../components/Field';
 import { Stat } from '../components/Stat';
 import { ToolbarButton } from '../components/ToolbarButton';
+import { jsonMergeModeOptions } from '../config/options';
 import type { JsonDiff, JsonMergeMode } from '../types';
 import { copyText } from '../utils/clipboard';
 import { compactJson, diffJson, formatJson, mergeJsonByDiff, parseJson, pathLabel, sortJson } from '../utils/json';
@@ -119,9 +120,11 @@ function JsonTool() {
           <>
             <Field label="Merge" compact>
               <select value={mergeMode} onChange={(event) => setMergeMode(event.target.value as JsonMergeMode)}>
-                <option value="full">Full</option>
-                <option value="diff">Differences</option>
-                <option value="value">Values only</option>
+                {jsonMergeModeOptions.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
               </select>
             </Field>
             <ToolbarButton title="Create merged JSON" variant="primary" onClick={runMerge}>

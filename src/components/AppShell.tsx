@@ -87,37 +87,29 @@ export function AppShell({
               <section className="nav-section" key={group}>
                 <h2>{group}</h2>
                 {groupTools.map((tool) => (
-                  <button
-                    className={`tool-row ${activeTool === tool.id ? 'active' : ''}`}
-                    key={tool.id}
-                    type="button"
-                    onClick={() => {
-                      setActiveTool(tool.id);
-                      setSidebarOpen(false);
-                    }}
-                  >
-                    <span className="tool-icon">{tool.icon}</span>
-                    <span>{tool.name}</span>
-                    <span
-                      className="favorite-toggle"
-                      role="button"
-                      tabIndex={0}
-                      title={favoriteIds.includes(tool.id) ? 'Remove favorite' : 'Add favorite'}
-                      onClick={(event) => {
-                        event.stopPropagation();
-                        toggleFavorite(tool.id);
-                      }}
-                      onKeyDown={(event) => {
-                        if (event.key === 'Enter' || event.key === ' ') {
-                          event.preventDefault();
-                          event.stopPropagation();
-                          toggleFavorite(tool.id);
-                        }
+                  <div className={`tool-row ${activeTool === tool.id ? 'active' : ''}`} key={tool.id}>
+                    <button
+                      className="tool-row-main"
+                      type="button"
+                      onClick={() => {
+                        setActiveTool(tool.id);
+                        setSidebarOpen(false);
                       }}
                     >
+                      <span className="tool-icon">{tool.icon}</span>
+                      <span>{tool.name}</span>
+                    </button>
+                    <button
+                      className="favorite-toggle"
+                      type="button"
+                      title={favoriteIds.includes(tool.id) ? 'Remove favorite' : 'Add favorite'}
+                      aria-label={favoriteIds.includes(tool.id) ? `Remove ${tool.name} from favorites` : `Add ${tool.name} to favorites`}
+                      aria-pressed={favoriteIds.includes(tool.id)}
+                      onClick={() => toggleFavorite(tool.id)}
+                    >
                       {favoriteIds.includes(tool.id) ? <Star size={15} fill="currentColor" /> : <StarOff size={15} />}
-                    </span>
-                  </button>
+                    </button>
+                  </div>
                 ))}
               </section>
             ))}
@@ -127,9 +119,12 @@ export function AppShell({
 
       <main className="workspace">
         <header className="workspace-header">
-          <div>
-            <p>{active.group}</p>
-            <h2>{active.name}</h2>
+          <div className="workspace-title">
+            <span className="workspace-icon">{active.icon}</span>
+            <div>
+              <p>{active.group}</p>
+              <h2>{active.name}</h2>
+            </div>
           </div>
           <button className="ghost-button" type="button" onClick={() => toggleFavorite(active.id)}>
             {favoriteIds.includes(active.id) ? <Star size={17} fill="currentColor" /> : <StarOff size={17} />}
