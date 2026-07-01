@@ -28,10 +28,18 @@ export type DiffOp = {
   newText?: string;
 };
 
+export type RegexCaptureGroup = {
+  name?: string;
+  text: string;
+  index: number;
+  end: number;
+};
+
 export type RegexMatchResult = {
   text: string;
   index: number;
-  groups: string[];
+  end: number;
+  groups: RegexCaptureGroup[];
 };
 
 export type HighlightSegment = {
