@@ -16,6 +16,7 @@ const cleanerActions = [
   { id: 'fullwidth-space', label: 'Convert full-width spaces' },
   { id: 'trim-lines', label: 'Trim lines' },
   { id: 'collapse-space', label: 'Collapse extra spaces' },
+  { id: 'space-after-comma', label: 'Add space after English comma' },
   { id: 'remove-empty', label: 'Remove empty lines' },
   { id: 'one-line', label: 'Compress to one line' },
   { id: 'lines-to-comma', label: 'Lines to comma-separated' },
@@ -32,6 +33,43 @@ const defaultCleanerActions: CleanerActionId[] = [
   'remove-empty',
 ];
 
+function isThousandsSeparator(value: string, commaIndex: number) {
+  const leftDigits = value.slice(0, commaIndex).match(/\d+$/)?.[0] ?? '';
+  const rightThousandsGroup = /^\d{3}(?!\d)/.test(value.slice(commaIndex + 1));
+  return leftDigits.length >= 1 && leftDigits.length <= 3 && rightThousandsGroup;
+}
+
+function addSpaceAfterEnglishComma(value: string) {
+  return value.replace(/,([^\s])/g, (match, next: string, offset: number, source: string) => {
+    if (isThousandsSeparator(source, offset)) return match;
+    return `, ${next}`;
+  });
+}
+
+function commaSeparatedToLines(value: string) {
+  const items: string[] = [];
+  let current = '';
+
+  for (let index = 0; index < value.length; index += 1) {
+    const character = value[index];
+    const shouldSplit = character === '，' || (character === ',' && !isThousandsSeparator(value, index));
+
+    if (shouldSplit) {
+      items.push(current);
+      current = '';
+    } else {
+      current += character;
+    }
+  }
+
+  items.push(current);
+
+  return items
+    .map((item) => item.trim())
+    .filter(Boolean)
+    .join('\n');
+}
+
 function applyCleanerAction(value: string, action: CleanerActionId) {
   const normalized = normalizeLineEndings(value);
   const lines = normalized.split('\n');
@@ -45,6 +83,8 @@ function applyCleanerAction(value: string, action: CleanerActionId) {
       return lines.map((line) => line.trim()).join('\n').trim();
     case 'collapse-space':
       return lines.map((line) => line.replace(/[ \t]+/g, ' ')).join('\n');
+    case 'space-after-comma':
+      return addSpaceAfterEnglishComma(normalized);
     case 'remove-empty':
       return lines.filter((line) => line.trim().length > 0).join('\n');
     case 'one-line':
@@ -58,16 +98,22 @@ function applyCleanerAction(value: string, action: CleanerActionId) {
         .filter(Boolean)
         .join(', ');
     case 'comma-to-lines':
-      return normalized
-        .split(/[，,]/)
-        .map((item) => item.trim())
-        .filter(Boolean)
-        .join('\n');
+      return commaSeparatedToLines(normalized);
   }
 }
 
 function TextCleanerTool() {
-  const [input, setInput] = useState('  First paragraph　　has full-width spaces  \r\n\r\nSecond line   has   extra spaces\r\nThird item,Fourth item  ');
+  const [input, setInput] = useState(
+    '  Product update　　has full-width spaces  \r\n\r\n' +
+      'Second line   has   extra spaces\r\n' +
+      'Feature list item one\r\n' +
+      'Feature list item two\r\n\r\n' +
+      'Email draft:Hello,team,please review this before release.\r\n' +
+      'Release notes:Added JWT decoder,improved Time Converter,fixed Regex reference scroll.\r\n' +
+      'CSV-like values:alpha,beta,gamma\r\n' +
+      'Keep number formatting:1,000 users,2,500 events\r\n' +
+      '  Trim this line before and after  ',
+  );
   const [output, setOutput] = useState('');
   const [selectedActions, setSelectedActions] = useState<CleanerActionId[]>(defaultCleanerActions);
 

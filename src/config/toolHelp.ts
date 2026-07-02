@@ -28,7 +28,7 @@ export const toolHelp: Record<ToolId, ToolHelp> = {
   'text-cleaner': {
     overview: 'Apply multiple cleanup operations to messy pasted text in one run.',
     sections: [
-      { title: 'What it does', items: ['Normalize line endings.', 'Trim lines, remove empty lines, and collapse extra spaces.', 'Convert lines to comma-separated text or comma-separated text to lines.'] },
+      { title: 'What it does', items: ['Normalize line endings.', 'Trim lines, remove empty lines, and collapse extra spaces.', 'Add spaces after English commas when cleaning prose.', 'Convert lines to comma-separated text or comma-separated text to lines.'] },
       { title: 'Good for', items: ['Cleaning copied spreadsheet cells.', 'Preparing lists for docs.', 'Normalizing text from chat, email, or tickets.'] },
       { title: 'Notes', items: ['Selected rules run in the order shown.', 'Use Apply output when you want to continue cleaning the result.'] },
     ],
