@@ -51,5 +51,28 @@ export function parseHexColor(input: string) {
     hex: `#${hex.toUpperCase()}`,
     rgb: `rgb(${r}, ${g}, ${b})`,
     hsl: `hsl(${hsl.h}, ${hsl.s}%, ${hsl.l}%)`,
+    channels: { r, g, b },
   };
+}
+
+function linearizeChannel(value: number) {
+  const channel = value / 255;
+  return channel <= 0.03928 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4;
+}
+
+export function getRelativeLuminance(color: { channels: { r: number; g: number; b: number } }) {
+  const { r, g, b } = color.channels;
+  return 0.2126 * linearizeChannel(r) + 0.7152 * linearizeChannel(g) + 0.0722 * linearizeChannel(b);
+}
+
+export function getContrastRatio(
+  foreground: { channels: { r: number; g: number; b: number } } | null,
+  background: { channels: { r: number; g: number; b: number } } | null,
+) {
+  if (!foreground || !background) return null;
+  const foregroundLuminance = getRelativeLuminance(foreground);
+  const backgroundLuminance = getRelativeLuminance(background);
+  const lighter = Math.max(foregroundLuminance, backgroundLuminance);
+  const darker = Math.min(foregroundLuminance, backgroundLuminance);
+  return (lighter + 0.05) / (darker + 0.05);
 }
