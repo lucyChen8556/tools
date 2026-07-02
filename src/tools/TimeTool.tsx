@@ -3,6 +3,7 @@ import { Clock3 } from 'lucide-react';
 import { SelectField } from '../components/SelectField';
 import { Stat } from '../components/Stat';
 import { TextInputField } from '../components/TextInputField';
+import { ToolSection } from '../components/ToolSection';
 import { ToolbarButton } from '../components/ToolbarButton';
 import { localeOptions, timeFormatPresetOptions, timeZoneOptions } from '../config/options';
 
@@ -171,39 +172,47 @@ function TimeTool() {
 
   return (
     <section className="tool-surface">
-      <div className="inline-controls wide time-controls">
-        <TextInputField label="Input" value={value} onChange={setValue} compact />
-        <SelectField label="Locale" value={locale} options={localeOptions} onChange={setLocale} />
-        <SelectField label="Time zone" value={timeZone} options={timeZoneOptions} onChange={setTimeZone} />
-        <SelectField
-          label="Format preset"
-          value={selectedFormatPreset}
-          options={formatPresetOptions}
-          onChange={(nextFormat) => nextFormat !== 'custom' && setCustomFormat(nextFormat)}
-        />
-        <TextInputField label="Custom format" value={customFormat} onChange={setCustomFormat} compact />
-        <ToolbarButton title="Use current time" variant="primary" onClick={() => setValue(String(Date.now()))}>
-          <Clock3 size={16} />
-          <span>Now</span>
-        </ToolbarButton>
-      </div>
-      <div className="metrics-row">
-        <Stat label="Input type" value={inspection.type} />
-        <Stat label="Detected unit" value={inspection.unit} />
-        <Stat label="Unix seconds" value={valid ? Math.floor(date.getTime() / 1000) : '-'} />
-        <Stat label="Unix milliseconds" value={valid ? date.getTime() : '-'} />
-      </div>
-      <div className="output-grid">
-        <TextInputField label="Relative" value={relative} readOnly />
-        <TextInputField label="Normalized ms" value={valid ? inspection.normalized : '-'} readOnly />
-        <TextInputField label="Custom" value={customFormatted} readOnly />
-        <TextInputField label="Formatted" value={formatted} readOnly />
-        <TextInputField label="Local" value={valid ? date.toLocaleString() : 'Invalid date'} readOnly />
-        <TextInputField label="ISO" value={valid ? date.toISOString() : 'Invalid date'} readOnly />
-        <TextInputField label="UTC" value={valid ? date.toUTCString() : 'Invalid date'} readOnly />
-        <TextInputField label="Current seconds" value={String(Math.floor(now.getTime() / 1000))} readOnly />
-        <TextInputField label="Current ms" value={String(now.getTime())} readOnly />
-      </div>
+      <ToolSection title="Input and format">
+        <div className="inline-controls wide time-controls">
+          <TextInputField label="Input" value={value} onChange={setValue} compact />
+          <SelectField label="Locale" value={locale} options={localeOptions} onChange={setLocale} />
+          <SelectField label="Time zone" value={timeZone} options={timeZoneOptions} onChange={setTimeZone} />
+          <SelectField
+            label="Format preset"
+            value={selectedFormatPreset}
+            options={formatPresetOptions}
+            onChange={(nextFormat) => nextFormat !== 'custom' && setCustomFormat(nextFormat)}
+          />
+          <TextInputField label="Custom format" value={customFormat} onChange={setCustomFormat} compact />
+          <ToolbarButton title="Use current time" variant="primary" onClick={() => setValue(String(Date.now()))}>
+            <Clock3 size={16} />
+            <span>Now</span>
+          </ToolbarButton>
+        </div>
+      </ToolSection>
+
+      <ToolSection title="Detected timestamp">
+        <div className="metrics-row">
+          <Stat label="Input type" value={inspection.type} />
+          <Stat label="Detected unit" value={inspection.unit} />
+          <Stat label="Unix seconds" value={valid ? Math.floor(date.getTime() / 1000) : '-'} />
+          <Stat label="Unix milliseconds" value={valid ? date.getTime() : '-'} />
+        </div>
+      </ToolSection>
+
+      <ToolSection title="Output">
+        <div className="output-grid">
+          <TextInputField label="Relative" value={relative} readOnly />
+          <TextInputField label="Normalized ms" value={valid ? inspection.normalized : '-'} readOnly />
+          <TextInputField label="Custom" value={customFormatted} readOnly />
+          <TextInputField label="Formatted" value={formatted} readOnly />
+          <TextInputField label="Local" value={valid ? date.toLocaleString() : 'Invalid date'} readOnly />
+          <TextInputField label="ISO" value={valid ? date.toISOString() : 'Invalid date'} readOnly />
+          <TextInputField label="UTC" value={valid ? date.toUTCString() : 'Invalid date'} readOnly />
+          <TextInputField label="Current seconds" value={String(Math.floor(now.getTime() / 1000))} readOnly />
+          <TextInputField label="Current ms" value={String(now.getTime())} readOnly />
+        </div>
+      </ToolSection>
     </section>
   );
 }

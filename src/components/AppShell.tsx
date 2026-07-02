@@ -1,8 +1,10 @@
 import type { ReactNode } from 'react';
-import { Menu, Search, Shuffle, Star, StarOff, X } from 'lucide-react';
+import { Info, Menu, Search, Shuffle, Star, StarOff, X } from 'lucide-react';
 import { useState } from 'react';
 import type { ToolId } from '../types';
 import { tools } from '../config/tools';
+import { toolHelp } from '../config/toolHelp';
+import { ToolHelpDialog } from './ToolHelpDialog';
 
 export function AppShell({
   activeTool,
@@ -22,8 +24,10 @@ export function AppShell({
   children: ReactNode;
 }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [helpOpen, setHelpOpen] = useState(false);
   const active = tools.find((tool) => tool.id === activeTool) ?? tools[0];
   const activeIsFavorite = favoriteIds.includes(active.id);
+  const activeHelp = toolHelp[active.id];
   const filteredTools = tools.filter((tool) => `${tool.name} ${tool.shortName} ${tool.group}`.toLowerCase().includes(query.toLowerCase()));
   const favorites = tools.filter((tool) => favoriteIds.includes(tool.id));
   const groupedTools = filteredTools.reduce<Record<string, typeof tools>>((groups, tool) => {
@@ -127,20 +131,29 @@ export function AppShell({
               <h2>{active.name}</h2>
             </div>
           </div>
-          <button
-            className="ghost-button"
-            type="button"
-            title={activeIsFavorite ? 'Remove favorite' : 'Add favorite'}
-            aria-label={activeIsFavorite ? `Remove ${active.name} from favorites` : `Add ${active.name} to favorites`}
-            aria-pressed={activeIsFavorite}
-            onClick={() => toggleFavorite(active.id)}
-          >
-            {activeIsFavorite ? <Star size={17} fill="currentColor" /> : <StarOff size={17} />}
-            <span>{activeIsFavorite ? 'Favorited' : 'Add favorite'}</span>
-          </button>
+          <div className="workspace-actions">
+            <button className="ghost-button" type="button" title={`About ${active.name}`} aria-label={`About ${active.name}`} onClick={() => setHelpOpen(true)}>
+              <Info size={17} />
+              <span>Details</span>
+            </button>
+            <button
+              className="ghost-button"
+              type="button"
+              title={activeIsFavorite ? 'Remove favorite' : 'Add favorite'}
+              aria-label={activeIsFavorite ? `Remove ${active.name} from favorites` : `Add ${active.name} to favorites`}
+              aria-pressed={activeIsFavorite}
+              onClick={() => toggleFavorite(active.id)}
+            >
+              {activeIsFavorite ? <Star size={17} fill="currentColor" /> : <StarOff size={17} />}
+              <span>{activeIsFavorite ? 'Favorited' : 'Add favorite'}</span>
+            </button>
+          </div>
         </header>
         {children}
       </main>
+      {helpOpen ? (
+        <ToolHelpDialog group={active.group} help={activeHelp} icon={active.icon} name={active.name} onClose={() => setHelpOpen(false)} />
+      ) : null}
     </div>
   );
 }

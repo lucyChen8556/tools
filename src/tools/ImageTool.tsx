@@ -4,6 +4,7 @@ import { Field } from '../components/Field';
 import { SelectField } from '../components/SelectField';
 import { Stat } from '../components/Stat';
 import { TextInputField } from '../components/TextInputField';
+import { ToolSection } from '../components/ToolSection';
 import { ToolbarButton } from '../components/ToolbarButton';
 import {
   compressionPresetOptions,
@@ -115,101 +116,113 @@ function ImageTool() {
 
   return (
     <section className="tool-surface">
-      <label
-        className={`dropzone ${dragActive ? 'active' : ''}`}
-        onDragEnter={(event) => {
-          event.preventDefault();
-          setDragActive(true);
-        }}
-        onDragOver={(event) => {
-          event.preventDefault();
-          setDragActive(true);
-        }}
-        onDragLeave={(event) => {
-          event.preventDefault();
-          setDragActive(false);
-        }}
-        onDrop={(event) => {
-          event.preventDefault();
-          setDragActive(false);
-          handleFiles(event.dataTransfer.files);
-        }}
-      >
-        <input
-          key={inputKey}
-          type="file"
-          accept="image/*"
-          onChange={(event: ChangeEvent<HTMLInputElement>) => handleFiles(event.target.files)}
-        />
-        <ImageDown size={24} />
-        <span>{fileName || 'Drop image here or click to upload'}</span>
-      </label>
-
-      <div className="inline-controls wide">
-        <SelectField label="Preset" value={preset} options={compressionPresetOptions} onChange={updatePreset} />
-        <SelectField label="Format" value={outputFormat} options={outputFormatOptions} onChange={setOutputFormat} />
-        <Field label="Quality" compact>
-          <input
-            type="range"
-            min="0.1"
-            max="1"
-            step="0.05"
-            value={quality}
-            onChange={(event) => {
-              setPreset('custom');
-              setQuality(Number(event.target.value));
-            }}
-          />
-        </Field>
-        <TextInputField
-          label="Max width"
-          type="number"
-          min="100"
-          value={maxWidth}
-          compact
-          onChange={(nextMaxWidth) => {
-            setPreset('custom');
-            setMaxWidth(Number(nextMaxWidth));
+      <ToolSection title="Upload">
+        <label
+          className={`dropzone ${dragActive ? 'active' : ''}`}
+          onDragEnter={(event) => {
+            event.preventDefault();
+            setDragActive(true);
           }}
-        />
-        <ToolbarButton title="Compress image" variant="primary" disabled={!file} onClick={() => void compressImage()}>
-          <ImageDown size={16} />
-          <span>Compress</span>
-        </ToolbarButton>
-        <ToolbarButton
-          title="Download image"
-          disabled={!resultUrl}
-          onClick={() => {
-            if (resultUrl) {
-              fetch(resultUrl)
-                .then((response) => response.blob())
-                .then((blob) => downloadBlob(blob, `${fileName.replace(/\.[^.]+$/, '') || 'image'}-compressed.${selectedFormat.extension}`));
-            }
+          onDragOver={(event) => {
+            event.preventDefault();
+            setDragActive(true);
+          }}
+          onDragLeave={(event) => {
+            event.preventDefault();
+            setDragActive(false);
+          }}
+          onDrop={(event) => {
+            event.preventDefault();
+            setDragActive(false);
+            handleFiles(event.dataTransfer.files);
           }}
         >
-          <Download size={16} />
-          <span>Download</span>
-        </ToolbarButton>
-        <ToolbarButton title="Reset compression options" onClick={resetOptions}>
-          <Eraser size={16} />
-          <span>Reset</span>
-        </ToolbarButton>
-        <ToolbarButton title="Clear image" onClick={clearImage} disabled={!file && !resultUrl}>
-          <Eraser size={16} />
-          <span>Clear</span>
-        </ToolbarButton>
-      </div>
-      <div className="metrics-row">
-        <Stat label="Status" value={status || '-'} />
-        <Stat label="Original" value={stats.original ? `${Math.round(stats.original / 1024)} KB` : '-'} />
-        <Stat label="Compressed" value={stats.compressed ? `${Math.round(stats.compressed / 1024)} KB` : '-'} />
-        <Stat label="Size" value={stats.width ? `${stats.width} x ${stats.height}` : '-'} />
-        <Stat label="Format" value={selectedFormat.extension.toUpperCase()} />
-      </div>
-      <div className="image-preview-grid">
-        <div>{preview ? <img src={preview} alt="Original preview" /> : <div className="empty-state">Original</div>}</div>
-        <div>{resultUrl ? <img src={resultUrl} alt="Compressed preview" /> : <div className="empty-state">Compressed</div>}</div>
-      </div>
+          <input
+            key={inputKey}
+            type="file"
+            accept="image/*"
+            onChange={(event: ChangeEvent<HTMLInputElement>) => handleFiles(event.target.files)}
+          />
+          <ImageDown size={24} />
+          <span>{fileName || 'Drop image here or click to upload'}</span>
+        </label>
+      </ToolSection>
+
+      <ToolSection title="Compression">
+        <div className="section-controls">
+          <SelectField label="Preset" value={preset} options={compressionPresetOptions} onChange={updatePreset} />
+          <SelectField label="Format" value={outputFormat} options={outputFormatOptions} onChange={setOutputFormat} />
+          <Field label="Quality" compact>
+            <input
+              type="range"
+              min="0.1"
+              max="1"
+              step="0.05"
+              value={quality}
+              onChange={(event) => {
+                setPreset('custom');
+                setQuality(Number(event.target.value));
+              }}
+            />
+          </Field>
+          <TextInputField
+            label="Max width"
+            type="number"
+            min="100"
+            value={maxWidth}
+            compact
+            onChange={(nextMaxWidth) => {
+              setPreset('custom');
+              setMaxWidth(Number(nextMaxWidth));
+            }}
+          />
+        </div>
+        <div className="section-actions">
+          <ToolbarButton title="Compress image" variant="primary" disabled={!file} onClick={() => void compressImage()}>
+            <ImageDown size={16} />
+            <span>Compress</span>
+          </ToolbarButton>
+          <ToolbarButton
+            title="Download image"
+            disabled={!resultUrl}
+            onClick={() => {
+              if (resultUrl) {
+                fetch(resultUrl)
+                  .then((response) => response.blob())
+                  .then((blob) => downloadBlob(blob, `${fileName.replace(/\.[^.]+$/, '') || 'image'}-compressed.${selectedFormat.extension}`));
+              }
+            }}
+          >
+            <Download size={16} />
+            <span>Download</span>
+          </ToolbarButton>
+          <ToolbarButton title="Reset compression options" onClick={resetOptions}>
+            <Eraser size={16} />
+            <span>Reset</span>
+          </ToolbarButton>
+          <ToolbarButton title="Clear image" onClick={clearImage} disabled={!file && !resultUrl}>
+            <Eraser size={16} />
+            <span>Clear</span>
+          </ToolbarButton>
+        </div>
+      </ToolSection>
+
+      <ToolSection title="Summary">
+        <div className="metrics-row">
+          <Stat label="Status" value={status || '-'} />
+          <Stat label="Original" value={stats.original ? `${Math.round(stats.original / 1024)} KB` : '-'} />
+          <Stat label="Compressed" value={stats.compressed ? `${Math.round(stats.compressed / 1024)} KB` : '-'} />
+          <Stat label="Size" value={stats.width ? `${stats.width} x ${stats.height}` : '-'} />
+          <Stat label="Format" value={selectedFormat.extension.toUpperCase()} />
+        </div>
+      </ToolSection>
+
+      <ToolSection title="Preview">
+        <div className="image-preview-grid">
+          <div>{preview ? <img src={preview} alt="Original preview" /> : <div className="empty-state">Original</div>}</div>
+          <div>{resultUrl ? <img src={resultUrl} alt="Compressed preview" /> : <div className="empty-state">Compressed</div>}</div>
+        </div>
+      </ToolSection>
     </section>
   );
 }
