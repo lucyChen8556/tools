@@ -23,6 +23,7 @@ export function AppShell({
 }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const active = tools.find((tool) => tool.id === activeTool) ?? tools[0];
+  const activeIsFavorite = favoriteIds.includes(active.id);
   const filteredTools = tools.filter((tool) => `${tool.name} ${tool.shortName} ${tool.group}`.toLowerCase().includes(query.toLowerCase()));
   const favorites = tools.filter((tool) => favoriteIds.includes(tool.id));
   const groupedTools = filteredTools.reduce<Record<string, typeof tools>>((groups, tool) => {
@@ -126,9 +127,16 @@ export function AppShell({
               <h2>{active.name}</h2>
             </div>
           </div>
-          <button className="ghost-button" type="button" onClick={() => toggleFavorite(active.id)}>
-            {favoriteIds.includes(active.id) ? <Star size={17} fill="currentColor" /> : <StarOff size={17} />}
-            <span>{favoriteIds.includes(active.id) ? 'Saved' : 'Save'}</span>
+          <button
+            className="ghost-button"
+            type="button"
+            title={activeIsFavorite ? 'Remove favorite' : 'Add favorite'}
+            aria-label={activeIsFavorite ? `Remove ${active.name} from favorites` : `Add ${active.name} to favorites`}
+            aria-pressed={activeIsFavorite}
+            onClick={() => toggleFavorite(active.id)}
+          >
+            {activeIsFavorite ? <Star size={17} fill="currentColor" /> : <StarOff size={17} />}
+            <span>{activeIsFavorite ? 'Favorited' : 'Add favorite'}</span>
           </button>
         </header>
         {children}

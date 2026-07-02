@@ -14,6 +14,8 @@ function RegexTool() {
   const [sample, setSample] = useState('dev@example.com\nsales@example.com\nnot-an-email');
   const [activeRuleId, setActiveRuleId] = useState('');
   const [patternsOpen, setPatternsOpen] = useState(false);
+  const [referenceOpen, setReferenceOpen] = useState(false);
+  const hasPattern = pattern.length > 0;
 
   function applyPreset(id: string) {
     setPresetId(id);
@@ -29,7 +31,10 @@ function RegexTool() {
     setActiveRuleId((current) => (current === rule.id ? '' : rule.id));
   }
 
-  const result = useMemo(() => collectRegexMatches(pattern, flags, sample), [flags, pattern, sample]);
+  const result = useMemo(() => {
+    if (!hasPattern) return { error: '', matches: [] };
+    return collectRegexMatches(pattern, flags, sample);
+  }, [flags, hasPattern, pattern, sample]);
   const regexTokens = useMemo(() => analyzeRegexPattern(pattern), [pattern]);
   const regexRules = useMemo(() => buildRegexRules(regexTokens), [regexTokens]);
   const activeRule = regexRules.find((rule) => rule.id === activeRuleId);
@@ -69,13 +74,16 @@ function RegexTool() {
           applyPreset={applyPreset}
           flags={flags}
           patternsOpen={patternsOpen}
+          referenceOpen={referenceOpen}
           rules={regexRules}
           selectRule={selectRule}
           setPatternsOpen={setPatternsOpen}
+          setReferenceOpen={setReferenceOpen}
         />
         <TestColumn
           error={result.error}
           flags={flags}
+          hasPattern={hasPattern}
           highlightedSample={highlightedSample}
           matches={result.matches}
           ruleCount={regexRules.length}

@@ -6,6 +6,7 @@ import type { HighlightSegment } from './types';
 type TestColumnProps = {
   error: string;
   flags: string;
+  hasPattern: boolean;
   highlightedSample: HighlightSegment[];
   matches: RegexMatchResult[];
   ruleCount: number;
@@ -13,7 +14,7 @@ type TestColumnProps = {
   setSample: (sample: string) => void;
 };
 
-function TestColumn({ error, flags, highlightedSample, matches, ruleCount, sample, setSample }: TestColumnProps) {
+function TestColumn({ error, flags, hasPattern, highlightedSample, matches, ruleCount, sample, setSample }: TestColumnProps) {
   return (
     <div className="regex-test-column">
       <Field label="Test text">
@@ -34,36 +35,38 @@ function TestColumn({ error, flags, highlightedSample, matches, ruleCount, sampl
           ),
         )}
       </div>
-      <div className="match-list">
-        <div className="regex-panel-title">
-          <strong>Match Information</strong>
-          <span>{matches.length}</span>
+      {hasPattern ? (
+        <div className="match-list">
+          <div className="regex-panel-title">
+            <strong>Match Information</strong>
+            <span>{matches.length}</span>
+          </div>
+          {matches.length === 0 ? (
+            <div className="empty-state">No matches</div>
+          ) : (
+            matches.map((match, index) => (
+              <div className="match-row" key={`${match.index}-${index}`}>
+                <strong>Match {index + 1}</strong>
+                <code>{match.text}</code>
+                <span>
+                  {match.index}-{match.end}
+                </span>
+                {match.groups.length > 0 ? (
+                  <div className="match-groups">
+                    {match.groups.map((group, groupIndex) => (
+                      <span key={`${groupIndex}-${group.index}-${group.text}`}>
+                        <strong>{group.name ?? `Group ${groupIndex + 1}`}</strong>
+                        <code>{group.text || '(empty)'}</code>
+                        <small>{group.index > -1 ? `${group.index}-${group.end}` : '-'}</small>
+                      </span>
+                    ))}
+                  </div>
+                ) : null}
+              </div>
+            ))
+          )}
         </div>
-        {matches.length === 0 ? (
-          <div className="empty-state">No matches</div>
-        ) : (
-          matches.map((match, index) => (
-            <div className="match-row" key={`${match.index}-${index}`}>
-              <strong>Match {index + 1}</strong>
-              <code>{match.text}</code>
-              <span>
-                {match.index}-{match.end}
-              </span>
-              {match.groups.length > 0 ? (
-                <div className="match-groups">
-                  {match.groups.map((group, groupIndex) => (
-                    <span key={`${groupIndex}-${group.index}-${group.text}`}>
-                      <strong>{group.name ?? `Group ${groupIndex + 1}`}</strong>
-                      <code>{group.text || '(empty)'}</code>
-                      <small>{group.index > -1 ? `${group.index}-${group.end}` : '-'}</small>
-                    </span>
-                  ))}
-                </div>
-              ) : null}
-            </div>
-          ))
-        )}
-      </div>
+      ) : null}
     </div>
   );
 }

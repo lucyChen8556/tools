@@ -10,14 +10,14 @@ function normalizeLineEndings(value: string) {
 }
 
 const cleanerActions = [
-  { id: 'normalize-newlines', label: '統一換行' },
-  { id: 'fullwidth-space', label: '全形空白轉半形' },
-  { id: 'trim-lines', label: '移除前後空白' },
-  { id: 'collapse-space', label: '移除多餘空白' },
-  { id: 'remove-empty', label: '移除空行' },
-  { id: 'one-line', label: '壓縮成一行' },
-  { id: 'lines-to-comma', label: '多行轉逗號' },
-  { id: 'comma-to-lines', label: '逗號轉多行' },
+  { id: 'normalize-newlines', label: 'Normalize line endings' },
+  { id: 'fullwidth-space', label: 'Convert full-width spaces' },
+  { id: 'trim-lines', label: 'Trim lines' },
+  { id: 'collapse-space', label: 'Collapse extra spaces' },
+  { id: 'remove-empty', label: 'Remove empty lines' },
+  { id: 'one-line', label: 'Compress to one line' },
+  { id: 'lines-to-comma', label: 'Lines to comma-separated' },
+  { id: 'comma-to-lines', label: 'Comma-separated to lines' },
 ] as const;
 
 type CleanerActionId = (typeof cleanerActions)[number]['id'];
@@ -65,7 +65,7 @@ function applyCleanerAction(value: string, action: CleanerActionId) {
 }
 
 function TextCleanerTool() {
-  const [input, setInput] = useState('  第一段文字　　有全形空白  \r\n\r\n第二段   有   多餘空白\r\n第三段,第四段  ');
+  const [input, setInput] = useState('  First paragraph　　has full-width spaces  \r\n\r\nSecond line   has   extra spaces\r\nThird item,Fourth item  ');
   const [output, setOutput] = useState('');
   const [selectedActions, setSelectedActions] = useState<CleanerActionId[]>(defaultCleanerActions);
 
@@ -109,19 +109,19 @@ function TextCleanerTool() {
       <div className="action-bar cleaner-actions">
         <ToolbarButton title="Run selected cleaners" variant="primary" onClick={() => clean(selectedActions)} disabled={selectedActions.length === 0}>
           <Eraser size={16} />
-          <span>執行勾選</span>
+          <span>Run selected</span>
         </ToolbarButton>
         <ToolbarButton title="Select default cleaners" onClick={() => setSelectedActions(defaultCleanerActions)}>
           <Check size={16} />
-          <span>預設</span>
+          <span>Defaults</span>
         </ToolbarButton>
         <ToolbarButton title="Clear selected cleaners" onClick={() => setSelectedActions([])}>
           <Eraser size={16} />
-          <span>清除規則</span>
+          <span>Clear rules</span>
         </ToolbarButton>
         <ToolbarButton title="Apply output to input" variant="primary" onClick={() => setInput(output)} disabled={!output}>
           <Repeat2 size={16} />
-          <span>套用</span>
+          <span>Apply output</span>
         </ToolbarButton>
         <ToolbarButton title="Copy output" onClick={() => copyText(output)} disabled={!output}>
           <Copy size={16} />

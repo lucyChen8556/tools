@@ -1,5 +1,6 @@
 import type { RegexRule } from './types';
 import { PatternBank } from './PatternBank';
+import { RegexReference } from './RegexReference';
 
 type AnalysisColumnProps = {
   activePresetId: string;
@@ -8,9 +9,11 @@ type AnalysisColumnProps = {
   applyPreset: (id: string) => void;
   flags: string;
   patternsOpen: boolean;
+  referenceOpen: boolean;
   rules: RegexRule[];
   selectRule: (rule: RegexRule) => void;
   setPatternsOpen: (open: boolean) => void;
+  setReferenceOpen: (open: boolean) => void;
 };
 
 function AnalysisColumn({
@@ -20,9 +23,11 @@ function AnalysisColumn({
   applyPreset,
   flags,
   patternsOpen,
+  referenceOpen,
   rules,
   selectRule,
   setPatternsOpen,
+  setReferenceOpen,
 }: AnalysisColumnProps) {
   return (
     <div className="regex-rule-column">
@@ -34,18 +39,22 @@ function AnalysisColumn({
         </div>
         <div className="regex-expression-preview">
           <span>/</span>
-          {rules.map((rule) => (
-            <button
-              className={`regex-expression-rule tone-${rule.tone} ${activeRuleId === rule.id ? 'active' : ''}`}
-              key={rule.id}
-              type="button"
-              onClick={() => selectRule(rule)}
-              aria-label={`${rule.text}: ${rule.label}`}
-              title={rule.description}
-            >
-              {rule.text}
-            </button>
-          ))}
+          {rules.length === 0 ? (
+            <em>empty pattern</em>
+          ) : (
+            rules.map((rule) => (
+              <button
+                className={`regex-expression-rule tone-${rule.tone} ${activeRuleId === rule.id ? 'active' : ''}`}
+                key={rule.id}
+                type="button"
+                onClick={() => selectRule(rule)}
+                aria-label={`${rule.text}: ${rule.label}`}
+                title={rule.description}
+              >
+                {rule.text}
+              </button>
+            ))
+          )}
           <span>/{flags}</span>
         </div>
       </section>
@@ -55,33 +64,38 @@ function AnalysisColumn({
           <span>{activeRule ? activeRule.label : 'All rules'}</span>
         </div>
         <div className="regex-explanation-list">
-          {rules.map((rule, index) => (
-            <button
-              className={`regex-explanation-row ${activeRuleId === rule.id ? 'active' : ''}`}
-              key={rule.id}
-              type="button"
-              onClick={() => selectRule(rule)}
-            >
-              <mark className={`tone-${rule.tone}`}>{rule.text}</mark>
-              <span>
-                <strong>{rule.label}</strong>
-                {rule.description}
-                {rule.details.length > 0 ? (
-                  <ul>
-                    {rule.details.map((detail) => (
-                      <li key={detail}>{detail}</li>
-                    ))}
-                  </ul>
-                ) : null}
-              </span>
-              <code>
-                {rule.start}-{rule.end}
-              </code>
-              <small>#{index + 1}</small>
-            </button>
-          ))}
+          {rules.length === 0 ? (
+            <div className="empty-state">Enter a pattern to see rule explanations</div>
+          ) : (
+            rules.map((rule, index) => (
+              <button
+                className={`regex-explanation-row ${activeRuleId === rule.id ? 'active' : ''}`}
+                key={rule.id}
+                type="button"
+                onClick={() => selectRule(rule)}
+              >
+                <mark className={`tone-${rule.tone}`}>{rule.text}</mark>
+                <span>
+                  <strong>{rule.label}</strong>
+                  {rule.description}
+                  {rule.details.length > 0 ? (
+                    <ul>
+                      {rule.details.map((detail) => (
+                        <li key={detail}>{detail}</li>
+                      ))}
+                    </ul>
+                  ) : null}
+                </span>
+                <code>
+                  {rule.start}-{rule.end}
+                </code>
+                <small>#{index + 1}</small>
+              </button>
+            ))
+          )}
         </div>
       </section>
+      <RegexReference open={referenceOpen} setOpen={setReferenceOpen} />
     </div>
   );
 }
