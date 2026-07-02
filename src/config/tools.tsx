@@ -12,6 +12,7 @@ import {
   KeyRound,
   Link2,
   Palette,
+  ReceiptText,
   Regex,
   Ruler,
   Table2,
@@ -40,6 +41,7 @@ export const tools: Array<{
   { id: 'url', name: 'URL Parser', shortName: 'URL', group: 'Code', icon: <Link2 size={18} /> },
   { id: 'number', name: 'Number Base Converter', shortName: 'Base', group: 'Code', icon: <Binary size={18} /> },
   { id: 'css-unit', name: 'CSS Unit Converter', shortName: 'Units', group: 'Design', icon: <Ruler size={18} /> },
+  { id: 'expense', name: 'Expense Splitter', shortName: 'Split', group: 'Life', icon: <ReceiptText size={18} /> },
   { id: 'encode', name: 'Encode / Decode', shortName: 'Codec', group: 'Code', icon: <Code2 size={18} /> },
   { id: 'csv', name: 'CSV / Excel Helper', shortName: 'CSV', group: 'Data', icon: <FileSpreadsheet size={18} /> },
 ];

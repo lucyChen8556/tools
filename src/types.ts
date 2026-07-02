@@ -13,6 +13,7 @@ export type ToolId =
   | 'url'
   | 'number'
   | 'css-unit'
+  | 'expense'
   | 'encode'
   | 'csv';
 

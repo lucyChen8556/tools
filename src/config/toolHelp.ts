@@ -114,11 +114,19 @@ export const toolHelp: Record<ToolId, ToolHelp> = {
     ],
   },
   'css-unit': {
-    overview: 'Convert CSS length values between px, rem, em, percent, vw, and vh.',
+    overview: 'Convert CSS length values and generate responsive clamp formulas.',
     sections: [
-      { title: 'What it does', items: ['Normalizes a value into pixels.', 'Shows equivalent CSS units.', 'Uses configurable base size, parent width, and viewport size.'] },
-      { title: 'Good for', items: ['Checking rem sizing.', 'Converting px specs into responsive units.', 'Debugging percentage and viewport-based layout values.'] },
-      { title: 'Notes', items: ['em uses the base px field in this tool.', 'Percent conversion uses the parent px field.'] },
+      { title: 'What it does', items: ['Normalizes a value into pixels.', 'Shows equivalent CSS units.', 'Generates px and rem clamp formulas from size and viewport ranges.'] },
+      { title: 'Good for', items: ['Checking rem sizing.', 'Converting px specs into responsive units.', 'Building fluid font-size, spacing, and component sizing values.'] },
+      { title: 'Notes', items: ['em uses the base px field in this tool.', 'Percent conversion uses the parent px field.', 'Clamp rem output uses the base px field.'] },
+    ],
+  },
+  expense: {
+    overview: 'Split shared bills with tax, tip, extra fees, and weighted shares.',
+    sections: [
+      { title: 'What it does', items: ['Calculates tax, tip, extra fees, total, and per-share amount.', 'Supports uneven splits with share counts.', 'Copies a clean text summary for chat or notes.'] },
+      { title: 'Good for', items: ['Group meals.', 'Shared purchases.', 'Trips or household expenses where people pay different portions.'] },
+      { title: 'Notes', items: ['Tax and tip are calculated from the subtotal.', 'Shares are weights, so 2 shares pays twice as much as 1 share.'] },
     ],
   },
   encode: {

@@ -6,6 +6,7 @@ import { readStoredToolId, readStoredToolList, writeStorage } from './utils/stor
 import { ColorTool } from './tools/ColorTool';
 import { CsvTool } from './tools/CsvTool';
 import { EncodeTool } from './tools/EncodeTool';
+import { ExpenseTool } from './tools/ExpenseTool';
 import { HashTool } from './tools/HashTool';
 import { ImageTool } from './tools/ImageTool';
 import { JsonTool } from './tools/JsonTool';
@@ -53,6 +54,7 @@ export function App() {
     url: <UrlTool />,
     number: <NumberTool />,
     'css-unit': <CssUnitTool />,
+    expense: <ExpenseTool />,
     encode: <EncodeTool />,
     csv: <CsvTool />,
   }[activeTool];

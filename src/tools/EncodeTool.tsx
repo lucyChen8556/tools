@@ -5,28 +5,23 @@ import { ActionBar, SplitTextAreas } from '../components/ToolLayout';
 import { ToolbarButton } from '../components/ToolbarButton';
 import { decodeHtml, escapeHtml, fromBase64, toBase64 } from '../utils/codec';
 
+const codecActions = [
+  { id: 'url-encode', label: 'URL +', transform: encodeURIComponent },
+  { id: 'url-decode', label: 'URL -', transform: decodeURIComponent },
+  { id: 'b64-encode', label: 'Base64 +', transform: toBase64 },
+  { id: 'b64-decode', label: 'Base64 -', transform: fromBase64 },
+  { id: 'html-encode', label: 'HTML +', transform: escapeHtml },
+  { id: 'html-decode', label: 'HTML -', transform: decodeHtml },
+] as const;
+
 function EncodeTool() {
   const [input, setInput] = useState('hello 世界');
   const [output, setOutput] = useState('');
   const [error, setError] = useState('');
 
-  function run(action: string) {
+  function run(transform: (value: string) => string) {
     try {
-      const next =
-        action === 'url-encode'
-          ? encodeURIComponent(input)
-          : action === 'url-decode'
-            ? decodeURIComponent(input)
-            : action === 'b64-encode'
-              ? toBase64(input)
-              : action === 'b64-decode'
-                ? fromBase64(input)
-                : action === 'html-encode'
-                  ? escapeHtml(input)
-                  : action === 'html-decode'
-                    ? decodeHtml(input)
-                    : input;
-      setOutput(next);
+      setOutput(transform(input));
       setError('');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unable to decode');
@@ -37,17 +32,10 @@ function EncodeTool() {
     <section className="tool-surface">
       <SplitTextAreas left={{ label: 'Input', value: input, onChange: setInput }} right={{ label: 'Output', value: output, onChange: setOutput }} />
       <ActionBar>
-        {[
-          ['url-encode', 'URL +'],
-          ['url-decode', 'URL -'],
-          ['b64-encode', 'Base64 +'],
-          ['b64-decode', 'Base64 -'],
-          ['html-encode', 'HTML +'],
-          ['html-decode', 'HTML -'],
-        ].map(([action, label]) => (
-          <ToolbarButton key={action} title={label} onClick={() => run(action)}>
+        {codecActions.map((action) => (
+          <ToolbarButton key={action.id} title={action.label} onClick={() => run(action.transform)}>
             <Code2 size={16} />
-            <span>{label}</span>
+            <span>{action.label}</span>
           </ToolbarButton>
         ))}
         <CopyButton title="Copy output" value={output} />

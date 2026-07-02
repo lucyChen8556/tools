@@ -32,12 +32,48 @@ function formatCssValue(value: number, unit: CssUnit) {
   return `${formatNumber(value)}${unit}`;
 }
 
+function formatPxValue(value: number) {
+  if (!Number.isFinite(value)) return '-';
+  return `${formatNumber(value)}px`;
+}
+
+function formatRemValue(value: number, basePx: number) {
+  if (!Number.isFinite(value) || !Number.isFinite(basePx) || basePx === 0) return '-';
+  return `${formatNumber(value / basePx)}rem`;
+}
+
 function toPixels(value: number, unit: CssUnit, context: { basePx: number; parentPx: number; viewportWidth: number; viewportHeight: number }) {
   if (unit === 'px') return value;
   if (unit === 'rem' || unit === 'em') return value * context.basePx;
   if (unit === '%') return (value / 100) * context.parentPx;
   if (unit === 'vw') return (value / 100) * context.viewportWidth;
   return (value / 100) * context.viewportHeight;
+}
+
+function buildClamp(minSize: number, maxSize: number, minViewport: number, maxViewport: number, basePx: number) {
+  const viewportRange = maxViewport - minViewport;
+  if (![minSize, maxSize, minViewport, maxViewport, basePx].every(Number.isFinite) || viewportRange === 0 || basePx === 0) {
+    return {
+      slope: Number.NaN,
+      intercept: Number.NaN,
+      px: 'Invalid range',
+      rem: 'Invalid range',
+      preferred: 'Invalid range',
+    };
+  }
+
+  const slope = ((maxSize - minSize) / viewportRange) * 100;
+  const intercept = minSize - (slope * minViewport) / 100;
+  const preferredPx = `${formatPxValue(intercept)} + ${formatNumber(slope)}vw`;
+  const preferredRem = `${formatRemValue(intercept, basePx)} + ${formatNumber(slope)}vw`;
+
+  return {
+    slope,
+    intercept,
+    px: `clamp(${formatPxValue(minSize)}, calc(${preferredPx}), ${formatPxValue(maxSize)})`,
+    rem: `clamp(${formatRemValue(minSize, basePx)}, calc(${preferredRem}), ${formatRemValue(maxSize, basePx)})`,
+    preferred: `calc(${preferredPx})`,
+  };
 }
 
 function CssUnitTool() {
@@ -47,6 +83,10 @@ function CssUnitTool() {
   const [parentPx, setParentPx] = useState('320');
   const [viewportWidth, setViewportWidth] = useState('1440');
   const [viewportHeight, setViewportHeight] = useState('900');
+  const [clampMinSize, setClampMinSize] = useState('16');
+  const [clampMaxSize, setClampMaxSize] = useState('32');
+  const [clampMinViewport, setClampMinViewport] = useState('375');
+  const [clampMaxViewport, setClampMaxViewport] = useState('1440');
 
   const result = useMemo(() => {
     const numericValue = readNumber(value, Number.NaN);
@@ -70,6 +110,17 @@ function CssUnitTool() {
       ],
     };
   }, [basePx, parentPx, unit, value, viewportHeight, viewportWidth]);
+  const clampResult = useMemo(
+    () =>
+      buildClamp(
+        readNumber(clampMinSize, Number.NaN),
+        readNumber(clampMaxSize, Number.NaN),
+        readNumber(clampMinViewport, Number.NaN),
+        readNumber(clampMaxViewport, Number.NaN),
+        readNumber(basePx, 16),
+      ),
+    [basePx, clampMaxSize, clampMaxViewport, clampMinSize, clampMinViewport],
+  );
 
   return (
     <section className="tool-surface">
@@ -86,6 +137,31 @@ function CssUnitTool() {
 
       <ToolSection title="Output">
         <CopyableRows rows={result.rows} />
+      </ToolSection>
+
+      <ToolSection title="Clamp calculator">
+        <div className="inline-controls wide clamp-controls">
+          <TextInputField label="Min size px" value={clampMinSize} onChange={setClampMinSize} compact />
+          <TextInputField label="Max size px" value={clampMaxSize} onChange={setClampMaxSize} compact />
+          <TextInputField label="Min viewport px" value={clampMinViewport} onChange={setClampMinViewport} compact />
+          <TextInputField label="Max viewport px" value={clampMaxViewport} onChange={setClampMaxViewport} compact />
+          <TextInputField label="Base px" value={basePx} onChange={setBasePx} compact />
+        </div>
+        <CopyableRows
+          rows={[
+            { label: 'clamp px', value: clampResult.px },
+            { label: 'clamp rem', value: clampResult.rem },
+            { label: 'preferred', value: clampResult.preferred },
+          ]}
+        />
+        <MetricsGrid
+          items={[
+            { label: 'Slope', value: Number.isFinite(clampResult.slope) ? `${formatNumber(clampResult.slope)}vw` : '-' },
+            { label: 'Intercept', value: formatPxValue(clampResult.intercept) },
+            { label: 'Viewport range', value: `${clampMinViewport}px - ${clampMaxViewport}px` },
+            { label: 'Size range', value: `${clampMinSize}px - ${clampMaxSize}px` },
+          ]}
+        />
       </ToolSection>
 
       <MetricsGrid
