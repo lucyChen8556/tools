@@ -1,7 +1,6 @@
 import { useMemo, useState } from 'react';
 import { Clock3 } from 'lucide-react';
 import { SelectField } from '../components/SelectField';
-import { Stat } from '../components/Stat';
 import { TextInputField } from '../components/TextInputField';
 import { ToolSection } from '../components/ToolSection';
 import { ToolbarButton } from '../components/ToolbarButton';
@@ -169,6 +168,23 @@ function TimeTool() {
     { label: 'Custom', value: 'custom' },
     ...timeFormatPresetOptions.map((option) => ({ label: option, value: option })),
   ];
+  const detectedItems = [
+    { label: 'Input type', value: inspection.type },
+    { label: 'Detected unit', value: inspection.unit },
+    { label: 'Unix seconds', value: valid ? String(Math.floor(date.getTime() / 1000)) : '-' },
+    { label: 'Unix milliseconds', value: valid ? String(date.getTime()) : '-' },
+  ];
+  const outputItems = [
+    { label: 'Custom', value: customFormatted },
+    { label: 'Formatted', value: formatted },
+    { label: 'Local', value: valid ? date.toLocaleString() : 'Invalid date' },
+    { label: 'ISO', value: valid ? date.toISOString() : 'Invalid date' },
+    { label: 'UTC', value: valid ? date.toUTCString() : 'Invalid date' },
+    { label: 'Relative', value: relative },
+    { label: 'Normalized ms', value: valid ? inspection.normalized : '-' },
+    { label: 'Current seconds', value: String(Math.floor(now.getTime() / 1000)) },
+    { label: 'Current ms', value: String(now.getTime()) },
+  ];
 
   return (
     <section className="tool-surface">
@@ -192,25 +208,24 @@ function TimeTool() {
       </ToolSection>
 
       <ToolSection title="Detected timestamp">
-        <div className="metrics-row">
-          <Stat label="Input type" value={inspection.type} />
-          <Stat label="Detected unit" value={inspection.unit} />
-          <Stat label="Unix seconds" value={valid ? Math.floor(date.getTime() / 1000) : '-'} />
-          <Stat label="Unix milliseconds" value={valid ? date.getTime() : '-'} />
+        <div className="time-summary-list">
+          {detectedItems.map((item) => (
+            <div className="time-summary-item" key={item.label}>
+              <span>{item.label}</span>
+              <strong>{item.value}</strong>
+            </div>
+          ))}
         </div>
       </ToolSection>
 
       <ToolSection title="Output">
-        <div className="output-grid">
-          <TextInputField label="Relative" value={relative} readOnly />
-          <TextInputField label="Normalized ms" value={valid ? inspection.normalized : '-'} readOnly />
-          <TextInputField label="Custom" value={customFormatted} readOnly />
-          <TextInputField label="Formatted" value={formatted} readOnly />
-          <TextInputField label="Local" value={valid ? date.toLocaleString() : 'Invalid date'} readOnly />
-          <TextInputField label="ISO" value={valid ? date.toISOString() : 'Invalid date'} readOnly />
-          <TextInputField label="UTC" value={valid ? date.toUTCString() : 'Invalid date'} readOnly />
-          <TextInputField label="Current seconds" value={String(Math.floor(now.getTime() / 1000))} readOnly />
-          <TextInputField label="Current ms" value={String(now.getTime())} readOnly />
+        <div className="time-output-list">
+          {outputItems.map((item) => (
+            <div className="time-output-item" key={item.label}>
+              <span>{item.label}</span>
+              <code>{item.value}</code>
+            </div>
+          ))}
         </div>
       </ToolSection>
     </section>

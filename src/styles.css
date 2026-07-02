@@ -461,6 +461,36 @@
     @apply grid grid-cols-4 gap-3 max-lg:grid-cols-2 max-sm:grid-cols-1;
   }
 
+  .time-summary-list,
+  .time-output-list {
+    @apply overflow-hidden rounded-md border border-ink-100 bg-white;
+  }
+
+  .time-summary-list {
+    @apply grid lg:grid-cols-4;
+  }
+
+  .time-summary-item {
+    @apply min-w-0 border-b border-ink-100 px-3 py-2.5 last:border-b-0 lg:border-b-0 lg:border-r lg:last:border-r-0;
+  }
+
+  .time-summary-item span,
+  .time-output-item span {
+    @apply block text-xs font-semibold uppercase tracking-normal text-ink-500;
+  }
+
+  .time-summary-item strong {
+    @apply mt-1 block truncate text-base font-semibold text-ink-950;
+  }
+
+  .time-output-item {
+    @apply grid min-w-0 grid-cols-[150px_minmax(0,1fr)] items-center gap-4 border-b border-ink-100 px-3 py-2.5 text-sm last:border-b-0 hover:bg-ink-50 max-md:grid-cols-1 max-md:gap-1;
+  }
+
+  .time-output-item code {
+    @apply min-w-0 break-words font-mono text-sm text-ink-950;
+  }
+
   .stat {
     @apply rounded-md border border-ink-100 bg-ink-50 px-3 py-2 transition hover:border-ink-200;
   }
