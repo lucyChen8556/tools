@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { Code2, Copy } from 'lucide-react';
-import { Field } from '../components/Field';
+import { Code2 } from 'lucide-react';
+import { CopyButton } from '../components/CopyButton';
+import { TextAreaField } from '../components/TextAreaField';
 import { ToolbarButton } from '../components/ToolbarButton';
-import { copyText } from '../utils/clipboard';
 import { decodeHtml, escapeHtml, fromBase64, toBase64 } from '../utils/codec';
 
 function EncodeTool() {
@@ -36,12 +36,8 @@ function EncodeTool() {
   return (
     <section className="tool-surface">
       <div className="split-editor">
-        <Field label="Input">
-          <textarea value={input} onChange={(event) => setInput(event.target.value)} />
-        </Field>
-        <Field label="Output">
-          <textarea value={output} onChange={(event) => setOutput(event.target.value)} />
-        </Field>
+        <TextAreaField label="Input" value={input} onChange={setInput} />
+        <TextAreaField label="Output" value={output} onChange={setOutput} />
       </div>
       <div className="action-bar">
         {[
@@ -57,10 +53,7 @@ function EncodeTool() {
             <span>{label}</span>
           </ToolbarButton>
         ))}
-        <ToolbarButton title="Copy output" onClick={() => copyText(output)} disabled={!output}>
-          <Copy size={16} />
-          <span>Copy</span>
-        </ToolbarButton>
+        <CopyButton title="Copy output" value={output} />
       </div>
       {error ? <div className="notice error">{error}</div> : null}
     </section>

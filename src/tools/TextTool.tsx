@@ -1,11 +1,13 @@
 import { useState } from 'react';
-import { CaseSensitive, Copy, Repeat2 } from 'lucide-react';
-import { Field } from '../components/Field';
+import { CaseSensitive } from 'lucide-react';
+import { ApplyTextButton } from '../components/ApplyTextButton';
+import { CheckboxControl } from '../components/CheckboxControl';
+import { CopyButton } from '../components/CopyButton';
 import { SelectField } from '../components/SelectField';
 import { Stat } from '../components/Stat';
+import { TextAreaField } from '../components/TextAreaField';
 import { ToolbarButton } from '../components/ToolbarButton';
 import { textCaseOptions, type TextCaseMode } from '../config/options';
-import { copyText } from '../utils/clipboard';
 
 type TextTransformId = 'trim' | 'sort' | 'dedupe';
 
@@ -94,26 +96,20 @@ function TextTool() {
   return (
     <section className="tool-surface">
       <div className="split-editor">
-        <Field label="Input">
-          <textarea value={input} onChange={(event) => setInput(event.target.value)} />
-        </Field>
-        <Field label="Output">
-          <textarea value={output} onChange={(event) => setOutput(event.target.value)} />
-        </Field>
+        <TextAreaField label="Input" value={input} onChange={setInput} />
+        <TextAreaField label="Output" value={output} onChange={setOutput} />
       </div>
       <div className="inline-controls">
         <SelectField label="Case" value={caseMode} options={textCaseOptions} onChange={setCaseMode} />
       </div>
       <div className="cleaner-panel">
         {textTransforms.map((transform) => (
-          <label className="check-control" key={transform.id}>
-            <input
-              type="checkbox"
-              checked={selectedTransforms.includes(transform.id)}
-              onChange={() => toggleTransform(transform.id)}
-            />
-            <span>{transform.label}</span>
-          </label>
+          <CheckboxControl
+            key={transform.id}
+            label={transform.label}
+            checked={selectedTransforms.includes(transform.id)}
+            onChange={() => toggleTransform(transform.id)}
+          />
         ))}
       </div>
       <div className="action-bar">
@@ -121,14 +117,8 @@ function TextTool() {
           <CaseSensitive size={16} />
           <span>Run selected</span>
         </ToolbarButton>
-        <ToolbarButton title="Apply output to input" onClick={() => setInput(output)} disabled={!output}>
-          <Repeat2 size={16} />
-          <span>Apply</span>
-        </ToolbarButton>
-        <ToolbarButton title="Copy output" onClick={() => copyText(output)} disabled={!output}>
-          <Copy size={16} />
-          <span>Copy</span>
-        </ToolbarButton>
+        <ApplyTextButton value={output} onApply={setInput} />
+        <CopyButton title="Copy output" value={output} />
       </div>
       <div className="metrics-row">
         <Stat label="Characters" value={input.length} />

@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Copy, Plus, Trash2 } from 'lucide-react';
-import { Field } from '../components/Field';
+import { Plus, Trash2 } from 'lucide-react';
+import { CopyButton } from '../components/CopyButton';
 import { Stat } from '../components/Stat';
+import { TextInputField } from '../components/TextInputField';
 import { ToolbarButton } from '../components/ToolbarButton';
-import { copyText } from '../utils/clipboard';
 
 type QueryRow = {
   id: string;
@@ -69,9 +69,7 @@ function UrlTool() {
 
   return (
     <section className="tool-surface">
-      <Field label="URL">
-        <input value={input} onChange={(event) => setInput(event.target.value)} />
-      </Field>
+      <TextInputField label="URL" value={input} onChange={setInput} />
       {parsed.error ? <div className="notice error">{parsed.error}</div> : null}
       <div className="metrics-row">
         <Stat label="Mode" value={parsed.relative ? 'Relative' : 'Absolute'} />
@@ -80,24 +78,12 @@ function UrlTool() {
         <Stat label="Has hash" value={parsed.url?.hash ? 'Yes' : 'No'} />
       </div>
       <div className="output-grid">
-        <Field label="Protocol">
-          <input readOnly value={parsed.url ? parsed.url.protocol.replace(':', '') || '-' : '-'} />
-        </Field>
-        <Field label="Host">
-          <input readOnly value={parsed.relative ? '(relative URL)' : parsed.url?.host ?? '-'} />
-        </Field>
-        <Field label="Path">
-          <input readOnly value={parsed.url?.pathname ?? '-'} />
-        </Field>
-        <Field label="Hash">
-          <input readOnly value={parsed.url?.hash ?? '-'} />
-        </Field>
-        <Field label="Origin">
-          <input readOnly value={parsed.relative ? '(relative URL)' : parsed.url?.origin ?? '-'} />
-        </Field>
-        <Field label="Search">
-          <input readOnly value={parsed.url?.search ?? '-'} />
-        </Field>
+        <TextInputField label="Protocol" value={parsed.url ? parsed.url.protocol.replace(':', '') || '-' : '-'} readOnly />
+        <TextInputField label="Host" value={parsed.relative ? '(relative URL)' : parsed.url?.host ?? '-'} readOnly />
+        <TextInputField label="Path" value={parsed.url?.pathname ?? '-'} readOnly />
+        <TextInputField label="Hash" value={parsed.url?.hash ?? '-'} readOnly />
+        <TextInputField label="Origin" value={parsed.relative ? '(relative URL)' : parsed.url?.origin ?? '-'} readOnly />
+        <TextInputField label="Search" value={parsed.url?.search ?? '-'} readOnly />
       </div>
       <div className="table-wrap">
         <table>
@@ -138,14 +124,9 @@ function UrlTool() {
           <Plus size={16} />
           <span>Add param</span>
         </ToolbarButton>
-        <ToolbarButton title="Copy rebuilt URL" onClick={() => copyText(rebuilt)} disabled={!rebuilt}>
-          <Copy size={16} />
-          <span>Copy URL</span>
-        </ToolbarButton>
+        <CopyButton title="Copy rebuilt URL" value={rebuilt} label="Copy URL" />
       </div>
-      <Field label="Rebuilt URL">
-        <input readOnly value={rebuilt || '-'} />
-      </Field>
+      <TextInputField label="Rebuilt URL" value={rebuilt || '-'} readOnly />
     </section>
   );
 }

@@ -3,6 +3,7 @@ import { Download, Eraser, ImageDown } from 'lucide-react';
 import { Field } from '../components/Field';
 import { SelectField } from '../components/SelectField';
 import { Stat } from '../components/Stat';
+import { TextInputField } from '../components/TextInputField';
 import { ToolbarButton } from '../components/ToolbarButton';
 import {
   compressionPresetOptions,
@@ -160,17 +161,17 @@ function ImageTool() {
             }}
           />
         </Field>
-        <Field label="Max width" compact>
-          <input
-            type="number"
-            min="100"
-            value={maxWidth}
-            onChange={(event) => {
-              setPreset('custom');
-              setMaxWidth(Number(event.target.value));
-            }}
-          />
-        </Field>
+        <TextInputField
+          label="Max width"
+          type="number"
+          min="100"
+          value={maxWidth}
+          compact
+          onChange={(nextMaxWidth) => {
+            setPreset('custom');
+            setMaxWidth(Number(nextMaxWidth));
+          }}
+        />
         <ToolbarButton title="Compress image" variant="primary" disabled={!file} onClick={() => void compressImage()}>
           <ImageDown size={16} />
           <span>Compress</span>

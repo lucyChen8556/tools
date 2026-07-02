@@ -1,9 +1,8 @@
 import { useMemo, useState } from 'react';
-import { Clipboard } from 'lucide-react';
-import { Field } from '../components/Field';
+import { CheckboxControl } from '../components/CheckboxControl';
+import { CopyButton } from '../components/CopyButton';
 import { Stat } from '../components/Stat';
-import { ToolbarButton } from '../components/ToolbarButton';
-import { copyText } from '../utils/clipboard';
+import { TextAreaField } from '../components/TextAreaField';
 import { diffLines } from '../utils/textDiff';
 
 function TextDiffTool() {
@@ -14,40 +13,24 @@ function TextDiffTool() {
   const added = diffs.filter((diff) => diff.type === 'added').length;
   const removed = diffs.filter((diff) => diff.type === 'removed').length;
   const changed = diffs.filter((diff) => diff.type === 'changed').length;
+  const diffText = diffs
+    .map((diff) => {
+      if (diff.type === 'same') return `  ${diff.oldText ?? ''}`;
+      if (diff.type === 'added') return `+ ${diff.newText ?? ''}`;
+      if (diff.type === 'removed') return `- ${diff.oldText ?? ''}`;
+      return `- ${diff.oldText ?? ''}\n+ ${diff.newText ?? ''}`;
+    })
+    .join('\n');
 
   return (
     <section className="tool-surface">
       <div className="split-editor">
-        <Field label="Before">
-          <textarea value={oldText} onChange={(event) => setOldText(event.target.value)} />
-        </Field>
-        <Field label="After">
-          <textarea value={newText} onChange={(event) => setNewText(event.target.value)} />
-        </Field>
+        <TextAreaField label="Before" value={oldText} onChange={setOldText} />
+        <TextAreaField label="After" value={newText} onChange={setNewText} />
       </div>
       <div className="action-bar">
-        <label className="check-control">
-          <input type="checkbox" checked={ignoreWhitespace} onChange={(event) => setIgnoreWhitespace(event.target.checked)} />
-          <span>Ignore whitespace</span>
-        </label>
-        <ToolbarButton
-          title="Copy diff"
-          onClick={() =>
-            copyText(
-              diffs
-                .map((diff) => {
-                  if (diff.type === 'same') return `  ${diff.oldText ?? ''}`;
-                  if (diff.type === 'added') return `+ ${diff.newText ?? ''}`;
-                  if (diff.type === 'removed') return `- ${diff.oldText ?? ''}`;
-                  return `- ${diff.oldText ?? ''}\n+ ${diff.newText ?? ''}`;
-                })
-                .join('\n'),
-            )
-          }
-        >
-          <Clipboard size={16} />
-          <span>Copy</span>
-        </ToolbarButton>
+        <CheckboxControl label="Ignore whitespace" checked={ignoreWhitespace} onChange={setIgnoreWhitespace} />
+        <CopyButton title="Copy diff" value={diffText} />
       </div>
       <div className="metrics-row">
         <Stat label="Changed" value={changed} />

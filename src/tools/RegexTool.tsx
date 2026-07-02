@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { Field } from '../components/Field';
+import { TextInputField } from '../components/TextInputField';
 import { analyzeRegexPattern, collectRegexMatches } from '../utils/regex';
 import { AnalysisColumn } from './regex/AnalysisColumn';
 import { commonPatterns } from './regex/patterns';
@@ -46,25 +46,25 @@ function RegexTool() {
   return (
     <section className="tool-surface">
       <div className="inline-controls wide">
-        <Field label="Pattern" compact>
-          <input
-            value={pattern}
-            onChange={(event) => {
-              setPresetId('');
-              setPattern(event.target.value);
-              setActiveRuleId('');
-            }}
-          />
-        </Field>
-        <Field label="Flags" compact>
-          <input
-            value={flags}
-            onChange={(event) => {
-              setPresetId('');
-              setFlags(event.target.value);
-            }}
-          />
-        </Field>
+        <TextInputField
+          label="Pattern"
+          value={pattern}
+          compact
+          onChange={(nextPattern) => {
+            setPresetId('');
+            setPattern(nextPattern);
+            setActiveRuleId('');
+          }}
+        />
+        <TextInputField
+          label="Flags"
+          value={flags}
+          compact
+          onChange={(nextFlags) => {
+            setPresetId('');
+            setFlags(nextFlags);
+          }}
+        />
       </div>
       <div className="regex-workspace">
         <AnalysisColumn

@@ -1,9 +1,9 @@
 import { useMemo, useState } from 'react';
 import { RotateCcw } from 'lucide-react';
 import { CopyableRows } from '../components/CopyableRows';
-import { Field } from '../components/Field';
 import { SelectField } from '../components/SelectField';
 import { Stat } from '../components/Stat';
+import { TextInputField } from '../components/TextInputField';
 import { ToolbarButton } from '../components/ToolbarButton';
 
 const baseOptions = [
@@ -70,9 +70,7 @@ function NumberTool() {
   return (
     <section className="tool-surface">
       <div className="inline-controls">
-        <Field label="Number" compact>
-          <input value={input} onChange={(event) => setInput(event.target.value)} />
-        </Field>
+        <TextInputField label="Number" value={input} onChange={setInput} compact />
         <SelectField label="Input base" value={baseMode} options={baseOptions} onChange={setBaseMode} />
       </div>
       {parsed.error ? <div className="notice error">{parsed.error}</div> : null}

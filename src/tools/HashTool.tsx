@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
-import { Copy, Fingerprint } from 'lucide-react';
+import { Fingerprint } from 'lucide-react';
 import { CopyableRows } from '../components/CopyableRows';
-import { Field } from '../components/Field';
+import { CopyButton } from '../components/CopyButton';
 import { Stat } from '../components/Stat';
+import { TextAreaField } from '../components/TextAreaField';
 import { ToolbarButton } from '../components/ToolbarButton';
-import { copyText } from '../utils/clipboard';
 
 const hashAlgorithms = ['SHA-1', 'SHA-256', 'SHA-384', 'SHA-512'] as const;
 
@@ -56,9 +56,7 @@ function HashTool() {
 
   return (
     <section className="tool-surface">
-      <Field label="Input">
-        <textarea value={input} onChange={(event) => setInput(event.target.value)} />
-      </Field>
+      <TextAreaField label="Input" value={input} onChange={setInput} />
       {error ? <div className="notice error">{error}</div> : null}
       <div className="metrics-row">
         <Stat label="Characters" value={input.length} />
@@ -72,10 +70,7 @@ function HashTool() {
           <Fingerprint size={16} />
           <span>Sample</span>
         </ToolbarButton>
-        <ToolbarButton title="Copy all hashes" onClick={() => copyText(results.map((result) => `${result.algorithm}: ${result.value}`).join('\n'))}>
-          <Copy size={16} />
-          <span>Copy all</span>
-        </ToolbarButton>
+        <CopyButton title="Copy all hashes" value={results.map((result) => `${result.algorithm}: ${result.value}`).join('\n')} label="Copy all" />
       </div>
     </section>
   );

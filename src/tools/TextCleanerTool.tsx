@@ -1,9 +1,11 @@
 import { useState } from 'react';
-import { Check, Copy, Eraser, Repeat2 } from 'lucide-react';
-import { Field } from '../components/Field';
+import { Check, Eraser } from 'lucide-react';
+import { ApplyTextButton } from '../components/ApplyTextButton';
+import { CheckboxControl } from '../components/CheckboxControl';
+import { CopyButton } from '../components/CopyButton';
 import { Stat } from '../components/Stat';
+import { TextAreaField } from '../components/TextAreaField';
 import { ToolbarButton } from '../components/ToolbarButton';
-import { copyText } from '../utils/clipboard';
 
 function normalizeLineEndings(value: string) {
   return value.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
@@ -87,23 +89,17 @@ function TextCleanerTool() {
   return (
     <section className="tool-surface">
       <div className="split-editor">
-        <Field label="Input">
-          <textarea value={input} onChange={(event) => setInput(event.target.value)} />
-        </Field>
-        <Field label="Output">
-          <textarea value={output} onChange={(event) => setOutput(event.target.value)} />
-        </Field>
+        <TextAreaField label="Input" value={input} onChange={setInput} />
+        <TextAreaField label="Output" value={output} onChange={setOutput} />
       </div>
       <div className="cleaner-panel">
         {cleanerActions.map((action) => (
-          <label className="check-control" key={action.id}>
-            <input
-              type="checkbox"
-              checked={selectedActions.includes(action.id)}
-              onChange={() => toggleCleanerAction(action.id)}
-            />
-            <span>{action.label}</span>
-          </label>
+          <CheckboxControl
+            key={action.id}
+            label={action.label}
+            checked={selectedActions.includes(action.id)}
+            onChange={() => toggleCleanerAction(action.id)}
+          />
         ))}
       </div>
       <div className="action-bar cleaner-actions">
@@ -119,14 +115,8 @@ function TextCleanerTool() {
           <Eraser size={16} />
           <span>Clear rules</span>
         </ToolbarButton>
-        <ToolbarButton title="Apply output to input" variant="primary" onClick={() => setInput(output)} disabled={!output}>
-          <Repeat2 size={16} />
-          <span>Apply output</span>
-        </ToolbarButton>
-        <ToolbarButton title="Copy output" onClick={() => copyText(output)} disabled={!output}>
-          <Copy size={16} />
-          <span>Copy</span>
-        </ToolbarButton>
+        <ApplyTextButton value={output} onApply={setInput} label="Apply output" variant="primary" />
+        <CopyButton title="Copy output" value={output} />
       </div>
       <div className="metrics-row">
         <Stat label="Input chars" value={input.length} />

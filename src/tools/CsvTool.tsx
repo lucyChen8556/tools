@@ -1,10 +1,8 @@
 import { useMemo, useState } from 'react';
-import { Copy } from 'lucide-react';
-import { Field } from '../components/Field';
+import { CopyButton } from '../components/CopyButton';
 import { SelectField } from '../components/SelectField';
-import { ToolbarButton } from '../components/ToolbarButton';
+import { TextAreaField } from '../components/TextAreaField';
 import { csvDelimiterOptions, type CsvDelimiterId } from '../config/options';
-import { copyText } from '../utils/clipboard';
 import { csvRowsToObjects, parseCsv } from '../utils/csv';
 
 function CsvTool() {
@@ -18,18 +16,11 @@ function CsvTool() {
     <section className="tool-surface">
       <div className="inline-controls">
         <SelectField label="Delimiter" value={delimiter} options={csvDelimiterOptions} onChange={setDelimiter} />
-        <ToolbarButton title="Copy JSON" onClick={() => copyText(json)}>
-          <Copy size={16} />
-          <span>JSON</span>
-        </ToolbarButton>
+        <CopyButton title="Copy JSON" value={json} label="JSON" />
       </div>
       <div className="split-editor">
-        <Field label="CSV / Excel">
-          <textarea value={input} onChange={(event) => setInput(event.target.value)} />
-        </Field>
-        <Field label="JSON">
-          <textarea value={json} readOnly />
-        </Field>
+        <TextAreaField label="CSV / Excel" value={input} onChange={setInput} />
+        <TextAreaField label="JSON" value={json} readOnly />
       </div>
       <div className="table-wrap">
         <table>

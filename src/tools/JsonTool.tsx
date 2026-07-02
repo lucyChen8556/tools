@@ -1,12 +1,12 @@
 import { useMemo, useState } from 'react';
-import { ArrowDownUp, Copy, FileJson, Repeat2 } from 'lucide-react';
-import { Field } from '../components/Field';
+import { ArrowDownUp, FileJson, Repeat2 } from 'lucide-react';
+import { CopyButton } from '../components/CopyButton';
 import { SelectField } from '../components/SelectField';
 import { Stat } from '../components/Stat';
+import { TextAreaField } from '../components/TextAreaField';
 import { ToolbarButton } from '../components/ToolbarButton';
 import { jsonMergeModeOptions } from '../config/options';
 import type { JsonDiff, JsonMergeMode } from '../types';
-import { copyText } from '../utils/clipboard';
 import { compactJson, diffJson, formatJson, mergeJsonByDiff, parseJson, pathLabel, sortJson } from '../utils/json';
 
 const sampleLeftJson = `{
@@ -92,12 +92,8 @@ function JsonTool() {
       </div>
 
       <div className="split-editor">
-        <Field label="Before">
-          <textarea value={left} onChange={(event) => setLeft(event.target.value)} spellCheck={false} />
-        </Field>
-        <Field label="After">
-          <textarea value={right} onChange={(event) => setRight(event.target.value)} spellCheck={false} />
-        </Field>
+        <TextAreaField label="Before" value={left} onChange={setLeft} spellCheck={false} />
+        <TextAreaField label="After" value={right} onChange={setRight} spellCheck={false} />
       </div>
 
       <div className="action-bar">
@@ -133,10 +129,7 @@ function JsonTool() {
             </ToolbarButton>
           </>
         )}
-        <ToolbarButton title="Copy result" onClick={() => copyText(jsonResult)} disabled={!jsonResult}>
-          <Copy size={16} />
-          <span>Copy</span>
-        </ToolbarButton>
+        <CopyButton title="Copy result" value={jsonResult} />
       </div>
 
       {jsonError || compareState.error ? <div className="notice error">{jsonError || compareState.error}</div> : null}
@@ -167,19 +160,13 @@ function JsonTool() {
       )}
 
       {jsonResult && (
-        <Field label="Result">
-          <textarea className="result-output" value={jsonResult} onChange={(event) => setJsonResult(event.target.value)} spellCheck={false} />
-        </Field>
+        <TextAreaField label="Result" value={jsonResult} onChange={setJsonResult} spellCheck={false} className="result-output" />
       )}
 
       {mode === 'format' && !jsonResult && (
         <div className="split-editor compact-preview">
-          <Field label="Sorted Before">
-            <textarea value={compareState.leftSorted} readOnly spellCheck={false} />
-          </Field>
-          <Field label="Sorted After">
-            <textarea value={compareState.rightSorted} readOnly spellCheck={false} />
-          </Field>
+          <TextAreaField label="Sorted Before" value={compareState.leftSorted} readOnly spellCheck={false} />
+          <TextAreaField label="Sorted After" value={compareState.rightSorted} readOnly spellCheck={false} />
         </div>
       )}
     </section>

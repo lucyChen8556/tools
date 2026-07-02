@@ -1,5 +1,5 @@
-import { Field } from '../../components/Field';
 import { Stat } from '../../components/Stat';
+import { TextAreaField } from '../../components/TextAreaField';
 import type { RegexMatchResult } from '../../types';
 import type { HighlightSegment } from './types';
 
@@ -17,9 +17,7 @@ type TestColumnProps = {
 function TestColumn({ error, flags, hasPattern, highlightedSample, matches, ruleCount, sample, setSample }: TestColumnProps) {
   return (
     <div className="regex-test-column">
-      <Field label="Test text">
-        <textarea value={sample} onChange={(event) => setSample(event.target.value)} />
-      </Field>
+      <TextAreaField label="Test text" value={sample} onChange={setSample} />
       {error ? <div className="notice error">{error}</div> : null}
       <div className="metrics-row">
         <Stat label="Matches" value={matches.length} />

@@ -1,9 +1,9 @@
 import { useMemo, useState } from 'react';
-import { Copy, Eraser, KeyRound, ShieldAlert } from 'lucide-react';
-import { Field } from '../components/Field';
+import { Eraser, KeyRound, ShieldAlert } from 'lucide-react';
+import { CopyButton } from '../components/CopyButton';
 import { Stat } from '../components/Stat';
+import { TextAreaField } from '../components/TextAreaField';
 import { ToolbarButton } from '../components/ToolbarButton';
-import { copyText } from '../utils/clipboard';
 import { decodeJwt, type DecodedJwt } from '../utils/jwt';
 
 const sampleJwt =
@@ -46,23 +46,15 @@ function JwtTool() {
 
   return (
     <section className="tool-surface">
-      <Field label="JWT">
-        <textarea value={token} onChange={(event) => setToken(event.target.value)} spellCheck={false} />
-      </Field>
+      <TextAreaField label="JWT" value={token} onChange={setToken} spellCheck={false} />
 
       <div className="action-bar">
         <ToolbarButton title="Decode JWT" variant="primary" onClick={runDecode}>
           <KeyRound size={16} />
           <span>Decode</span>
         </ToolbarButton>
-        <ToolbarButton title="Copy header JSON" disabled={!decoded} onClick={() => copyText(decoded?.headerText ?? '')}>
-          <Copy size={16} />
-          <span>Header</span>
-        </ToolbarButton>
-        <ToolbarButton title="Copy payload JSON" disabled={!decoded} onClick={() => copyText(decoded?.payloadText ?? '')}>
-          <Copy size={16} />
-          <span>Payload</span>
-        </ToolbarButton>
+        <CopyButton title="Copy header JSON" value={decoded?.headerText ?? ''} label="Header" disabled={!decoded} />
+        <CopyButton title="Copy payload JSON" value={decoded?.payloadText ?? ''} label="Payload" disabled={!decoded} />
         <ToolbarButton title="Clear JWT" disabled={!token && !decoded && !error} onClick={clearJwt}>
           <Eraser size={16} />
           <span>Clear</span>
@@ -95,15 +87,9 @@ function JwtTool() {
             </div>
           ) : null}
           <div className="output-grid">
-            <Field label="Header">
-              <textarea className="result-output" value={decoded.headerText} readOnly spellCheck={false} />
-            </Field>
-            <Field label="Payload">
-              <textarea className="result-output" value={decoded.payloadText} readOnly spellCheck={false} />
-            </Field>
-            <Field label="Signature">
-              <textarea className="result-output" value={decoded.signaturePreview} readOnly spellCheck={false} />
-            </Field>
+            <TextAreaField label="Header" value={decoded.headerText} readOnly spellCheck={false} className="result-output" />
+            <TextAreaField label="Payload" value={decoded.payloadText} readOnly spellCheck={false} className="result-output" />
+            <TextAreaField label="Signature" value={decoded.signaturePreview} readOnly spellCheck={false} className="result-output" />
           </div>
         </>
       ) : null}

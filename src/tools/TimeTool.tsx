@@ -1,8 +1,8 @@
 import { useMemo, useState } from 'react';
 import { Clock3 } from 'lucide-react';
-import { Field } from '../components/Field';
 import { SelectField } from '../components/SelectField';
 import { Stat } from '../components/Stat';
+import { TextInputField } from '../components/TextInputField';
 import { ToolbarButton } from '../components/ToolbarButton';
 import { localeOptions, timeFormatPresetOptions, timeZoneOptions } from '../config/options';
 
@@ -172,9 +172,7 @@ function TimeTool() {
   return (
     <section className="tool-surface">
       <div className="inline-controls wide time-controls">
-        <Field label="Input" compact>
-          <input value={value} onChange={(event) => setValue(event.target.value)} />
-        </Field>
+        <TextInputField label="Input" value={value} onChange={setValue} compact />
         <SelectField label="Locale" value={locale} options={localeOptions} onChange={setLocale} />
         <SelectField label="Time zone" value={timeZone} options={timeZoneOptions} onChange={setTimeZone} />
         <SelectField
@@ -183,9 +181,7 @@ function TimeTool() {
           options={formatPresetOptions}
           onChange={(nextFormat) => nextFormat !== 'custom' && setCustomFormat(nextFormat)}
         />
-        <Field label="Custom format" compact>
-          <input value={customFormat} onChange={(event) => setCustomFormat(event.target.value)} />
-        </Field>
+        <TextInputField label="Custom format" value={customFormat} onChange={setCustomFormat} compact />
         <ToolbarButton title="Use current time" variant="primary" onClick={() => setValue(String(Date.now()))}>
           <Clock3 size={16} />
           <span>Now</span>
@@ -198,33 +194,15 @@ function TimeTool() {
         <Stat label="Unix milliseconds" value={valid ? date.getTime() : '-'} />
       </div>
       <div className="output-grid">
-        <Field label="Relative">
-          <input readOnly value={relative} />
-        </Field>
-        <Field label="Normalized ms">
-          <input readOnly value={valid ? inspection.normalized : '-'} />
-        </Field>
-        <Field label="Custom">
-          <input readOnly value={customFormatted} />
-        </Field>
-        <Field label="Formatted">
-          <input readOnly value={formatted} />
-        </Field>
-        <Field label="Local">
-          <input readOnly value={valid ? date.toLocaleString() : 'Invalid date'} />
-        </Field>
-        <Field label="ISO">
-          <input readOnly value={valid ? date.toISOString() : 'Invalid date'} />
-        </Field>
-        <Field label="UTC">
-          <input readOnly value={valid ? date.toUTCString() : 'Invalid date'} />
-        </Field>
-        <Field label="Current seconds">
-          <input readOnly value={String(Math.floor(now.getTime() / 1000))} />
-        </Field>
-        <Field label="Current ms">
-          <input readOnly value={String(now.getTime())} />
-        </Field>
+        <TextInputField label="Relative" value={relative} readOnly />
+        <TextInputField label="Normalized ms" value={valid ? inspection.normalized : '-'} readOnly />
+        <TextInputField label="Custom" value={customFormatted} readOnly />
+        <TextInputField label="Formatted" value={formatted} readOnly />
+        <TextInputField label="Local" value={valid ? date.toLocaleString() : 'Invalid date'} readOnly />
+        <TextInputField label="ISO" value={valid ? date.toISOString() : 'Invalid date'} readOnly />
+        <TextInputField label="UTC" value={valid ? date.toUTCString() : 'Invalid date'} readOnly />
+        <TextInputField label="Current seconds" value={String(Math.floor(now.getTime() / 1000))} readOnly />
+        <TextInputField label="Current ms" value={String(now.getTime())} readOnly />
       </div>
     </section>
   );
