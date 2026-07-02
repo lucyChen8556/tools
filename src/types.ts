@@ -8,6 +8,9 @@ export type ToolId =
   | 'color'
   | 'regex'
   | 'jwt'
+  | 'hash'
+  | 'url'
+  | 'number'
   | 'encode'
   | 'csv';
 

@@ -1,6 +1,7 @@
 import { ChangeEvent, useState } from 'react';
 import { Download, Eraser, ImageDown } from 'lucide-react';
 import { Field } from '../components/Field';
+import { SelectField } from '../components/SelectField';
 import { Stat } from '../components/Stat';
 import { ToolbarButton } from '../components/ToolbarButton';
 import {
@@ -144,24 +145,8 @@ function ImageTool() {
       </label>
 
       <div className="inline-controls wide">
-        <Field label="Preset" compact>
-          <select value={preset} onChange={(event) => updatePreset(event.target.value as CompressionPreset)}>
-            {compressionPresetOptions.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
-        </Field>
-        <Field label="Format" compact>
-          <select value={outputFormat} onChange={(event) => setOutputFormat(event.target.value as OutputFormat)}>
-            {outputFormatOptions.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
-        </Field>
+        <SelectField label="Preset" value={preset} options={compressionPresetOptions} onChange={updatePreset} />
+        <SelectField label="Format" value={outputFormat} options={outputFormatOptions} onChange={setOutputFormat} />
         <Field label="Quality" compact>
           <input
             type="range"

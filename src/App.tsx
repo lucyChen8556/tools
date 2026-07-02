@@ -6,14 +6,17 @@ import { readStoredToolId, readStoredToolList, writeStorage } from './utils/stor
 import { ColorTool } from './tools/ColorTool';
 import { CsvTool } from './tools/CsvTool';
 import { EncodeTool } from './tools/EncodeTool';
+import { HashTool } from './tools/HashTool';
 import { ImageTool } from './tools/ImageTool';
 import { JsonTool } from './tools/JsonTool';
 import { JwtTool } from './tools/JwtTool';
+import { NumberTool } from './tools/NumberTool';
 import { RegexTool } from './tools/RegexTool';
 import { TextCleanerTool } from './tools/TextCleanerTool';
 import { TextDiffTool } from './tools/TextDiffTool';
 import { TextTool } from './tools/TextTool';
 import { TimeTool } from './tools/TimeTool';
+import { UrlTool } from './tools/UrlTool';
 
 export function App() {
   const [activeTool, setActiveToolState] = useState<ToolId>(() => readStoredToolId('tools-hub.active', 'json'));
@@ -43,6 +46,9 @@ export function App() {
     color: <ColorTool />,
     regex: <RegexTool />,
     jwt: <JwtTool />,
+    hash: <HashTool />,
+    url: <UrlTool />,
+    number: <NumberTool />,
     encode: <EncodeTool />,
     csv: <CsvTool />,
   }[activeTool];

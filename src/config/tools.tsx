@@ -1,5 +1,20 @@
 import type { ReactNode } from 'react';
-import { Braces, Clock3, Code2, Diff, Eraser, FileSpreadsheet, ImageDown, KeyRound, Palette, Regex, Type } from 'lucide-react';
+import {
+  Binary,
+  Braces,
+  Clock3,
+  Code2,
+  Diff,
+  Eraser,
+  FileSpreadsheet,
+  Fingerprint,
+  ImageDown,
+  KeyRound,
+  Link2,
+  Palette,
+  Regex,
+  Type,
+} from 'lucide-react';
 import type { ToolId } from '../types';
 
 export const tools: Array<{
@@ -18,6 +33,9 @@ export const tools: Array<{
   { id: 'color', name: 'Color Converter', shortName: 'Color', group: 'Design', icon: <Palette size={18} /> },
   { id: 'regex', name: 'Regex Tester', shortName: 'Regex', group: 'Code', icon: <Regex size={18} /> },
   { id: 'jwt', name: 'JWT Decoder', shortName: 'JWT', group: 'Code', icon: <KeyRound size={18} /> },
+  { id: 'hash', name: 'Hash Generator', shortName: 'Hash', group: 'Code', icon: <Fingerprint size={18} /> },
+  { id: 'url', name: 'URL Parser', shortName: 'URL', group: 'Code', icon: <Link2 size={18} /> },
+  { id: 'number', name: 'Number Base Converter', shortName: 'Base', group: 'Code', icon: <Binary size={18} /> },
   { id: 'encode', name: 'Encode / Decode', shortName: 'Codec', group: 'Code', icon: <Code2 size={18} /> },
   { id: 'csv', name: 'CSV / Excel Helper', shortName: 'CSV', group: 'Data', icon: <FileSpreadsheet size={18} /> },
 ];

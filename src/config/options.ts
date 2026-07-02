@@ -10,6 +10,11 @@ export const textCaseOptions = [
   { label: 'Uppercase', value: 'upper' },
   { label: 'Lowercase', value: 'lower' },
   { label: 'Title Case', value: 'title' },
+  { label: 'Slug / kebab-case', value: 'slug' },
+  { label: 'snake_case', value: 'snake' },
+  { label: 'camelCase', value: 'camel' },
+  { label: 'PascalCase', value: 'pascal' },
+  { label: 'CONSTANT_CASE', value: 'constant' },
 ] as const;
 
 export type TextCaseMode = (typeof textCaseOptions)[number]['value'];

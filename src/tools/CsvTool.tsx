@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { Copy } from 'lucide-react';
 import { Field } from '../components/Field';
+import { SelectField } from '../components/SelectField';
 import { ToolbarButton } from '../components/ToolbarButton';
 import { csvDelimiterOptions, type CsvDelimiterId } from '../config/options';
 import { copyText } from '../utils/clipboard';
@@ -16,15 +17,7 @@ function CsvTool() {
   return (
     <section className="tool-surface">
       <div className="inline-controls">
-        <Field label="Delimiter" compact>
-          <select value={delimiter} onChange={(event) => setDelimiter(event.target.value as CsvDelimiterId)}>
-            {csvDelimiterOptions.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
-        </Field>
+        <SelectField label="Delimiter" value={delimiter} options={csvDelimiterOptions} onChange={setDelimiter} />
         <ToolbarButton title="Copy JSON" onClick={() => copyText(json)}>
           <Copy size={16} />
           <span>JSON</span>

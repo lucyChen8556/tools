@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { Clock3 } from 'lucide-react';
 import { Field } from '../components/Field';
+import { SelectField } from '../components/SelectField';
 import { Stat } from '../components/Stat';
 import { ToolbarButton } from '../components/ToolbarButton';
 import { localeOptions, timeFormatPresetOptions, timeZoneOptions } from '../config/options';
@@ -90,19 +91,68 @@ function formatCustomDate(date: Date, pattern: string, locale: string | undefine
   );
 }
 
+function inspectDateInput(value: string) {
+  const trimmed = value.trim();
+  if (!trimmed) return { date: new Date(Number.NaN), type: 'Empty', unit: '-', normalized: '-' };
+
+  if (/^-?\d+$/.test(trimmed)) {
+    const negative = trimmed.startsWith('-');
+    const digits = negative ? trimmed.slice(1) : trimmed;
+    const timestamp = BigInt(trimmed);
+    let unit = 'Seconds';
+    let milliseconds = timestamp * 1000n;
+
+    if (digits.length > 10 && digits.length <= 13) {
+      unit = 'Milliseconds';
+      milliseconds = timestamp;
+    } else if (digits.length > 13 && digits.length <= 16) {
+      unit = 'Microseconds';
+      milliseconds = timestamp / 1000n;
+    } else if (digits.length > 16) {
+      unit = 'Nanoseconds';
+      milliseconds = timestamp / 1_000_000n;
+    }
+
+    return {
+      date: new Date(Number(milliseconds)),
+      type: 'Numeric timestamp',
+      unit,
+      normalized: milliseconds.toString(),
+    };
+  }
+
+  return {
+    date: new Date(trimmed),
+    type: 'Date string',
+    unit: 'Parsed by Date',
+    normalized: '-',
+  };
+}
+
+function formatDuration(milliseconds: number) {
+  const absolute = Math.abs(milliseconds);
+  const units = [
+    { label: 'day', value: 86_400_000 },
+    { label: 'hour', value: 3_600_000 },
+    { label: 'minute', value: 60_000 },
+    { label: 'second', value: 1_000 },
+  ];
+  const unit = units.find((item) => absolute >= item.value) ?? units[units.length - 1];
+  const amount = Math.round(absolute / unit.value);
+  const suffix = milliseconds > 0 ? 'from now' : 'ago';
+  return `${amount} ${unit.label}${amount === 1 ? '' : 's'} ${suffix}`;
+}
+
 function TimeTool() {
   const [value, setValue] = useState(() => String(Date.now()));
   const [locale, setLocale] = useState('default');
   const [timeZone, setTimeZone] = useState('default');
   const [customFormat, setCustomFormat] = useState('YYYY-MM-DD HH:mm:ss');
-  const date = useMemo(() => {
-    const trimmed = value.trim();
-    if (/^\d{10}$/.test(trimmed)) return new Date(Number(trimmed) * 1000);
-    if (/^\d{13}$/.test(trimmed)) return new Date(Number(trimmed));
-    return new Date(trimmed);
-  }, [value]);
+  const inspection = useMemo(() => inspectDateInput(value), [value]);
+  const date = inspection.date;
   const valid = !Number.isNaN(date.getTime());
   const now = new Date();
+  const relative = valid ? formatDuration(date.getTime() - now.getTime()) : '-';
   const selectedLocale = locale === 'default' ? undefined : locale;
   const selectedTimeZone = timeZone === 'default' ? undefined : timeZone;
   const formatted = valid
@@ -113,38 +163,28 @@ function TimeTool() {
       }).format(date)
     : 'Invalid date';
   const customFormatted = valid ? formatCustomDate(date, customFormat, selectedLocale, selectedTimeZone) : 'Invalid date';
+  const selectedFormatPreset = (timeFormatPresetOptions as readonly string[]).includes(customFormat) ? customFormat : 'custom';
+  const formatPresetOptions = [
+    { label: 'Custom', value: 'custom' },
+    ...timeFormatPresetOptions.map((option) => ({ label: option, value: option })),
+  ];
 
   return (
     <section className="tool-surface">
-      <div className="inline-controls wide">
+      <div className="inline-controls wide time-controls">
         <Field label="Input" compact>
           <input value={value} onChange={(event) => setValue(event.target.value)} />
         </Field>
-        <Field label="Locale" compact>
-          <select value={locale} onChange={(event) => setLocale(event.target.value)}>
-            {localeOptions.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
-        </Field>
-        <Field label="Time zone" compact>
-          <select value={timeZone} onChange={(event) => setTimeZone(event.target.value)}>
-            {timeZoneOptions.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
-        </Field>
+        <SelectField label="Locale" value={locale} options={localeOptions} onChange={setLocale} />
+        <SelectField label="Time zone" value={timeZone} options={timeZoneOptions} onChange={setTimeZone} />
+        <SelectField
+          label="Format preset"
+          value={selectedFormatPreset}
+          options={formatPresetOptions}
+          onChange={(nextFormat) => nextFormat !== 'custom' && setCustomFormat(nextFormat)}
+        />
         <Field label="Custom format" compact>
-          <input list="time-format-presets" value={customFormat} onChange={(event) => setCustomFormat(event.target.value)} />
-          <datalist id="time-format-presets">
-            {timeFormatPresetOptions.map((option) => (
-              <option key={option} value={option} />
-            ))}
-          </datalist>
+          <input value={customFormat} onChange={(event) => setCustomFormat(event.target.value)} />
         </Field>
         <ToolbarButton title="Use current time" variant="primary" onClick={() => setValue(String(Date.now()))}>
           <Clock3 size={16} />
@@ -152,12 +192,18 @@ function TimeTool() {
         </ToolbarButton>
       </div>
       <div className="metrics-row">
+        <Stat label="Input type" value={inspection.type} />
+        <Stat label="Detected unit" value={inspection.unit} />
         <Stat label="Unix seconds" value={valid ? Math.floor(date.getTime() / 1000) : '-'} />
         <Stat label="Unix milliseconds" value={valid ? date.getTime() : '-'} />
-        <Stat label="Current seconds" value={Math.floor(now.getTime() / 1000)} />
-        <Stat label="Current ms" value={now.getTime()} />
       </div>
       <div className="output-grid">
+        <Field label="Relative">
+          <input readOnly value={relative} />
+        </Field>
+        <Field label="Normalized ms">
+          <input readOnly value={valid ? inspection.normalized : '-'} />
+        </Field>
         <Field label="Custom">
           <input readOnly value={customFormatted} />
         </Field>
@@ -172,6 +218,12 @@ function TimeTool() {
         </Field>
         <Field label="UTC">
           <input readOnly value={valid ? date.toUTCString() : 'Invalid date'} />
+        </Field>
+        <Field label="Current seconds">
+          <input readOnly value={String(Math.floor(now.getTime() / 1000))} />
+        </Field>
+        <Field label="Current ms">
+          <input readOnly value={String(now.getTime())} />
         </Field>
       </div>
     </section>

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { CaseSensitive, Copy, Repeat2 } from 'lucide-react';
 import { Field } from '../components/Field';
+import { SelectField } from '../components/SelectField';
 import { Stat } from '../components/Stat';
 import { ToolbarButton } from '../components/ToolbarButton';
 import { textCaseOptions, type TextCaseMode } from '../config/options';
@@ -13,6 +14,33 @@ const textTransforms: Array<{ id: TextTransformId; label: string }> = [
   { id: 'sort', label: 'Sort lines' },
   { id: 'dedupe', label: 'Dedupe lines' },
 ];
+
+function splitWords(value: string) {
+  return value
+    .replace(/([a-z0-9])([A-Z])/g, '$1 $2')
+    .replace(/[_-]+/g, ' ')
+    .trim()
+    .match(/[\p{L}\p{N}]+/gu) ?? [];
+}
+
+function capitalizeWord(value: string) {
+  return value ? `${value[0].toUpperCase()}${value.slice(1).toLowerCase()}` : '';
+}
+
+function formatWords(value: string, mode: TextCaseMode) {
+  const words = splitWords(value);
+  if (words.length === 0) return '';
+
+  if (mode === 'slug') return words.map((word) => word.toLowerCase()).join('-');
+  if (mode === 'snake') return words.map((word) => word.toLowerCase()).join('_');
+  if (mode === 'camel') {
+    const [firstWord, ...restWords] = words;
+    return `${(firstWord ?? '').toLowerCase()}${restWords.map(capitalizeWord).join('')}`;
+  }
+  if (mode === 'pascal') return words.map(capitalizeWord).join('');
+  if (mode === 'constant') return words.map((word) => word.toUpperCase()).join('_');
+  return value;
+}
 
 function TextTool() {
   const [input, setInput] = useState('Apple\nbanana\nApple\n  carrot  ');
@@ -33,6 +61,12 @@ function TextTool() {
     if (caseMode === 'upper') return value.toUpperCase();
     if (caseMode === 'lower') return value.toLowerCase();
     if (caseMode === 'title') return value.toLowerCase().replace(/\b\p{L}/gu, (char) => char.toUpperCase());
+    if (['slug', 'snake', 'camel', 'pascal', 'constant'].includes(caseMode)) {
+      return value
+        .split(/\r?\n/)
+        .map((line) => formatWords(line, caseMode))
+        .join('\n');
+    }
     return value;
   }
 
@@ -68,15 +102,7 @@ function TextTool() {
         </Field>
       </div>
       <div className="inline-controls">
-        <Field label="Case" compact>
-          <select value={caseMode} onChange={(event) => setCaseMode(event.target.value as TextCaseMode)}>
-            {textCaseOptions.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
-        </Field>
+        <SelectField label="Case" value={caseMode} options={textCaseOptions} onChange={setCaseMode} />
       </div>
       <div className="cleaner-panel">
         {textTransforms.map((transform) => (
