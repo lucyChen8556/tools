@@ -25,6 +25,14 @@ export const toolHelp: Record<ToolId, ToolHelp> = {
       { title: 'Notes', items: ['This is a text diff, not a semantic JSON parser.', 'Use JSON Lab for structural JSON differences.'] },
     ],
   },
+  'markdown-table': {
+    overview: 'Format messy Markdown tables into aligned, readable tables for docs and release notes.',
+    sections: [
+      { title: 'What it does', items: ['Trims table cells.', 'Pads missing cells.', 'Generates a separator row.', 'Aligns columns based on the widest cell.'] },
+      { title: 'Good for', items: ['README tables.', 'PR descriptions.', 'Release note checklists.'] },
+      { title: 'Notes', items: ['Rows without pipe characters are ignored.', 'Escaped pipe characters inside cells are not parsed as a special case yet.'] },
+    ],
+  },
   'text-cleaner': {
     overview: 'Apply multiple cleanup operations to messy pasted text in one run.',
     sections: [
@@ -36,7 +44,7 @@ export const toolHelp: Record<ToolId, ToolHelp> = {
   time: {
     overview: 'Inspect timestamps and format dates across locales, time zones, and custom patterns.',
     sections: [
-      { title: 'What it does', items: ['Detects seconds, milliseconds, microseconds, nanoseconds, or date strings.', 'Formats output with locale and time zone choices.', 'Supports common preset tokens and custom date formats.'] },
+      { title: 'What it does', items: ['Detects seconds, milliseconds, microseconds, nanoseconds, or date strings.', 'Formats output with locale and time zone choices.', 'Supports common preset tokens and custom date formats.', 'Converts multiple timestamps in batch using the same format settings.'] },
       { title: 'Good for', items: ['Debugging API timestamps.', 'Checking UTC/local time conversion.', 'Preparing human-readable release or log times.'] },
       { title: 'Notes', items: ['Date string parsing follows browser Date behavior.', 'Use explicit timestamps when precision matters.'] },
     ],
@@ -44,7 +52,7 @@ export const toolHelp: Record<ToolId, ToolHelp> = {
   text: {
     overview: 'Transform text casing and line order with composable operations.',
     sections: [
-      { title: 'What it does', items: ['Uppercase, lowercase, title case, slug, snake, camel, Pascal, and constant case.', 'Trim, sort, and dedupe lines.', 'Copy or apply output back to input.'] },
+      { title: 'What it does', items: ['Uppercase, lowercase, title case, slug, snake, camel, Pascal, and constant case.', 'Trim, sort, and dedupe lines.', 'Dedupe can ignore case or trim only the comparison key.', 'Copy or apply output back to input.'] },
       { title: 'Good for', items: ['Creating variable names.', 'Normalizing copy blocks.', 'Sorting simple line lists.'] },
       { title: 'Notes', items: ['Case conversion runs before line transforms.', 'Slug and identifier modes process each line independently.'] },
     ],
@@ -92,7 +100,7 @@ export const toolHelp: Record<ToolId, ToolHelp> = {
   url: {
     overview: 'Parse URLs, edit query parameters, and rebuild the final URL.',
     sections: [
-      { title: 'What it does', items: ['Extracts protocol, host, path, hash, origin, and search.', 'Lets you add, edit, and remove query parameters.', 'Copies the rebuilt URL.'] },
+      { title: 'What it does', items: ['Extracts protocol, host, path, hash, origin, and search.', 'Lets you add, edit, sort, and remove query parameters.', 'Can remove empty query rows and apply the rebuilt URL back to input.', 'Copies the rebuilt URL.'] },
       { title: 'Good for', items: ['Debugging tracking URLs.', 'Editing API query strings.', 'Cleaning long URLs before sharing.'] },
       { title: 'Notes', items: ['Relative URLs are parsed against an example host internally.', 'Duplicate query keys are preserved as separate rows.'] },
     ],
@@ -103,6 +111,14 @@ export const toolHelp: Record<ToolId, ToolHelp> = {
       { title: 'What it does', items: ['Auto-detects common prefixes like 0x, 0b, and 0o.', 'Outputs decimal, binary, octal, and hex values.', 'Uses BigInt for large integers.'] },
       { title: 'Good for', items: ['Debugging flags and masks.', 'Working with color or permission values.', 'Checking numeric representations.'] },
       { title: 'Notes', items: ['Only integers are supported.', 'Plain numeric input without prefix is treated as decimal.'] },
+    ],
+  },
+  'css-unit': {
+    overview: 'Convert CSS length values between px, rem, em, percent, vw, and vh.',
+    sections: [
+      { title: 'What it does', items: ['Normalizes a value into pixels.', 'Shows equivalent CSS units.', 'Uses configurable base size, parent width, and viewport size.'] },
+      { title: 'Good for', items: ['Checking rem sizing.', 'Converting px specs into responsive units.', 'Debugging percentage and viewport-based layout values.'] },
+      { title: 'Notes', items: ['em uses the base px field in this tool.', 'Percent conversion uses the parent px field.'] },
     ],
   },
   encode: {

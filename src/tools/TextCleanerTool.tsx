@@ -3,8 +3,7 @@ import { Check, Eraser } from 'lucide-react';
 import { ApplyTextButton } from '../components/ApplyTextButton';
 import { CheckboxControl } from '../components/CheckboxControl';
 import { CopyButton } from '../components/CopyButton';
-import { Stat } from '../components/Stat';
-import { TextAreaField } from '../components/TextAreaField';
+import { ActionBar, MetricsGrid, SplitTextAreas } from '../components/ToolLayout';
 import { ToolbarButton } from '../components/ToolbarButton';
 
 function normalizeLineEndings(value: string) {
@@ -134,10 +133,7 @@ function TextCleanerTool() {
 
   return (
     <section className="tool-surface">
-      <div className="split-editor">
-        <TextAreaField label="Input" value={input} onChange={setInput} />
-        <TextAreaField label="Output" value={output} onChange={setOutput} />
-      </div>
+      <SplitTextAreas left={{ label: 'Input', value: input, onChange: setInput }} right={{ label: 'Output', value: output, onChange: setOutput }} />
       <div className="cleaner-panel">
         {cleanerActions.map((action) => (
           <CheckboxControl
@@ -148,7 +144,7 @@ function TextCleanerTool() {
           />
         ))}
       </div>
-      <div className="action-bar cleaner-actions">
+      <ActionBar className="cleaner-actions">
         <ToolbarButton title="Run selected cleaners" variant="primary" onClick={() => clean(selectedActions)} disabled={selectedActions.length === 0}>
           <Eraser size={16} />
           <span>Run selected</span>
@@ -163,13 +159,15 @@ function TextCleanerTool() {
         </ToolbarButton>
         <ApplyTextButton value={output} onApply={setInput} label="Apply output" variant="primary" />
         <CopyButton title="Copy output" value={output} />
-      </div>
-      <div className="metrics-row">
-        <Stat label="Input chars" value={input.length} />
-        <Stat label="Input lines" value={inputLines.length} />
-        <Stat label="Output chars" value={output.length || '-'} />
-        <Stat label="Output lines" value={output ? outputLines.length : '-'} />
-      </div>
+      </ActionBar>
+      <MetricsGrid
+        items={[
+          { label: 'Input chars', value: input.length },
+          { label: 'Input lines', value: inputLines.length },
+          { label: 'Output chars', value: output.length || '-' },
+          { label: 'Output lines', value: output ? outputLines.length : '-' },
+        ]}
+      />
     </section>
   );
 }

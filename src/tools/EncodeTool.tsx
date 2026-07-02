@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Code2 } from 'lucide-react';
 import { CopyButton } from '../components/CopyButton';
-import { TextAreaField } from '../components/TextAreaField';
+import { ActionBar, SplitTextAreas } from '../components/ToolLayout';
 import { ToolbarButton } from '../components/ToolbarButton';
 import { decodeHtml, escapeHtml, fromBase64, toBase64 } from '../utils/codec';
 
@@ -35,11 +35,8 @@ function EncodeTool() {
 
   return (
     <section className="tool-surface">
-      <div className="split-editor">
-        <TextAreaField label="Input" value={input} onChange={setInput} />
-        <TextAreaField label="Output" value={output} onChange={setOutput} />
-      </div>
-      <div className="action-bar">
+      <SplitTextAreas left={{ label: 'Input', value: input, onChange: setInput }} right={{ label: 'Output', value: output, onChange: setOutput }} />
+      <ActionBar>
         {[
           ['url-encode', 'URL +'],
           ['url-decode', 'URL -'],
@@ -54,7 +51,7 @@ function EncodeTool() {
           </ToolbarButton>
         ))}
         <CopyButton title="Copy output" value={output} />
-      </div>
+      </ActionBar>
       {error ? <div className="notice error">{error}</div> : null}
     </section>
   );

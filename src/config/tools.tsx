@@ -13,6 +13,8 @@ import {
   Link2,
   Palette,
   Regex,
+  Ruler,
+  Table2,
   Type,
 } from 'lucide-react';
 import type { ToolId } from '../types';
@@ -26,6 +28,7 @@ export const tools: Array<{
 }> = [
   { id: 'json', name: 'JSON Lab', shortName: 'JSON', group: 'Data', icon: <Braces size={18} /> },
   { id: 'text-diff', name: 'What Changed?', shortName: 'Diff', group: 'Text', icon: <Diff size={18} /> },
+  { id: 'markdown-table', name: 'Markdown Table Formatter', shortName: 'Table', group: 'Text', icon: <Table2 size={18} /> },
   { id: 'text-cleaner', name: 'Text Cleaner', shortName: 'Clean', group: 'Text', icon: <Eraser size={18} /> },
   { id: 'time', name: 'Time Converter', shortName: 'Time', group: 'Time', icon: <Clock3 size={18} /> },
   { id: 'text', name: 'Text Processor', shortName: 'Text', group: 'Text', icon: <Type size={18} /> },
@@ -36,6 +39,7 @@ export const tools: Array<{
   { id: 'hash', name: 'Hash Generator', shortName: 'Hash', group: 'Code', icon: <Fingerprint size={18} /> },
   { id: 'url', name: 'URL Parser', shortName: 'URL', group: 'Code', icon: <Link2 size={18} /> },
   { id: 'number', name: 'Number Base Converter', shortName: 'Base', group: 'Code', icon: <Binary size={18} /> },
+  { id: 'css-unit', name: 'CSS Unit Converter', shortName: 'Units', group: 'Design', icon: <Ruler size={18} /> },
   { id: 'encode', name: 'Encode / Decode', shortName: 'Codec', group: 'Code', icon: <Code2 size={18} /> },
   { id: 'csv', name: 'CSV / Excel Helper', shortName: 'CSV', group: 'Data', icon: <FileSpreadsheet size={18} /> },
 ];

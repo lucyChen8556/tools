@@ -4,8 +4,7 @@ import { ApplyTextButton } from '../components/ApplyTextButton';
 import { CheckboxControl } from '../components/CheckboxControl';
 import { CopyButton } from '../components/CopyButton';
 import { SelectField } from '../components/SelectField';
-import { Stat } from '../components/Stat';
-import { TextAreaField } from '../components/TextAreaField';
+import { ActionBar, MetricsGrid, SplitTextAreas } from '../components/ToolLayout';
 import { ToolbarButton } from '../components/ToolbarButton';
 import { textCaseOptions, type TextCaseMode } from '../config/options';
 
@@ -44,14 +43,22 @@ function formatWords(value: string, mode: TextCaseMode) {
   return value;
 }
 
+function getDedupeKey(value: string, options: { ignoreCase: boolean; trimKey: boolean }) {
+  const trimmed = options.trimKey ? value.trim() : value;
+  return options.ignoreCase ? trimmed.toLocaleLowerCase() : trimmed;
+}
+
 function TextTool() {
   const [input, setInput] = useState('Apple\nbanana\nApple\n  carrot  ');
   const [output, setOutput] = useState('');
   const [caseMode, setCaseMode] = useState<TextCaseMode>('none');
   const [selectedTransforms, setSelectedTransforms] = useState<TextTransformId[]>(['trim']);
+  const [dedupeIgnoreCase, setDedupeIgnoreCase] = useState(false);
+  const [dedupeTrimKey, setDedupeTrimKey] = useState(true);
 
   const lines = input.split(/\r?\n/);
   const words = input.trim() ? input.trim().split(/\s+/).length : 0;
+  const duplicateCount = lines.length - new Set(lines.map((line) => getDedupeKey(line, { ignoreCase: dedupeIgnoreCase, trimKey: dedupeTrimKey }))).size;
 
   function toggleTransform(transform: TextTransformId) {
     setSelectedTransforms((current) =>
@@ -86,7 +93,15 @@ function TextTool() {
         next = [...nextLines].sort((a, b) => a.localeCompare(b)).join('\n');
       }
       if (transform.id === 'dedupe') {
-        next = Array.from(new Set(nextLines)).join('\n');
+        const seen = new Set<string>();
+        next = nextLines
+          .filter((line) => {
+            const key = getDedupeKey(line, { ignoreCase: dedupeIgnoreCase, trimKey: dedupeTrimKey });
+            if (seen.has(key)) return false;
+            seen.add(key);
+            return true;
+          })
+          .join('\n');
       }
     });
 
@@ -95,10 +110,7 @@ function TextTool() {
 
   return (
     <section className="tool-surface">
-      <div className="split-editor">
-        <TextAreaField label="Input" value={input} onChange={setInput} />
-        <TextAreaField label="Output" value={output} onChange={setOutput} />
-      </div>
+      <SplitTextAreas left={{ label: 'Input', value: input, onChange: setInput }} right={{ label: 'Output', value: output, onChange: setOutput }} />
       <div className="inline-controls">
         <SelectField label="Case" value={caseMode} options={textCaseOptions} onChange={setCaseMode} />
       </div>
@@ -111,20 +123,25 @@ function TextTool() {
             onChange={() => toggleTransform(transform.id)}
           />
         ))}
+        <CheckboxControl label="Dedupe ignores case" checked={dedupeIgnoreCase} onChange={setDedupeIgnoreCase} />
+        <CheckboxControl label="Dedupe trims key" checked={dedupeTrimKey} onChange={setDedupeTrimKey} />
       </div>
-      <div className="action-bar">
+      <ActionBar>
         <ToolbarButton title="Run selected transforms" variant="primary" onClick={run}>
           <CaseSensitive size={16} />
           <span>Run selected</span>
         </ToolbarButton>
         <ApplyTextButton value={output} onApply={setInput} />
         <CopyButton title="Copy output" value={output} />
-      </div>
-      <div className="metrics-row">
-        <Stat label="Characters" value={input.length} />
-        <Stat label="Words" value={words} />
-        <Stat label="Lines" value={lines.length} />
-      </div>
+      </ActionBar>
+      <MetricsGrid
+        items={[
+          { label: 'Characters', value: input.length },
+          { label: 'Words', value: words },
+          { label: 'Lines', value: lines.length },
+          { label: 'Duplicates', value: Math.max(0, duplicateCount) },
+        ]}
+      />
     </section>
   );
 }

@@ -1,7 +1,9 @@
 import { useMemo, useState } from 'react';
 import { Clock3 } from 'lucide-react';
+import { CopyButton } from '../components/CopyButton';
 import { SelectField } from '../components/SelectField';
 import { TextInputField } from '../components/TextInputField';
+import { ActionBar, MetricsGrid, SplitTextAreas } from '../components/ToolLayout';
 import { ToolSection } from '../components/ToolSection';
 import { ToolbarButton } from '../components/ToolbarButton';
 import { localeOptions, timeFormatPresetOptions, timeZoneOptions } from '../config/options';
@@ -145,6 +147,8 @@ function formatDuration(milliseconds: number) {
 
 function TimeTool() {
   const [value, setValue] = useState(() => String(Date.now()));
+  const [batchInput, setBatchInput] = useState('1720000000\n1720000000000\n2026-07-02T10:03:23.263Z');
+  const [batchOutput, setBatchOutput] = useState('');
   const [locale, setLocale] = useState('default');
   const [timeZone, setTimeZone] = useState('default');
   const [customFormat, setCustomFormat] = useState('YYYY-MM-DD HH:mm:ss');
@@ -185,6 +189,24 @@ function TimeTool() {
     { label: 'Current seconds', value: String(Math.floor(now.getTime() / 1000)) },
     { label: 'Current ms', value: String(now.getTime()) },
   ];
+  const batchLines = batchInput.split(/\r?\n/).filter((line) => line.trim()).length;
+
+  function formatBatch() {
+    const nextOutput = batchInput
+      .split(/\r?\n/)
+      .map((line) => {
+        const trimmed = line.trim();
+        if (!trimmed) return '';
+
+        const batchInspection = inspectDateInput(trimmed);
+        if (Number.isNaN(batchInspection.date.getTime())) return `${trimmed} -> Invalid date`;
+        return formatCustomDate(batchInspection.date, customFormat, selectedLocale, selectedTimeZone);
+      })
+      .join('\n')
+      .trim();
+
+    setBatchOutput(nextOutput);
+  }
 
   return (
     <section className="tool-surface">
@@ -227,6 +249,29 @@ function TimeTool() {
             </div>
           ))}
         </div>
+      </ToolSection>
+
+      <ToolSection title="Batch conversion">
+        <SplitTextAreas
+          compact
+          left={{ label: 'Batch input', value: batchInput, onChange: setBatchInput }}
+          right={{ label: 'Batch output', value: batchOutput, onChange: setBatchOutput }}
+        />
+        <ActionBar>
+          <ToolbarButton title="Convert batch timestamps" variant="primary" onClick={formatBatch}>
+            <Clock3 size={16} />
+            <span>Convert batch</span>
+          </ToolbarButton>
+          <CopyButton title="Copy batch output" value={batchOutput} />
+        </ActionBar>
+        <MetricsGrid
+          items={[
+            { label: 'Batch rows', value: batchLines || '-' },
+            { label: 'Format', value: customFormat },
+            { label: 'Locale', value: locale },
+            { label: 'Time zone', value: timeZone },
+          ]}
+        />
       </ToolSection>
     </section>
   );

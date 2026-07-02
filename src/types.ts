@@ -1,6 +1,7 @@
 export type ToolId =
   | 'json'
   | 'text-diff'
+  | 'markdown-table'
   | 'text-cleaner'
   | 'time'
   | 'text'
@@ -11,6 +12,7 @@ export type ToolId =
   | 'hash'
   | 'url'
   | 'number'
+  | 'css-unit'
   | 'encode'
   | 'csv';
 

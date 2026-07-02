@@ -1,8 +1,8 @@
 import { useMemo, useState } from 'react';
 import { Eraser, KeyRound, ShieldAlert } from 'lucide-react';
 import { CopyButton } from '../components/CopyButton';
-import { Stat } from '../components/Stat';
 import { TextAreaField } from '../components/TextAreaField';
+import { ActionBar, MetricsGrid } from '../components/ToolLayout';
 import { ToolbarButton } from '../components/ToolbarButton';
 import { decodeJwt, type DecodedJwt } from '../utils/jwt';
 
@@ -48,7 +48,7 @@ function JwtTool() {
     <section className="tool-surface">
       <TextAreaField label="JWT" value={token} onChange={setToken} spellCheck={false} />
 
-      <div className="action-bar">
+      <ActionBar>
         <ToolbarButton title="Decode JWT" variant="primary" onClick={runDecode}>
           <KeyRound size={16} />
           <span>Decode</span>
@@ -59,7 +59,7 @@ function JwtTool() {
           <Eraser size={16} />
           <span>Clear</span>
         </ToolbarButton>
-      </div>
+      </ActionBar>
 
       <div className="notice warning">
         <ShieldAlert size={16} />
@@ -67,12 +67,14 @@ function JwtTool() {
       </div>
       {error ? <div className="notice error">{error}</div> : null}
 
-      <div className="metrics-row">
-        <Stat label="Parts" value={tokenParts.length} />
-        <Stat label="Algorithm" value={getAlgorithm(decoded)} />
-        <Stat label="Type" value={getType(decoded)} />
-        <Stat label="Signature" value={decoded?.signature ? 'Present' : '-'} />
-      </div>
+      <MetricsGrid
+        items={[
+          { label: 'Parts', value: tokenParts.length },
+          { label: 'Algorithm', value: getAlgorithm(decoded) },
+          { label: 'Type', value: getType(decoded) },
+          { label: 'Signature', value: decoded?.signature ? 'Present' : '-' },
+        ]}
+      />
 
       {decoded ? (
         <>

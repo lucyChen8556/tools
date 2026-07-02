@@ -10,6 +10,7 @@ import { HashTool } from './tools/HashTool';
 import { ImageTool } from './tools/ImageTool';
 import { JsonTool } from './tools/JsonTool';
 import { JwtTool } from './tools/JwtTool';
+import { MarkdownTableTool } from './tools/MarkdownTableTool';
 import { NumberTool } from './tools/NumberTool';
 import { RegexTool } from './tools/RegexTool';
 import { TextCleanerTool } from './tools/TextCleanerTool';
@@ -17,6 +18,7 @@ import { TextDiffTool } from './tools/TextDiffTool';
 import { TextTool } from './tools/TextTool';
 import { TimeTool } from './tools/TimeTool';
 import { UrlTool } from './tools/UrlTool';
+import { CssUnitTool } from './tools/CssUnitTool';
 
 export function App() {
   const [activeTool, setActiveToolState] = useState<ToolId>(() => readStoredToolId('tools-hub.active', 'json'));
@@ -39,6 +41,7 @@ export function App() {
   const content = {
     json: <JsonTool />,
     'text-diff': <TextDiffTool />,
+    'markdown-table': <MarkdownTableTool />,
     'text-cleaner': <TextCleanerTool />,
     time: <TimeTool />,
     text: <TextTool />,
@@ -49,6 +52,7 @@ export function App() {
     hash: <HashTool />,
     url: <UrlTool />,
     number: <NumberTool />,
+    'css-unit': <CssUnitTool />,
     encode: <EncodeTool />,
     csv: <CsvTool />,
   }[activeTool];

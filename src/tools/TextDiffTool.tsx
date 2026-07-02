@@ -1,8 +1,7 @@
 import { useMemo, useState } from 'react';
 import { CheckboxControl } from '../components/CheckboxControl';
 import { CopyButton } from '../components/CopyButton';
-import { Stat } from '../components/Stat';
-import { TextAreaField } from '../components/TextAreaField';
+import { ActionBar, MetricsGrid, SplitTextAreas } from '../components/ToolLayout';
 import { diffLines } from '../utils/textDiff';
 
 function TextDiffTool() {
@@ -24,20 +23,19 @@ function TextDiffTool() {
 
   return (
     <section className="tool-surface">
-      <div className="split-editor">
-        <TextAreaField label="Before" value={oldText} onChange={setOldText} />
-        <TextAreaField label="After" value={newText} onChange={setNewText} />
-      </div>
-      <div className="action-bar">
+      <SplitTextAreas left={{ label: 'Before', value: oldText, onChange: setOldText }} right={{ label: 'After', value: newText, onChange: setNewText }} />
+      <ActionBar>
         <CheckboxControl label="Ignore whitespace" checked={ignoreWhitespace} onChange={setIgnoreWhitespace} />
         <CopyButton title="Copy diff" value={diffText} />
-      </div>
-      <div className="metrics-row">
-        <Stat label="Changed" value={changed} />
-        <Stat label="Added" value={added} />
-        <Stat label="Removed" value={removed} />
-        <Stat label="Lines" value={diffs.length} />
-      </div>
+      </ActionBar>
+      <MetricsGrid
+        items={[
+          { label: 'Changed', value: changed },
+          { label: 'Added', value: added },
+          { label: 'Removed', value: removed },
+          { label: 'Lines', value: diffs.length },
+        ]}
+      />
       <div className="text-diff-view">
         {diffs.map((diff, index) => (
           <div className={`line-diff ${diff.type}`} key={`${diff.type}-${index}`}>

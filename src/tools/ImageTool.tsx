@@ -2,8 +2,8 @@ import { ChangeEvent, useState } from 'react';
 import { Download, Eraser, ImageDown } from 'lucide-react';
 import { Field } from '../components/Field';
 import { SelectField } from '../components/SelectField';
-import { Stat } from '../components/Stat';
 import { TextInputField } from '../components/TextInputField';
+import { MetricsGrid } from '../components/ToolLayout';
 import { ToolSection } from '../components/ToolSection';
 import { ToolbarButton } from '../components/ToolbarButton';
 import {
@@ -208,13 +208,15 @@ function ImageTool() {
       </ToolSection>
 
       <ToolSection title="Summary">
-        <div className="metrics-row">
-          <Stat label="Status" value={status || '-'} />
-          <Stat label="Original" value={stats.original ? `${Math.round(stats.original / 1024)} KB` : '-'} />
-          <Stat label="Compressed" value={stats.compressed ? `${Math.round(stats.compressed / 1024)} KB` : '-'} />
-          <Stat label="Size" value={stats.width ? `${stats.width} x ${stats.height}` : '-'} />
-          <Stat label="Format" value={selectedFormat.extension.toUpperCase()} />
-        </div>
+        <MetricsGrid
+          items={[
+            { label: 'Status', value: status || '-' },
+            { label: 'Original', value: stats.original ? `${Math.round(stats.original / 1024)} KB` : '-' },
+            { label: 'Compressed', value: stats.compressed ? `${Math.round(stats.compressed / 1024)} KB` : '-' },
+            { label: 'Size', value: stats.width ? `${stats.width} x ${stats.height}` : '-' },
+            { label: 'Format', value: selectedFormat.extension.toUpperCase() },
+          ]}
+        />
       </ToolSection>
 
       <ToolSection title="Preview">

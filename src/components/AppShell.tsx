@@ -102,7 +102,7 @@ export function AppShell({
                       }}
                     >
                       <span className="tool-icon">{tool.icon}</span>
-                      <span>{tool.name}</span>
+                      <span className="tool-row-label">{tool.name}</span>
                     </button>
                     <button
                       className="favorite-toggle"

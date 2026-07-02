@@ -1,5 +1,5 @@
-import { Stat } from '../../components/Stat';
 import { TextAreaField } from '../../components/TextAreaField';
+import { MetricsGrid } from '../../components/ToolLayout';
 import type { RegexMatchResult } from '../../types';
 import type { HighlightSegment } from './types';
 
@@ -19,11 +19,13 @@ function TestColumn({ error, flags, hasPattern, highlightedSample, matches, rule
     <div className="regex-test-column">
       <TextAreaField label="Test text" value={sample} onChange={setSample} />
       {error ? <div className="notice error">{error}</div> : null}
-      <div className="metrics-row">
-        <Stat label="Matches" value={matches.length} />
-        <Stat label="Rules" value={ruleCount} />
-        <Stat label="Flags" value={flags || '-'} />
-      </div>
+      <MetricsGrid
+        items={[
+          { label: 'Matches', value: matches.length },
+          { label: 'Rules', value: ruleCount },
+          { label: 'Flags', value: flags || '-' },
+        ]}
+      />
       <div className="regex-preview" aria-label="Highlighted regex matches">
         {highlightedSample.map((segment, index) =>
           segment.type === 'match' ? (

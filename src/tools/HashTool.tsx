@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react';
 import { Fingerprint } from 'lucide-react';
 import { CopyableRows } from '../components/CopyableRows';
 import { CopyButton } from '../components/CopyButton';
-import { Stat } from '../components/Stat';
 import { TextAreaField } from '../components/TextAreaField';
+import { ActionBar, MetricsGrid } from '../components/ToolLayout';
 import { ToolbarButton } from '../components/ToolbarButton';
 
 const hashAlgorithms = ['SHA-1', 'SHA-256', 'SHA-384', 'SHA-512'] as const;
@@ -55,23 +55,25 @@ function HashTool() {
   }, [input]);
 
   return (
-    <section className="tool-surface">
+      <section className="tool-surface">
       <TextAreaField label="Input" value={input} onChange={setInput} />
       {error ? <div className="notice error">{error}</div> : null}
-      <div className="metrics-row">
-        <Stat label="Characters" value={input.length} />
-        <Stat label="Bytes" value={new TextEncoder().encode(input).length} />
-        <Stat label="Algorithms" value={hashAlgorithms.length} />
-        <Stat label="Output format" value="Hex" />
-      </div>
+      <MetricsGrid
+        items={[
+          { label: 'Characters', value: input.length },
+          { label: 'Bytes', value: new TextEncoder().encode(input).length },
+          { label: 'Algorithms', value: hashAlgorithms.length },
+          { label: 'Output format', value: 'Hex' },
+        ]}
+      />
       <CopyableRows rows={results.map((result) => ({ label: result.algorithm, value: result.value }))} />
-      <div className="action-bar">
+      <ActionBar>
         <ToolbarButton title="Use sample text" variant="primary" onClick={() => setInput('hello world')}>
           <Fingerprint size={16} />
           <span>Sample</span>
         </ToolbarButton>
         <CopyButton title="Copy all hashes" value={results.map((result) => `${result.algorithm}: ${result.value}`).join('\n')} label="Copy all" />
-      </div>
+      </ActionBar>
     </section>
   );
 }

@@ -2,8 +2,8 @@ import { useMemo, useState } from 'react';
 import { ArrowDownUp, FileJson, Repeat2 } from 'lucide-react';
 import { CopyButton } from '../components/CopyButton';
 import { SelectField } from '../components/SelectField';
-import { Stat } from '../components/Stat';
 import { TextAreaField } from '../components/TextAreaField';
+import { ActionBar, MetricsGrid, SplitTextAreas } from '../components/ToolLayout';
 import { ToolbarButton } from '../components/ToolbarButton';
 import { jsonMergeModeOptions } from '../config/options';
 import type { JsonDiff, JsonMergeMode } from '../types';
@@ -91,12 +91,12 @@ function JsonTool() {
         </button>
       </div>
 
-      <div className="split-editor">
-        <TextAreaField label="Before" value={left} onChange={setLeft} spellCheck={false} />
-        <TextAreaField label="After" value={right} onChange={setRight} spellCheck={false} />
-      </div>
+      <SplitTextAreas
+        left={{ label: 'Before', value: left, onChange: setLeft, spellCheck: false }}
+        right={{ label: 'After', value: right, onChange: setRight, spellCheck: false }}
+      />
 
-      <div className="action-bar">
+      <ActionBar>
         {mode === 'format' && (
           <>
             <div className="segmented two">
@@ -130,18 +130,20 @@ function JsonTool() {
           </>
         )}
         <CopyButton title="Copy result" value={jsonResult} />
-      </div>
+      </ActionBar>
 
       {jsonError || compareState.error ? <div className="notice error">{jsonError || compareState.error}</div> : null}
 
       {mode === 'compare' && (
         <>
-          <div className="metrics-row">
-            <Stat label="Changed" value={compareState.diffs.filter((diff) => diff.type === 'changed').length} />
-            <Stat label="Added" value={compareState.diffs.filter((diff) => diff.type === 'added').length} />
-            <Stat label="Removed" value={compareState.diffs.filter((diff) => diff.type === 'removed').length} />
-            <Stat label="Total" value={compareState.diffs.length} />
-          </div>
+          <MetricsGrid
+            items={[
+              { label: 'Changed', value: compareState.diffs.filter((diff) => diff.type === 'changed').length },
+              { label: 'Added', value: compareState.diffs.filter((diff) => diff.type === 'added').length },
+              { label: 'Removed', value: compareState.diffs.filter((diff) => diff.type === 'removed').length },
+              { label: 'Total', value: compareState.diffs.length },
+            ]}
+          />
           <div className="diff-list">
             {compareState.diffs.length === 0 ? (
               <div className="empty-state">No differences</div>
@@ -164,10 +166,11 @@ function JsonTool() {
       )}
 
       {mode === 'format' && !jsonResult && (
-        <div className="split-editor compact-preview">
-          <TextAreaField label="Sorted Before" value={compareState.leftSorted} readOnly spellCheck={false} />
-          <TextAreaField label="Sorted After" value={compareState.rightSorted} readOnly spellCheck={false} />
-        </div>
+        <SplitTextAreas
+          compact
+          left={{ label: 'Sorted Before', value: compareState.leftSorted, readOnly: true, spellCheck: false }}
+          right={{ label: 'Sorted After', value: compareState.rightSorted, readOnly: true, spellCheck: false }}
+        />
       )}
     </section>
   );

@@ -2,8 +2,8 @@ import { useMemo, useState } from 'react';
 import { RotateCcw } from 'lucide-react';
 import { CopyableRows } from '../components/CopyableRows';
 import { SelectField } from '../components/SelectField';
-import { Stat } from '../components/Stat';
 import { TextInputField } from '../components/TextInputField';
+import { ActionBar, MetricsGrid } from '../components/ToolLayout';
 import { ToolbarButton } from '../components/ToolbarButton';
 
 const baseOptions = [
@@ -74,19 +74,21 @@ function NumberTool() {
         <SelectField label="Input base" value={baseMode} options={baseOptions} onChange={setBaseMode} />
       </div>
       {parsed.error ? <div className="notice error">{parsed.error}</div> : null}
-      <div className="metrics-row">
-        <Stat label="Detected base" value={parsed.detected.label} />
-        <Stat label="Sign" value={value === null ? '-' : value < 0n ? 'Negative' : 'Positive'} />
-        <Stat label="Digits" value={parsed.detected.digits.replace('-', '').length || '-'} />
-        <Stat label="Bit length" value={value === null ? '-' : (value < 0n ? -value : value).toString(2).length} />
-      </div>
+      <MetricsGrid
+        items={[
+          { label: 'Detected base', value: parsed.detected.label },
+          { label: 'Sign', value: value === null ? '-' : value < 0n ? 'Negative' : 'Positive' },
+          { label: 'Digits', value: parsed.detected.digits.replace('-', '').length || '-' },
+          { label: 'Bit length', value: value === null ? '-' : (value < 0n ? -value : value).toString(2).length },
+        ]}
+      />
       <CopyableRows rows={rows} />
-      <div className="action-bar">
+      <ActionBar>
         <ToolbarButton title="Reset sample" variant="primary" onClick={() => setInput('0xff')}>
           <RotateCcw size={16} />
           <span>Sample</span>
         </ToolbarButton>
-      </div>
+      </ActionBar>
     </section>
   );
 }

@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { CopyButton } from '../components/CopyButton';
 import { SelectField } from '../components/SelectField';
-import { TextAreaField } from '../components/TextAreaField';
+import { SplitTextAreas } from '../components/ToolLayout';
 import { csvDelimiterOptions, type CsvDelimiterId } from '../config/options';
 import { csvRowsToObjects, parseCsv } from '../utils/csv';
 
@@ -18,10 +18,7 @@ function CsvTool() {
         <SelectField label="Delimiter" value={delimiter} options={csvDelimiterOptions} onChange={setDelimiter} />
         <CopyButton title="Copy JSON" value={json} label="JSON" />
       </div>
-      <div className="split-editor">
-        <TextAreaField label="CSV / Excel" value={input} onChange={setInput} />
-        <TextAreaField label="JSON" value={json} readOnly />
-      </div>
+      <SplitTextAreas left={{ label: 'CSV / Excel', value: input, onChange: setInput }} right={{ label: 'JSON', value: json, readOnly: true }} />
       <div className="table-wrap">
         <table>
           <tbody>
