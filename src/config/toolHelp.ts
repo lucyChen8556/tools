@@ -137,6 +137,14 @@ export const toolHelp: Record<ToolId, ToolHelp> = {
       { title: 'Notes', items: ['Coupon amount is applied after percent discount.', 'Tax is calculated from the discounted subtotal.'] },
     ],
   },
+  invoice: {
+    overview: 'Calculate a receipt-style total with discount, service charge, tax, rounding, and paid amount.',
+    sections: [
+      { title: 'What it does', items: ['Applies percent and fixed discounts.', 'Calculates service charge and tax after discount.', 'Rounds totals with common receipt rounding modes.', 'Shows change or remaining balance from a paid amount.'] },
+      { title: 'Good for', items: ['Checking invoice math.', 'Estimating receipt totals.', 'Preparing a clean payment summary to paste into chat or notes.'] },
+      { title: 'Notes', items: ['Tax is calculated after discount and service charge.', 'Rounding adjustment is shown separately so the math stays visible.'] },
+    ],
+  },
   subscription: {
     overview: 'Compare subscription costs by month, year, seat, and person.',
     sections: [

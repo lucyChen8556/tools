@@ -46,6 +46,7 @@ export const tools: Array<{
   { id: 'css-unit', name: 'CSS Unit Converter', shortName: 'Units', group: 'Design', icon: <Ruler size={18} /> },
   { id: 'expense', name: 'Expense Splitter', shortName: 'Split', group: 'Life', icon: <ReceiptText size={18} /> },
   { id: 'discount', name: 'Discount Calculator', shortName: 'Sale', group: 'Life', icon: <BadgePercent size={18} /> },
+  { id: 'invoice', name: 'Invoice / Receipt Helper', shortName: 'Invoice', group: 'Life', icon: <ReceiptText size={18} /> },
   { id: 'subscription', name: 'Subscription Cost Calculator', shortName: 'Sub', group: 'Life', icon: <CalendarDays size={18} /> },
   { id: 'randomizer', name: 'Name / List Randomizer', shortName: 'Pick', group: 'Life', icon: <Shuffle size={18} /> },
   { id: 'encode', name: 'Encode / Decode', shortName: 'Codec', group: 'Code', icon: <Code2 size={18} /> },

@@ -15,6 +15,7 @@ export type ToolId =
   | 'css-unit'
   | 'expense'
   | 'discount'
+  | 'invoice'
   | 'subscription'
   | 'randomizer'
   | 'encode'

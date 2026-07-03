@@ -386,6 +386,10 @@
     grid-template-columns: repeat(5, minmax(120px, 1fr));
   }
 
+  .inline-controls.invoice-controls {
+    grid-template-columns: repeat(4, minmax(130px, 1fr));
+  }
+
   .inline-controls.life-controls {
     grid-template-columns: repeat(6, minmax(110px, 1fr));
   }
@@ -419,6 +423,10 @@
       grid-template-columns: repeat(3, minmax(0, 1fr));
     }
 
+    .inline-controls.invoice-controls {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
     .inline-controls.life-controls {
       grid-template-columns: repeat(3, minmax(0, 1fr));
     }
@@ -450,6 +458,10 @@
     }
 
     .inline-controls.expense-controls {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .inline-controls.invoice-controls {
       grid-template-columns: minmax(0, 1fr);
     }
 

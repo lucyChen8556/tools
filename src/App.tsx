@@ -11,6 +11,7 @@ import { EncodeTool } from './tools/EncodeTool';
 import { ExpenseTool } from './tools/ExpenseTool';
 import { HashTool } from './tools/HashTool';
 import { ImageTool } from './tools/ImageTool';
+import { InvoiceTool } from './tools/InvoiceTool';
 import { JsonTool } from './tools/JsonTool';
 import { JwtTool } from './tools/JwtTool';
 import { MarkdownTableTool } from './tools/MarkdownTableTool';
@@ -77,6 +78,7 @@ export function App() {
     'css-unit': <CssUnitTool />,
     expense: <ExpenseTool />,
     discount: <DiscountTool />,
+    invoice: <InvoiceTool />,
     subscription: <SubscriptionTool />,
     randomizer: <RandomizerTool />,
     encode: <EncodeTool />,

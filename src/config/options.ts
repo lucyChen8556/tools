@@ -33,6 +33,17 @@ export const jsonMergeModeOptions = [
   { label: 'Values only', value: 'value' },
 ] as const satisfies ReadonlyArray<SelectOption<JsonMergeMode>>;
 
+export const invoiceRoundingOptions = [
+  { label: 'No rounding', value: 'none' },
+  { label: 'Nearest 1', value: 'nearest-1' },
+  { label: 'Nearest 5', value: 'nearest-5' },
+  { label: 'Nearest 10', value: 'nearest-10' },
+  { label: 'Round up', value: 'up-1' },
+  { label: 'Round down', value: 'down-1' },
+] as const;
+
+export type InvoiceRoundingMode = (typeof invoiceRoundingOptions)[number]['value'];
+
 export const compressionPresetOptions = [
   { label: 'Balanced', value: 'balanced', quality: 0.8, maxWidth: 1600 },
   { label: 'High quality', value: 'quality', quality: 0.9, maxWidth: 2400 },
