@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { ArrowDownUp, FileJson, Repeat2 } from 'lucide-react';
 import { CopyButton } from '../components/CopyButton';
+import { SegmentedTabs } from '../components/SegmentedTabs';
 import { SelectField } from '../components/SelectField';
 import { TextAreaField } from '../components/TextAreaField';
 import { ActionBar, MetricsGrid, SplitTextAreas } from '../components/ToolLayout';
@@ -25,6 +26,16 @@ const sampleRightJson = `{
   },
   "version": 2
 }`;
+
+const jsonModeOptions = [
+  { label: 'Compare', value: 'compare' },
+  { label: 'Format', value: 'format' },
+] as const;
+
+const formatTargetOptions = [
+  { label: 'Left', value: 'left' },
+  { label: 'Right', value: 'right' },
+] as const;
 
 function JsonTool() {
   const [mode, setMode] = useState<'format' | 'compare'>('compare');
@@ -82,14 +93,7 @@ function JsonTool() {
 
   return (
     <section className="tool-surface">
-      <div className="segmented two">
-        <button className={mode === 'compare' ? 'active' : ''} type="button" onClick={() => setMode('compare')}>
-          Compare
-        </button>
-        <button className={mode === 'format' ? 'active' : ''} type="button" onClick={() => setMode('format')}>
-          Format
-        </button>
-      </div>
+      <SegmentedTabs ariaLabel="JSON mode" options={jsonModeOptions} value={mode} onChange={setMode} />
 
       <SplitTextAreas
         left={{ label: 'Before', value: left, onChange: setLeft, spellCheck: false }}
@@ -99,14 +103,7 @@ function JsonTool() {
       <ActionBar>
         {mode === 'format' && (
           <>
-            <div className="segmented two">
-              <button className={formatTarget === 'left' ? 'active' : ''} type="button" onClick={() => setFormatTarget('left')}>
-                Left
-              </button>
-              <button className={formatTarget === 'right' ? 'active' : ''} type="button" onClick={() => setFormatTarget('right')}>
-                Right
-              </button>
-            </div>
+            <SegmentedTabs compact ariaLabel="Format target" options={formatTargetOptions} value={formatTarget} onChange={setFormatTarget} />
             <ToolbarButton title="Format selected JSON" variant="primary" onClick={() => runFormat(formatTarget)}>
               <FileJson size={16} />
               <span>Format</span>

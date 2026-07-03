@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { Info, Menu, Search, Shuffle, Star, StarOff, X } from 'lucide-react';
+import { ChevronDown, Info, Menu, Search, Shuffle, Star, StarOff, X } from 'lucide-react';
 import { useState } from 'react';
 import type { ToolId } from '../types';
 import { tools } from '../config/tools';
@@ -25,6 +25,7 @@ export function AppShell({
 }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [helpOpen, setHelpOpen] = useState(false);
+  const [collapsedGroups, setCollapsedGroups] = useState<Record<string, boolean>>({});
   const active = tools.find((tool) => tool.id === activeTool) ?? tools[0];
   const activeIsFavorite = favoriteIds.includes(active.id);
   const activeHelp = toolHelp[active.id];
@@ -34,6 +35,10 @@ export function AppShell({
     groups[tool.group] = groups[tool.group] ? [...groups[tool.group], tool] : [tool];
     return groups;
   }, {});
+
+  function toggleGroup(group: string) {
+    setCollapsedGroups((current) => ({ ...current, [group]: !current[group] }));
+  }
 
   return (
     <div className="app-shell">
@@ -88,36 +93,49 @@ export function AppShell({
           )}
 
           <nav className="tool-nav">
-            {Object.entries(groupedTools).map(([group, groupTools]) => (
-              <section className="nav-section" key={group}>
-                <h2>{group}</h2>
-                {groupTools.map((tool) => (
-                  <div className={`tool-row ${activeTool === tool.id ? 'active' : ''}`} key={tool.id}>
-                    <button
-                      className="tool-row-main"
-                      type="button"
-                      onClick={() => {
-                        setActiveTool(tool.id);
-                        setSidebarOpen(false);
-                      }}
-                    >
-                      <span className="tool-icon">{tool.icon}</span>
-                      <span className="tool-row-label">{tool.name}</span>
-                    </button>
-                    <button
-                      className="favorite-toggle"
-                      type="button"
-                      title={favoriteIds.includes(tool.id) ? 'Remove favorite' : 'Add favorite'}
-                      aria-label={favoriteIds.includes(tool.id) ? `Remove ${tool.name} from favorites` : `Add ${tool.name} to favorites`}
-                      aria-pressed={favoriteIds.includes(tool.id)}
-                      onClick={() => toggleFavorite(tool.id)}
-                    >
-                      {favoriteIds.includes(tool.id) ? <Star size={15} fill="currentColor" /> : <StarOff size={15} />}
-                    </button>
+            {Object.entries(groupedTools).map(([group, groupTools]) => {
+              const hasActiveTool = groupTools.some((tool) => tool.id === activeTool);
+              const isOpen = Boolean(query) || hasActiveTool || !collapsedGroups[group];
+
+              return (
+                <section className="nav-section" key={group}>
+                  <button className="nav-section-toggle" type="button" onClick={() => toggleGroup(group)} aria-expanded={isOpen}>
+                    <span>{group}</span>
+                    <small>{groupTools.length}</small>
+                    <ChevronDown className={isOpen ? 'open' : ''} size={15} />
+                  </button>
+                  <div className={`nav-section-tools ${isOpen ? 'open' : ''}`}>
+                    <div className="tool-list">
+                      {groupTools.map((tool) => (
+                        <div className={`tool-row ${activeTool === tool.id ? 'active' : ''}`} key={tool.id}>
+                          <button
+                            className="tool-row-main"
+                            type="button"
+                            onClick={() => {
+                              setActiveTool(tool.id);
+                              setSidebarOpen(false);
+                            }}
+                          >
+                            <span className="tool-icon">{tool.icon}</span>
+                            <span className="tool-row-label">{tool.name}</span>
+                          </button>
+                          <button
+                            className="favorite-toggle"
+                            type="button"
+                            title={favoriteIds.includes(tool.id) ? 'Remove favorite' : 'Add favorite'}
+                            aria-label={favoriteIds.includes(tool.id) ? `Remove ${tool.name} from favorites` : `Add ${tool.name} to favorites`}
+                            aria-pressed={favoriteIds.includes(tool.id)}
+                            onClick={() => toggleFavorite(tool.id)}
+                          >
+                            {favoriteIds.includes(tool.id) ? <Star size={15} fill="currentColor" /> : <StarOff size={15} />}
+                          </button>
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                ))}
-              </section>
-            ))}
+                </section>
+              );
+            })}
           </nav>
         </div>
       </aside>

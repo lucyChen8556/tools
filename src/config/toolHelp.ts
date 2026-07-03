@@ -124,9 +124,33 @@ export const toolHelp: Record<ToolId, ToolHelp> = {
   expense: {
     overview: 'Split shared bills with tax, tip, extra fees, and weighted shares.',
     sections: [
-      { title: 'What it does', items: ['Calculates tax, tip, extra fees, total, and per-share amount.', 'Supports uneven splits with share counts.', 'Copies a clean text summary for chat or notes.'] },
-      { title: 'Good for', items: ['Group meals.', 'Shared purchases.', 'Trips or household expenses where people pay different portions.'] },
-      { title: 'Notes', items: ['Tax and tip are calculated from the subtotal.', 'Shares are weights, so 2 shares pays twice as much as 1 share.'] },
+      { title: 'What it does', items: ['Quickly splits a total equally by people.', 'Calculates tax, tip, extra fees, total, and per-share amount.', 'Supports uneven splits with share counts.', 'Copies clean text summaries for chat or notes.'] },
+      { title: 'Good for', items: ['Fast equal splits.', 'Group meals.', 'Shared purchases.', 'Trips or household expenses where people pay different portions.'] },
+      { title: 'Notes', items: ['Quick split is a simple equal split.', 'Tax and tip are calculated from the subtotal.', 'Shares are weights, so 2 shares pays twice as much as 1 share.'] },
+    ],
+  },
+  discount: {
+    overview: 'Calculate sale prices, coupons, tax, and actual savings.',
+    sections: [
+      { title: 'What it does', items: ['Applies a percent discount.', 'Subtracts a fixed coupon amount.', 'Calculates tax after discounts.', 'Shows final price and effective discount.'] },
+      { title: 'Good for', items: ['Shopping comparisons.', 'Checking promotion math.', 'Seeing whether a coupon or sale is actually worth it.'] },
+      { title: 'Notes', items: ['Coupon amount is applied after percent discount.', 'Tax is calculated from the discounted subtotal.'] },
+    ],
+  },
+  subscription: {
+    overview: 'Compare subscription costs by month, year, seat, and person.',
+    sections: [
+      { title: 'What it does', items: ['Converts monthly and yearly billing.', 'Calculates seat-based totals.', 'Splits subscription cost by people.', 'Shows daily, monthly, and yearly cost.'] },
+      { title: 'Good for', items: ['Shared subscriptions.', 'SaaS tool budgeting.', 'Comparing monthly and annual plans.'] },
+      { title: 'Notes', items: ['Daily cost uses a 365-day year.', 'Discount percent is applied to the entered period price.'] },
+    ],
+  },
+  randomizer: {
+    overview: 'Pick winners, shuffle names, or split a list into groups.',
+    sections: [
+      { title: 'What it does', items: ['Accepts names separated by lines or commas.', 'Randomly picks a selected number of winners.', 'Shuffles the full list.', 'Splits items into random groups.'] },
+      { title: 'Good for', items: ['Giveaways.', 'Team grouping.', 'Chores, turns, and simple decisions.'] },
+      { title: 'Notes', items: ['Random results are generated locally in the browser.', 'Run again when you want a fresh draw.'] },
     ],
   },
   encode: {

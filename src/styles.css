@@ -58,7 +58,7 @@
   }
 
   .sidebar {
-    @apply sticky top-0 flex h-screen flex-col gap-5 border-r border-ink-200 bg-white/95 px-4 py-5 shadow-[1px_0_0_rgba(17,24,39,0.02)] max-lg:static max-lg:h-auto max-lg:border-b max-lg:border-r-0 max-lg:py-3;
+    @apply sticky top-0 flex h-screen flex-col gap-5 border-r border-ink-200 bg-white/95 px-4 py-5 pr-0 shadow-[1px_0_0_rgba(17,24,39,0.02)] max-lg:static max-lg:h-auto max-lg:border-b max-lg:border-r-0 max-lg:py-3;
   }
 
   .sidebar-header {
@@ -110,6 +110,38 @@
     @apply mb-2 px-1 text-[11px] font-semibold uppercase tracking-normal text-ink-500;
   }
 
+  .nav-section-toggle {
+    @apply mb-2 flex w-full items-center gap-2 rounded-md border border-transparent px-1 py-1 text-left text-[11px] font-semibold uppercase tracking-normal text-ink-500 transition hover:border-ink-200 hover:bg-white hover:text-ink-700;
+  }
+
+  .nav-section-toggle span {
+    @apply min-w-0 flex-1;
+  }
+
+  .nav-section-toggle small {
+    @apply rounded bg-white px-1.5 py-0.5 text-[10px] font-semibold leading-none text-ink-500;
+  }
+
+  .nav-section-toggle svg {
+    @apply shrink-0 transition-transform duration-200;
+  }
+
+  .nav-section-toggle svg.open {
+    @apply rotate-180;
+  }
+
+  .nav-section-tools {
+    @apply grid grid-rows-[0fr] opacity-0 transition-all duration-200 ease-out;
+  }
+
+  .nav-section-tools.open {
+    @apply grid-rows-[1fr] opacity-100;
+  }
+
+  .nav-section-tools > .tool-list {
+    @apply min-h-0 overflow-hidden;
+  }
+
   .tool-grid {
     @apply grid gap-2;
   }
@@ -122,7 +154,7 @@
   .tool-row-main,
   .ghost-button,
   .toolbar-button,
-  .segmented button {
+  .segmented-tab {
     @apply inline-flex items-center justify-center gap-2 rounded-md border text-sm font-medium transition active:translate-y-px;
   }
 
@@ -131,8 +163,7 @@
   }
 
   .tool-chip.active,
-  .tool-row.active,
-  .segmented button.active {
+  .tool-row.active {
     @apply border-teal-600 bg-teal-50 text-teal-700;
   }
 
@@ -241,20 +272,28 @@
     @apply mx-auto flex max-w-[1500px] flex-col gap-5;
   }
 
-  .segmented {
-    @apply inline-grid w-fit grid-cols-3 rounded-md border border-ink-200 bg-ink-100/70 p-1 shadow-inner;
+  .segmented-tabs {
+    @apply relative inline-grid w-fit min-w-72 overflow-hidden rounded-md border border-ink-300 bg-ink-100 p-1 shadow-inner;
+    grid-template-columns: repeat(var(--tab-count), minmax(0, 1fr));
   }
 
-  .segmented.two {
-    @apply grid-cols-2;
+  .segmented-tabs.compact {
+    @apply min-w-44;
   }
 
-  .segmented button {
-    @apply h-8 border-transparent px-4 text-ink-600 hover:text-ink-950;
+  .segmented-tabs-indicator {
+    @apply absolute bottom-1 top-1 rounded-[5px] border border-teal-600 bg-white shadow-sm transition-transform duration-200 ease-out;
+    left: 0.25rem;
+    width: calc((100% - 0.5rem) / var(--tab-count));
+    transform: translateX(calc(var(--tab-index) * 100%));
   }
 
-  .segmented button.active {
-    @apply bg-white shadow-sm;
+  .segmented-tab {
+    @apply relative z-10 h-9 min-w-0 border-transparent bg-transparent px-4 text-ink-600 hover:text-ink-950 focus-visible:ring-2 focus-visible:ring-teal-100;
+  }
+
+  .segmented-tab[aria-selected='true'] {
+    @apply text-teal-700;
   }
 
   .split-editor {
@@ -347,6 +386,14 @@
     grid-template-columns: repeat(5, minmax(120px, 1fr));
   }
 
+  .inline-controls.life-controls {
+    grid-template-columns: repeat(6, minmax(110px, 1fr));
+  }
+
+  .inline-controls.randomizer-controls {
+    grid-template-columns: minmax(160px, 1fr) repeat(2, minmax(120px, auto));
+  }
+
   .inline-controls.contrast-controls {
     grid-template-columns: minmax(150px, 1fr) auto minmax(150px, 1fr) auto auto;
   }
@@ -369,6 +416,14 @@
     }
 
     .inline-controls.expense-controls {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .inline-controls.life-controls {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .inline-controls.randomizer-controls {
       grid-template-columns: repeat(3, minmax(0, 1fr));
     }
 
@@ -395,6 +450,11 @@
     }
 
     .inline-controls.expense-controls {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .inline-controls.life-controls,
+    .inline-controls.randomizer-controls {
       grid-template-columns: minmax(0, 1fr);
     }
 
