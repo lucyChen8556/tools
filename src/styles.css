@@ -581,6 +581,10 @@
     @apply h-auto min-h-10 justify-start bg-white;
   }
 
+  .mask-custom-rule {
+    @apply grid grid-cols-[minmax(180px,auto)_minmax(220px,1fr)_minmax(100px,auto)_minmax(160px,auto)] items-end gap-2.5 max-lg:grid-cols-2 max-sm:grid-cols-1;
+  }
+
   .image-mask-upload {
     @apply rounded-md border border-dashed border-ink-300 bg-white p-4 transition hover:border-teal-600 hover:bg-teal-50/40;
   }
@@ -635,6 +639,26 @@
   }
 
   .image-mask-item small {
+    @apply truncate text-xs text-ink-500;
+  }
+
+  .image-mask-regions {
+    @apply min-h-0 overflow-auto border-t border-ink-200;
+  }
+
+  .image-mask-region {
+    @apply grid w-full gap-1 border-b border-ink-100 bg-white px-3 py-2 text-left text-sm transition hover:bg-ink-50;
+  }
+
+  .image-mask-region.active {
+    @apply bg-teal-50 text-teal-800;
+  }
+
+  .image-mask-region strong {
+    @apply truncate font-semibold text-ink-950;
+  }
+
+  .image-mask-region span {
     @apply truncate text-xs text-ink-500;
   }
 

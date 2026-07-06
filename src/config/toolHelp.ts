@@ -44,8 +44,8 @@ export const toolHelp: Record<ToolId, ToolHelp> = {
   mask: {
     overview: 'Mask sensitive text and redact image regions locally before sharing logs, tickets, screenshots, or support messages.',
     sections: [
-      { title: 'Text masking', items: ['Detects common sensitive values like emails, phone numbers, URLs, tokens, cards, IPs, IDs, and UUIDs.', 'Supports placeholder, partial, and full-mask output modes.', 'Shows per-rule match counts after masking.'] },
-      { title: 'Image masking', items: ['Upload one or many images.', 'Drag on the canvas to create mask regions.', 'Move or resize selected regions.', 'Use pixelate, blur, or black bar styles.', 'Apply current regions to all images and export PNG files.'] },
+      { title: 'Text masking', items: ['Detects common sensitive values like emails, phone numbers, URLs, tokens, cards, IPs, IDs, and UUIDs.', 'Supports placeholder, partial, and full-mask output modes.', 'Adds an optional custom regex rule for one-off sensitive patterns.', 'Shows per-rule match counts after masking.'] },
+      { title: 'Image masking', items: ['Upload one or many images.', 'Drag on the canvas to create mask regions.', 'Move or resize selected regions.', 'Use pixelate, blur, or black bar styles.', 'Manage regions from a selectable list, duplicate masks, or delete the selected mask.', 'Apply current regions to all images and export PNG files.'] },
       { title: 'Notes', items: ['Rules are pattern-based and may not catch every sensitive text value.', 'Review the output before sharing externally.', 'Text and image processing run locally in your browser.'] },
     ],
   },

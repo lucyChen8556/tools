@@ -4,6 +4,7 @@ import { ApplyTextButton } from '../../components/ApplyTextButton';
 import { CheckboxControl } from '../../components/CheckboxControl';
 import { CopyButton } from '../../components/CopyButton';
 import { SelectField } from '../../components/SelectField';
+import { TextInputField } from '../../components/TextInputField';
 import { ActionBar, MetricsGrid, SplitTextAreas } from '../../components/ToolLayout';
 import { ToolbarButton } from '../../components/ToolbarButton';
 import { maskModeOptions, type MaskMode } from '../../config/options';
@@ -57,14 +58,34 @@ function runTextMask(input: string, selectedRuleIds: TextMaskRuleId[], mode: Mas
   return { output, stats };
 }
 
+function normalizeRegexFlags(value: string) {
+  return Array.from(new Set(value.replace(/[^dgimsuvy]/g, '').split(''))).join('');
+}
+
+function buildCustomRule(pattern: string, flags: string, label: string) {
+  const normalizedFlags = normalizeRegexFlags(flags);
+  const globalFlags = normalizedFlags.includes('g') ? normalizedFlags : `${normalizedFlags}g`;
+  const regex = new RegExp(pattern, globalFlags);
+  return {
+    pattern: regex,
+    placeholder: `[${label.trim() || 'CUSTOM'}]`,
+  };
+}
+
 function TextMaskPanel() {
   const [input, setInput] = useState(textMaskSample);
   const [output, setOutput] = useState('');
   const [selectedRuleIds, setSelectedRuleIds] = useState<TextMaskRuleId[]>(defaultTextMaskRuleIds);
   const [maskMode, setMaskMode] = useState<MaskMode>('placeholder');
   const [stats, setStats] = useState<TextMaskStats>(() => createEmptyStats());
+  const [customEnabled, setCustomEnabled] = useState(false);
+  const [customPattern, setCustomPattern] = useState('order_[A-Z0-9]+');
+  const [customFlags, setCustomFlags] = useState('gi');
+  const [customLabel, setCustomLabel] = useState('CUSTOM');
+  const [customMatches, setCustomMatches] = useState(0);
+  const [error, setError] = useState('');
 
-  const totalMatches = Object.values(stats).reduce((sum, count) => sum + count, 0);
+  const totalMatches = Object.values(stats).reduce((sum, count) => sum + count, 0) + customMatches;
 
   function toggleRule(ruleId: TextMaskRuleId) {
     setSelectedRuleIds((current) =>
@@ -73,9 +94,26 @@ function TextMaskPanel() {
   }
 
   function mask() {
-    const result = runTextMask(input, selectedRuleIds, maskMode);
-    setOutput(result.output);
-    setStats(result.stats);
+    try {
+      const result = runTextMask(input, selectedRuleIds, maskMode);
+      let nextOutput = result.output;
+      let nextCustomMatches = 0;
+
+      if (customEnabled && customPattern.trim()) {
+        const customRule = buildCustomRule(customPattern, customFlags, customLabel);
+        nextOutput = nextOutput.replace(customRule.pattern, () => {
+          nextCustomMatches += 1;
+          return customRule.placeholder;
+        });
+      }
+
+      setOutput(nextOutput);
+      setStats(result.stats);
+      setCustomMatches(nextCustomMatches);
+      setError('');
+    } catch (customError) {
+      setError(customError instanceof Error ? customError.message : 'Invalid custom regex');
+    }
   }
 
   function resetSample() {
@@ -84,6 +122,12 @@ function TextMaskPanel() {
     setSelectedRuleIds(defaultTextMaskRuleIds);
     setMaskMode('placeholder');
     setStats(createEmptyStats());
+    setCustomEnabled(false);
+    setCustomPattern('order_[A-Z0-9]+');
+    setCustomFlags('gi');
+    setCustomLabel('CUSTOM');
+    setCustomMatches(0);
+    setError('');
   }
 
   function cleanAll() {
@@ -92,6 +136,9 @@ function TextMaskPanel() {
     setSelectedRuleIds(defaultTextMaskRuleIds);
     setMaskMode('placeholder');
     setStats(createEmptyStats());
+    setCustomEnabled(false);
+    setCustomMatches(0);
+    setError('');
   }
 
   return (
@@ -105,8 +152,15 @@ function TextMaskPanel() {
           <CheckboxControl key={rule.id} label={rule.label} checked={selectedRuleIds.includes(rule.id)} onChange={() => toggleRule(rule.id)} />
         ))}
       </div>
+      <div className="mask-custom-rule">
+        <CheckboxControl label="Use custom regex rule" checked={customEnabled} onChange={setCustomEnabled} />
+        <TextInputField label="Custom pattern" value={customPattern} onChange={setCustomPattern} compact placeholder="order_[A-Z0-9]+" />
+        <TextInputField label="Flags" value={customFlags} onChange={setCustomFlags} compact placeholder="gi" />
+        <TextInputField label="Placeholder label" value={customLabel} onChange={setCustomLabel} compact placeholder="CUSTOM" />
+      </div>
+      {error ? <div className="notice error">{error}</div> : null}
       <ActionBar>
-        <ToolbarButton title="Mask selected sensitive values" variant="primary" onClick={mask} disabled={selectedRuleIds.length === 0}>
+        <ToolbarButton title="Mask selected sensitive values" variant="primary" onClick={mask} disabled={selectedRuleIds.length === 0 && !customEnabled}>
           <ShieldCheck size={16} />
           <span>Mask selected</span>
         </ToolbarButton>
@@ -131,6 +185,7 @@ function TextMaskPanel() {
           { label: 'Input chars', value: input.length },
           { label: 'Output chars', value: output.length || '-' },
           { label: 'Active rules', value: selectedRuleIds.length },
+          { label: 'Custom matches', value: customMatches || '-' },
           ...textMaskRules.map((rule) => ({ label: rule.label, value: stats[rule.id] || '-' })),
         ]}
       />
