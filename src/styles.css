@@ -201,7 +201,7 @@
   }
 
   .workspace-header {
-    @apply mx-auto mb-5 flex max-w-[1500px] items-center justify-between gap-4 max-sm:items-start;
+    @apply mx-auto mb-5 flex max-w-[1500px] items-center justify-between gap-4 max-sm:flex-col max-sm:items-stretch;
   }
 
   .workspace-title {
@@ -217,11 +217,11 @@
   }
 
   .workspace-actions {
-    @apply flex shrink-0 flex-wrap justify-end gap-2 max-sm:w-full max-sm:justify-start;
+    @apply flex shrink-0 flex-wrap justify-end gap-2 max-sm:grid max-sm:w-full max-sm:grid-cols-2;
   }
 
   .ghost-button {
-    @apply h-10 shrink-0 border-ink-200 bg-white px-3 text-ink-600 shadow-sm hover:border-teal-600 hover:text-teal-700 hover:shadow;
+    @apply h-10 shrink-0 border-ink-200 bg-white px-3 text-ink-600 shadow-sm hover:border-teal-600 hover:text-teal-700 hover:shadow max-sm:min-w-0;
   }
 
   .dialog-backdrop {
@@ -579,6 +579,104 @@
 
   .cleaner-panel .check-control {
     @apply h-auto min-h-10 justify-start bg-white;
+  }
+
+  .image-mask-upload {
+    @apply rounded-md border border-dashed border-ink-300 bg-white p-4 transition hover:border-teal-600 hover:bg-teal-50/40;
+  }
+
+  .image-mask-upload.dragging {
+    @apply border-teal-600 bg-teal-50;
+  }
+
+  .image-mask-upload label {
+    @apply flex min-h-24 cursor-pointer flex-col items-center justify-center gap-2 text-center text-sm font-medium text-ink-600;
+  }
+
+  .image-mask-upload input {
+    @apply sr-only;
+  }
+
+  .image-mask-layout {
+    @apply grid min-h-[560px] grid-cols-[280px_minmax(0,1fr)] gap-4 max-xl:grid-cols-1;
+  }
+
+  .image-mask-list,
+  .image-mask-workspace {
+    @apply min-w-0 rounded-md border border-ink-200 bg-white shadow-[0_1px_2px_rgba(17,24,39,0.04)];
+  }
+
+  .image-mask-list {
+    @apply flex max-h-[640px] flex-col overflow-hidden;
+  }
+
+  .image-mask-list-header {
+    @apply border-b border-ink-200 px-3 py-2 text-xs font-semibold uppercase tracking-normal text-ink-500;
+  }
+
+  .image-mask-item {
+    @apply grid grid-cols-[54px_minmax(0,1fr)] items-center gap-3 border-b border-ink-100 bg-white px-3 py-2 text-left transition hover:bg-ink-50;
+  }
+
+  .image-mask-item.active {
+    @apply bg-teal-50 text-teal-800;
+  }
+
+  .image-mask-item img {
+    @apply size-12 rounded-md border border-ink-200 object-cover;
+  }
+
+  .image-mask-item span {
+    @apply grid min-w-0 gap-1;
+  }
+
+  .image-mask-item strong {
+    @apply truncate text-sm font-semibold text-ink-950;
+  }
+
+  .image-mask-item small {
+    @apply truncate text-xs text-ink-500;
+  }
+
+  .image-mask-toolbar {
+    @apply flex flex-wrap items-end gap-3 border-b border-ink-200 p-3;
+  }
+
+  .image-mask-toolbar .field {
+    @apply min-w-52 flex-1;
+  }
+
+  .image-mask-toolbar input[type='range'] {
+    @apply h-10 w-full border-0 bg-transparent px-0 py-0 focus:ring-0;
+  }
+
+  .image-mask-canvas-shell {
+    @apply relative grid h-[560px] place-items-center overflow-auto bg-[#f8faf9] p-4;
+  }
+
+  .image-mask-canvas-shell.zoomed {
+    @apply place-items-start;
+  }
+
+  .image-mask-canvas-shell canvas {
+    @apply hidden max-w-none rounded-md border border-ink-200 bg-white shadow-sm;
+    touch-action: none;
+  }
+
+  .image-mask-canvas-shell canvas.ready {
+    @apply block;
+  }
+
+  .image-mask-canvas-shell .empty-state {
+    @apply flex min-h-56 max-w-lg flex-col items-center justify-center gap-2 rounded-md border border-dashed border-ink-300 bg-white px-6 text-center text-sm text-ink-600;
+  }
+
+  .image-mask-canvas-shell .empty-state strong {
+    @apply text-base font-semibold text-ink-950;
+  }
+
+  .empty-state.compact {
+    @apply m-3 min-h-24 rounded-md border border-dashed border-ink-200 bg-ink-50 p-4 text-center text-sm text-ink-500;
   }
 
   .metrics-row {

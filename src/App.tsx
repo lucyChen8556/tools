@@ -14,6 +14,7 @@ import { ImageTool } from './tools/ImageTool';
 import { InvoiceTool } from './tools/InvoiceTool';
 import { JsonTool } from './tools/JsonTool';
 import { JwtTool } from './tools/JwtTool';
+import { MaskTool } from './tools/MaskTool';
 import { MarkdownTableTool } from './tools/MarkdownTableTool';
 import { NumberTool } from './tools/NumberTool';
 import { RandomizerTool } from './tools/RandomizerTool';
@@ -66,6 +67,7 @@ export function App() {
     'text-diff': <TextDiffTool />,
     'markdown-table': <MarkdownTableTool />,
     'text-cleaner': <TextCleanerTool />,
+    mask: <MaskTool />,
     time: <TimeTool />,
     text: <TextTool />,
     image: <ImageTool />,

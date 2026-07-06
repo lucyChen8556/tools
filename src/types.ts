@@ -3,6 +3,7 @@ export type ToolId =
   | 'text-diff'
   | 'markdown-table'
   | 'text-cleaner'
+  | 'mask'
   | 'time'
   | 'text'
   | 'image'

@@ -44,6 +44,14 @@ export const invoiceRoundingOptions = [
 
 export type InvoiceRoundingMode = (typeof invoiceRoundingOptions)[number]['value'];
 
+export const maskModeOptions = [
+  { label: 'Placeholder', value: 'placeholder' },
+  { label: 'Partial', value: 'partial' },
+  { label: 'Full mask', value: 'full' },
+] as const;
+
+export type MaskMode = (typeof maskModeOptions)[number]['value'];
+
 export const compressionPresetOptions = [
   { label: 'Balanced', value: 'balanced', quality: 0.8, maxWidth: 1600 },
   { label: 'High quality', value: 'quality', quality: 0.9, maxWidth: 2400 },

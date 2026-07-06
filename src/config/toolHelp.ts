@@ -41,6 +41,14 @@ export const toolHelp: Record<ToolId, ToolHelp> = {
       { title: 'Notes', items: ['Selected rules run in the order shown.', 'Use Apply output when you want to continue cleaning the result.'] },
     ],
   },
+  mask: {
+    overview: 'Mask sensitive text and redact image regions locally before sharing logs, tickets, screenshots, or support messages.',
+    sections: [
+      { title: 'Text masking', items: ['Detects common sensitive values like emails, phone numbers, URLs, tokens, cards, IPs, IDs, and UUIDs.', 'Supports placeholder, partial, and full-mask output modes.', 'Shows per-rule match counts after masking.'] },
+      { title: 'Image masking', items: ['Upload one or many images.', 'Drag on the canvas to create mask regions.', 'Move or resize selected regions.', 'Use pixelate, blur, or black bar styles.', 'Apply current regions to all images and export PNG files.'] },
+      { title: 'Notes', items: ['Rules are pattern-based and may not catch every sensitive text value.', 'Review the output before sharing externally.', 'Text and image processing run locally in your browser.'] },
+    ],
+  },
   time: {
     overview: 'Inspect timestamps and format dates across locales, time zones, and custom patterns.',
     sections: [
