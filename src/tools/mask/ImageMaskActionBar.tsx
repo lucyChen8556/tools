@@ -1,7 +1,7 @@
 import { Copy, Download, ImagePlus, RotateCcw, Trash2, Undo2 } from 'lucide-react';
 import { ActionBar } from '../../components/ToolLayout';
 import { ToolbarButton } from '../../components/ToolbarButton';
-import type { ImageMask, MaskImage } from './constants';
+import { imageMaskInteractionConfig, type ImageMask, type MaskImage } from './constants';
 
 type ImageMaskActionBarProps = {
   activeImage: MaskImage | null;
@@ -68,7 +68,7 @@ function ImageMaskActionBar({
         <Download size={16} />
         <span>Export current</span>
       </ToolbarButton>
-      <ToolbarButton title="Export all masked images" variant="primary" onClick={() => images.forEach((image, index) => window.setTimeout(() => exportImage(image), index * 180))} disabled={!images.length}>
+      <ToolbarButton title="Export all masked images" variant="primary" onClick={() => images.forEach((image, index) => window.setTimeout(() => exportImage(image), index * imageMaskInteractionConfig.exportBatchDelayMs))} disabled={!images.length}>
         <Download size={16} />
         <span>Export batch</span>
       </ToolbarButton>

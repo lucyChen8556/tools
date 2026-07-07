@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Check, Eraser } from 'lucide-react';
 import { ApplyTextButton } from '../components/ApplyTextButton';
 import { CheckboxControl } from '../components/CheckboxControl';
 import { CopyButton } from '../components/CopyButton';
 import { ActionBar, MetricsGrid, SplitTextAreas } from '../components/ToolLayout';
+import type { ToolMetric } from '../components/ToolLayout';
 import { ToolbarButton } from '../components/ToolbarButton';
 import { cleanerActions, cleanText, defaultCleanerActions, normalizeLineEndings, textCleanerSample, type CleanerActionId } from './textCleaner/textCleanerUtils';
 
@@ -14,6 +15,15 @@ function TextCleanerTool() {
 
   const inputLines = normalizeLineEndings(input).split('\n');
   const outputLines = output ? normalizeLineEndings(output).split('\n') : [];
+  const metricsItems = useMemo<ToolMetric[]>(
+    () => [
+      { label: 'Input chars', value: input.length },
+      { label: 'Input lines', value: inputLines.length },
+      { label: 'Output chars', value: output.length || '-' },
+      { label: 'Output lines', value: output ? outputLines.length : '-' },
+    ],
+    [input.length, inputLines.length, output, output.length, outputLines.length],
+  );
 
   function toggleCleanerAction(action: CleanerActionId) {
     setSelectedActions((current) =>
@@ -54,14 +64,7 @@ function TextCleanerTool() {
         <ApplyTextButton value={output} onApply={setInput} label="Apply output" variant="primary" />
         <CopyButton title="Copy output" value={output} />
       </ActionBar>
-      <MetricsGrid
-        items={[
-          { label: 'Input chars', value: input.length },
-          { label: 'Input lines', value: inputLines.length },
-          { label: 'Output chars', value: output.length || '-' },
-          { label: 'Output lines', value: output ? outputLines.length : '-' },
-        ]}
-      />
+      <MetricsGrid items={metricsItems} />
     </section>
   );
 }

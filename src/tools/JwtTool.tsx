@@ -3,6 +3,7 @@ import { Eraser, KeyRound, ShieldAlert } from 'lucide-react';
 import { CopyButton } from '../components/CopyButton';
 import { TextAreaField } from '../components/TextAreaField';
 import { ActionBar, MetricsGrid } from '../components/ToolLayout';
+import type { ToolMetric } from '../components/ToolLayout';
 import { ToolbarButton } from '../components/ToolbarButton';
 import { decodeJwt, getJwtAlgorithm, getJwtType, sampleJwt, type DecodedJwt } from './jwt/jwtUtils';
 
@@ -12,6 +13,15 @@ function JwtTool() {
   const [error, setError] = useState('');
 
   const tokenParts = useMemo(() => token.trim().split('.').filter(Boolean), [token]);
+  const metricsItems = useMemo<ToolMetric[]>(
+    () => [
+      { label: 'Parts', value: tokenParts.length },
+      { label: 'Algorithm', value: getJwtAlgorithm(decoded) },
+      { label: 'Type', value: getJwtType(decoded) },
+      { label: 'Signature', value: decoded?.signature ? 'Present' : '-' },
+    ],
+    [decoded, tokenParts.length],
+  );
 
   function runDecode() {
     try {
@@ -52,14 +62,7 @@ function JwtTool() {
       </div>
       {error ? <div className="notice error">{error}</div> : null}
 
-      <MetricsGrid
-        items={[
-          { label: 'Parts', value: tokenParts.length },
-          { label: 'Algorithm', value: getJwtAlgorithm(decoded) },
-          { label: 'Type', value: getJwtType(decoded) },
-          { label: 'Signature', value: decoded?.signature ? 'Present' : '-' },
-        ]}
-      />
+      <MetricsGrid items={metricsItems} />
 
       {decoded ? (
         <>

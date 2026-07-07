@@ -1,9 +1,10 @@
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useMemo, useState } from 'react';
 import { Download, Eraser, ImageDown } from 'lucide-react';
 import { Field } from '../components/Field';
 import { SelectField } from '../components/SelectField';
 import { TextInputField } from '../components/TextInputField';
 import { MetricsGrid } from '../components/ToolLayout';
+import type { ToolMetric } from '../components/ToolLayout';
 import { ToolSection } from '../components/ToolSection';
 import { ToolbarButton } from '../components/ToolbarButton';
 import {
@@ -29,6 +30,16 @@ function ImageTool() {
   const [dragActive, setDragActive] = useState(false);
   const [inputKey, setInputKey] = useState(0);
   const selectedFormat = outputFormatOptions.find((option) => option.value === outputFormat) ?? outputFormatOptions[0];
+  const metricsItems = useMemo<ToolMetric[]>(
+    () => [
+      { label: 'Status', value: status || '-' },
+      { label: 'Original', value: stats.original ? `${Math.round(stats.original / 1024)} KB` : '-' },
+      { label: 'Compressed', value: stats.compressed ? `${Math.round(stats.compressed / 1024)} KB` : '-' },
+      { label: 'Size', value: stats.width ? `${stats.width} x ${stats.height}` : '-' },
+      { label: 'Format', value: selectedFormat.extension.toUpperCase() },
+    ],
+    [selectedFormat.extension, stats.compressed, stats.height, stats.original, stats.width, status],
+  );
 
   async function readImagePreview(nextFile: File) {
     const dataUrl = await readImageFileAsDataUrl(nextFile);
@@ -187,15 +198,7 @@ function ImageTool() {
       </ToolSection>
 
       <ToolSection title="Summary">
-        <MetricsGrid
-          items={[
-            { label: 'Status', value: status || '-' },
-            { label: 'Original', value: stats.original ? `${Math.round(stats.original / 1024)} KB` : '-' },
-            { label: 'Compressed', value: stats.compressed ? `${Math.round(stats.compressed / 1024)} KB` : '-' },
-            { label: 'Size', value: stats.width ? `${stats.width} x ${stats.height}` : '-' },
-            { label: 'Format', value: selectedFormat.extension.toUpperCase() },
-          ]}
-        />
+        <MetricsGrid items={metricsItems} />
       </ToolSection>
 
       <ToolSection title="Preview">

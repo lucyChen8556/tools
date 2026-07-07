@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Repeat2 } from 'lucide-react';
 import { TextInputField } from '../components/TextInputField';
 import { MetricsGrid } from '../components/ToolLayout';
+import type { ToolMetric } from '../components/ToolLayout';
 import { ToolSection } from '../components/ToolSection';
 import { ToolbarButton } from '../components/ToolbarButton';
 import { formatContrastRatio, getContrastPassLabel, getContrastRatio, parseHexColor } from './color/colorUtils';
@@ -14,6 +15,17 @@ function ColorTool() {
   const foregroundColor = parseHexColor(foreground);
   const backgroundColor = parseHexColor(background);
   const contrastRatio = getContrastRatio(foregroundColor, backgroundColor);
+  const contrastMetricsItems = useMemo<ToolMetric[]>(
+    () => [
+      { label: 'Ratio', value: formatContrastRatio(contrastRatio) },
+      { label: 'Normal AA', value: getContrastPassLabel(contrastRatio, 4.5) },
+      { label: 'Normal AAA', value: getContrastPassLabel(contrastRatio, 7) },
+      { label: 'Large AA', value: getContrastPassLabel(contrastRatio, 3) },
+      { label: 'Large AAA', value: getContrastPassLabel(contrastRatio, 4.5) },
+      { label: 'UI components', value: getContrastPassLabel(contrastRatio, 3) },
+    ],
+    [contrastRatio],
+  );
 
   return (
     <section className="tool-surface">
@@ -73,16 +85,7 @@ function ColorTool() {
             <strong>Readable interface text</strong>
             <span>Buttons, labels, alerts, release notes, and documentation copy.</span>
           </div>
-          <MetricsGrid
-            items={[
-              { label: 'Ratio', value: formatContrastRatio(contrastRatio) },
-              { label: 'Normal AA', value: getContrastPassLabel(contrastRatio, 4.5) },
-              { label: 'Normal AAA', value: getContrastPassLabel(contrastRatio, 7) },
-              { label: 'Large AA', value: getContrastPassLabel(contrastRatio, 3) },
-              { label: 'Large AAA', value: getContrastPassLabel(contrastRatio, 4.5) },
-              { label: 'UI components', value: getContrastPassLabel(contrastRatio, 3) },
-            ]}
-          />
+          <MetricsGrid items={contrastMetricsItems} />
         </div>
       </ToolSection>
     </section>

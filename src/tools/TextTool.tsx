@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { CaseSensitive } from 'lucide-react';
 import { ApplyTextButton } from '../components/ApplyTextButton';
 import { CheckboxControl } from '../components/CheckboxControl';
 import { CopyButton } from '../components/CopyButton';
 import { SelectField } from '../components/SelectField';
 import { ActionBar, MetricsGrid, SplitTextAreas } from '../components/ToolLayout';
+import type { ToolMetric } from '../components/ToolLayout';
 import { ToolbarButton } from '../components/ToolbarButton';
 import { textCaseOptions, type TextCaseMode } from '../config/options';
 import { countDuplicateLines, runTextTransforms, textTransforms, type TextTransformId } from './textProcessor/textProcessorUtils';
@@ -20,6 +21,15 @@ function TextTool() {
   const lines = input.split(/\r?\n/);
   const words = input.trim() ? input.trim().split(/\s+/).length : 0;
   const duplicateCount = countDuplicateLines(lines, { ignoreCase: dedupeIgnoreCase, trimKey: dedupeTrimKey });
+  const metricsItems = useMemo<ToolMetric[]>(
+    () => [
+      { label: 'Characters', value: input.length },
+      { label: 'Words', value: words },
+      { label: 'Lines', value: lines.length },
+      { label: 'Duplicates', value: Math.max(0, duplicateCount) },
+    ],
+    [duplicateCount, input.length, lines.length, words],
+  );
 
   function toggleTransform(transform: TextTransformId) {
     setSelectedTransforms((current) =>
@@ -57,14 +67,7 @@ function TextTool() {
         <ApplyTextButton value={output} onApply={setInput} />
         <CopyButton title="Copy output" value={output} />
       </ActionBar>
-      <MetricsGrid
-        items={[
-          { label: 'Characters', value: input.length },
-          { label: 'Words', value: words },
-          { label: 'Lines', value: lines.length },
-          { label: 'Duplicates', value: Math.max(0, duplicateCount) },
-        ]}
-      />
+      <MetricsGrid items={metricsItems} />
     </section>
   );
 }

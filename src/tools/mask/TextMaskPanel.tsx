@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Check, ShieldCheck, Trash2 } from 'lucide-react';
 import { ApplyTextButton } from '../../components/ApplyTextButton';
 import { CheckboxControl } from '../../components/CheckboxControl';
@@ -6,25 +6,37 @@ import { CopyButton } from '../../components/CopyButton';
 import { SelectField } from '../../components/SelectField';
 import { TextInputField } from '../../components/TextInputField';
 import { ActionBar, MetricsGrid, SplitTextAreas } from '../../components/ToolLayout';
+import type { ToolMetric } from '../../components/ToolLayout';
 import { ToolbarButton } from '../../components/ToolbarButton';
 import { maskModeOptions, type MaskMode } from '../../config/options';
-import { defaultTextMaskRuleIds, textMaskRules, textMaskSample, type TextMaskRuleId, type TextMaskStats } from './constants';
+import { defaultTextMaskRuleIds, textMaskCustomRuleDefaults, textMaskDefaultMode, textMaskRules, textMaskSample, type TextMaskRuleId, type TextMaskStats } from './constants';
 import { buildCustomRule, createEmptyStats, runTextMask } from './textMaskUtils';
 
 function TextMaskPanel() {
   const [input, setInput] = useState(textMaskSample);
   const [output, setOutput] = useState('');
   const [selectedRuleIds, setSelectedRuleIds] = useState<TextMaskRuleId[]>(defaultTextMaskRuleIds);
-  const [maskMode, setMaskMode] = useState<MaskMode>('placeholder');
+  const [maskMode, setMaskMode] = useState<MaskMode>(textMaskDefaultMode);
   const [stats, setStats] = useState<TextMaskStats>(() => createEmptyStats());
   const [customEnabled, setCustomEnabled] = useState(false);
-  const [customPattern, setCustomPattern] = useState('order_[A-Z0-9]+');
-  const [customFlags, setCustomFlags] = useState('gi');
-  const [customLabel, setCustomLabel] = useState('CUSTOM');
+  const [customPattern, setCustomPattern] = useState(textMaskCustomRuleDefaults.pattern);
+  const [customFlags, setCustomFlags] = useState(textMaskCustomRuleDefaults.flags);
+  const [customLabel, setCustomLabel] = useState(textMaskCustomRuleDefaults.label);
   const [customMatches, setCustomMatches] = useState(0);
   const [error, setError] = useState('');
 
   const totalMatches = Object.values(stats).reduce((sum, count) => sum + count, 0) + customMatches;
+  const metricsItems = useMemo<ToolMetric[]>(
+    () => [
+      { label: 'Total masked', value: totalMatches || '-' },
+      { label: 'Input chars', value: input.length },
+      { label: 'Output chars', value: output.length || '-' },
+      { label: 'Active rules', value: selectedRuleIds.length },
+      { label: 'Custom matches', value: customMatches || '-' },
+      ...textMaskRules.map((rule) => ({ label: rule.label, value: stats[rule.id] || '-' })),
+    ],
+    [customMatches, input.length, output.length, selectedRuleIds.length, stats, totalMatches],
+  );
 
   function toggleRule(ruleId: TextMaskRuleId) {
     setSelectedRuleIds((current) =>
@@ -59,12 +71,12 @@ function TextMaskPanel() {
     setInput(textMaskSample);
     setOutput('');
     setSelectedRuleIds(defaultTextMaskRuleIds);
-    setMaskMode('placeholder');
+    setMaskMode(textMaskDefaultMode);
     setStats(createEmptyStats());
     setCustomEnabled(false);
-    setCustomPattern('order_[A-Z0-9]+');
-    setCustomFlags('gi');
-    setCustomLabel('CUSTOM');
+    setCustomPattern(textMaskCustomRuleDefaults.pattern);
+    setCustomFlags(textMaskCustomRuleDefaults.flags);
+    setCustomLabel(textMaskCustomRuleDefaults.label);
     setCustomMatches(0);
     setError('');
   }
@@ -73,7 +85,7 @@ function TextMaskPanel() {
     setInput('');
     setOutput('');
     setSelectedRuleIds(defaultTextMaskRuleIds);
-    setMaskMode('placeholder');
+    setMaskMode(textMaskDefaultMode);
     setStats(createEmptyStats());
     setCustomEnabled(false);
     setCustomMatches(0);
@@ -93,9 +105,9 @@ function TextMaskPanel() {
       </div>
       <div className="mask-custom-rule">
         <CheckboxControl label="Use custom regex rule" checked={customEnabled} onChange={setCustomEnabled} />
-        <TextInputField label="Custom pattern" value={customPattern} onChange={setCustomPattern} compact placeholder="order_[A-Z0-9]+" />
-        <TextInputField label="Flags" value={customFlags} onChange={setCustomFlags} compact placeholder="gi" />
-        <TextInputField label="Placeholder label" value={customLabel} onChange={setCustomLabel} compact placeholder="CUSTOM" />
+        <TextInputField label="Custom pattern" value={customPattern} onChange={setCustomPattern} compact placeholder={textMaskCustomRuleDefaults.pattern} />
+        <TextInputField label="Flags" value={customFlags} onChange={setCustomFlags} compact placeholder={textMaskCustomRuleDefaults.flags} />
+        <TextInputField label="Placeholder label" value={customLabel} onChange={setCustomLabel} compact placeholder={textMaskCustomRuleDefaults.label} />
       </div>
       {error ? <div className="notice error">{error}</div> : null}
       <ActionBar>
@@ -118,16 +130,7 @@ function TextMaskPanel() {
         <ApplyTextButton value={output} onApply={setInput} label="Apply output" />
         <CopyButton title="Copy masked output" value={output} />
       </ActionBar>
-      <MetricsGrid
-        items={[
-          { label: 'Total masked', value: totalMatches || '-' },
-          { label: 'Input chars', value: input.length },
-          { label: 'Output chars', value: output.length || '-' },
-          { label: 'Active rules', value: selectedRuleIds.length },
-          { label: 'Custom matches', value: customMatches || '-' },
-          ...textMaskRules.map((rule) => ({ label: rule.label, value: stats[rule.id] || '-' })),
-        ]}
-      />
+      <MetricsGrid items={metricsItems} />
     </>
   );
 }

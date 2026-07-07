@@ -4,6 +4,7 @@ import { CopyableRows } from '../components/CopyableRows';
 import { SelectField } from '../components/SelectField';
 import { TextInputField } from '../components/TextInputField';
 import { ActionBar, MetricsGrid } from '../components/ToolLayout';
+import type { ToolMetric } from '../components/ToolLayout';
 import { ToolbarButton } from '../components/ToolbarButton';
 import { baseOptions, buildNumberRows, parseBigInt, type BaseMode } from './number/numberUtils';
 
@@ -13,6 +14,15 @@ function NumberTool() {
   const parsed = useMemo(() => parseBigInt(input, baseMode), [baseMode, input]);
   const value = parsed.value;
   const rows = buildNumberRows(value);
+  const metricsItems = useMemo<ToolMetric[]>(
+    () => [
+      { label: 'Detected base', value: parsed.detected.label },
+      { label: 'Sign', value: value === null ? '-' : value < 0n ? 'Negative' : 'Positive' },
+      { label: 'Digits', value: parsed.detected.digits.replace('-', '').length || '-' },
+      { label: 'Bit length', value: value === null ? '-' : (value < 0n ? -value : value).toString(2).length },
+    ],
+    [parsed.detected.digits, parsed.detected.label, value],
+  );
 
   return (
     <section className="tool-surface">
@@ -21,14 +31,7 @@ function NumberTool() {
         <SelectField label="Input base" value={baseMode} options={baseOptions} onChange={setBaseMode} />
       </div>
       {parsed.error ? <div className="notice error">{parsed.error}</div> : null}
-      <MetricsGrid
-        items={[
-          { label: 'Detected base', value: parsed.detected.label },
-          { label: 'Sign', value: value === null ? '-' : value < 0n ? 'Negative' : 'Positive' },
-          { label: 'Digits', value: parsed.detected.digits.replace('-', '').length || '-' },
-          { label: 'Bit length', value: value === null ? '-' : (value < 0n ? -value : value).toString(2).length },
-        ]}
-      />
+      <MetricsGrid items={metricsItems} />
       <CopyableRows rows={rows} />
       <ActionBar>
         <ToolbarButton title="Reset sample" variant="primary" onClick={() => setInput('0xff')}>

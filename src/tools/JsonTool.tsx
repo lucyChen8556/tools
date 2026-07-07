@@ -5,6 +5,7 @@ import { SegmentedTabs } from '../components/SegmentedTabs';
 import { SelectField } from '../components/SelectField';
 import { TextAreaField } from '../components/TextAreaField';
 import { ActionBar, MetricsGrid, SplitTextAreas } from '../components/ToolLayout';
+import type { ToolMetric } from '../components/ToolLayout';
 import { ToolbarButton } from '../components/ToolbarButton';
 import { jsonMergeModeOptions } from '../config/options';
 import type { JsonDiff, JsonMergeMode } from '../types';
@@ -66,6 +67,15 @@ function JsonTool() {
       };
     }
   }, [left, right]);
+  const compareMetricsItems = useMemo<ToolMetric[]>(
+    () => [
+      { label: 'Changed', value: compareState.diffs.filter((diff) => diff.type === 'changed').length },
+      { label: 'Added', value: compareState.diffs.filter((diff) => diff.type === 'added').length },
+      { label: 'Removed', value: compareState.diffs.filter((diff) => diff.type === 'removed').length },
+      { label: 'Total', value: compareState.diffs.length },
+    ],
+    [compareState.diffs],
+  );
 
   function runFormat(target: 'left' | 'right') {
     try {
@@ -133,14 +143,7 @@ function JsonTool() {
 
       {mode === 'compare' && (
         <>
-          <MetricsGrid
-            items={[
-              { label: 'Changed', value: compareState.diffs.filter((diff) => diff.type === 'changed').length },
-              { label: 'Added', value: compareState.diffs.filter((diff) => diff.type === 'added').length },
-              { label: 'Removed', value: compareState.diffs.filter((diff) => diff.type === 'removed').length },
-              { label: 'Total', value: compareState.diffs.length },
-            ]}
-          />
+          <MetricsGrid items={compareMetricsItems} />
           <div className="diff-list">
             {compareState.diffs.length === 0 ? (
               <div className="empty-state">No differences</div>

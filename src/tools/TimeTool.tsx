@@ -4,6 +4,7 @@ import { CopyButton } from '../components/CopyButton';
 import { SelectField } from '../components/SelectField';
 import { TextInputField } from '../components/TextInputField';
 import { ActionBar, MetricsGrid, SplitTextAreas } from '../components/ToolLayout';
+import type { ToolMetric } from '../components/ToolLayout';
 import { ToolSection } from '../components/ToolSection';
 import { ToolbarButton } from '../components/ToolbarButton';
 import { localeOptions, timeFormatPresetOptions, timeZoneOptions } from '../config/options';
@@ -54,6 +55,15 @@ function TimeTool() {
     { label: 'Current ms', value: String(now.getTime()) },
   ];
   const batchLines = batchInput.split(/\r?\n/).filter((line) => line.trim()).length;
+  const batchMetricsItems = useMemo<ToolMetric[]>(
+    () => [
+      { label: 'Batch rows', value: batchLines || '-' },
+      { label: 'Format', value: customFormat },
+      { label: 'Locale', value: locale },
+      { label: 'Time zone', value: timeZone },
+    ],
+    [batchLines, customFormat, locale, timeZone],
+  );
 
   function formatBatch() {
     setBatchOutput(formatBatchTimestamps(batchInput, customFormat, selectedLocale, selectedTimeZone));
@@ -115,14 +125,7 @@ function TimeTool() {
           </ToolbarButton>
           <CopyButton title="Copy batch output" value={batchOutput} />
         </ActionBar>
-        <MetricsGrid
-          items={[
-            { label: 'Batch rows', value: batchLines || '-' },
-            { label: 'Format', value: customFormat },
-            { label: 'Locale', value: locale },
-            { label: 'Time zone', value: timeZone },
-          ]}
-        />
+        <MetricsGrid items={batchMetricsItems} />
       </ToolSection>
     </section>
   );

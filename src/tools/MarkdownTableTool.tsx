@@ -3,6 +3,7 @@ import { Table2 } from 'lucide-react';
 import { ApplyTextButton } from '../components/ApplyTextButton';
 import { CopyButton } from '../components/CopyButton';
 import { ActionBar, MetricsGrid, SplitTextAreas } from '../components/ToolLayout';
+import type { ToolMetric } from '../components/ToolLayout';
 import { ToolbarButton } from '../components/ToolbarButton';
 import { formatMarkdownTable, parseMarkdownTable } from './markdownTable/markdownTableUtils';
 
@@ -16,6 +17,15 @@ function MarkdownTableTool() {
   );
   const [output, setOutput] = useState('');
   const parsed = useMemo(() => parseMarkdownTable(input), [input]);
+  const metricsItems = useMemo<ToolMetric[]>(
+    () => [
+      { label: 'Rows', value: parsed.rows.length || '-' },
+      { label: 'Columns', value: parsed.columnCount || '-' },
+      { label: 'Separator row', value: parsed.skippedSeparator ? 'Detected' : 'Generated' },
+      { label: 'Output chars', value: output.length || '-' },
+    ],
+    [output.length, parsed.columnCount, parsed.rows.length, parsed.skippedSeparator],
+  );
 
   function format() {
     setOutput(formatMarkdownTable(input));
@@ -32,14 +42,7 @@ function MarkdownTableTool() {
         <ApplyTextButton value={output} onApply={setInput} />
         <CopyButton title="Copy formatted table" value={output} />
       </ActionBar>
-      <MetricsGrid
-        items={[
-          { label: 'Rows', value: parsed.rows.length || '-' },
-          { label: 'Columns', value: parsed.columnCount || '-' },
-          { label: 'Separator row', value: parsed.skippedSeparator ? 'Detected' : 'Generated' },
-          { label: 'Output chars', value: output.length || '-' },
-        ]}
-      />
+      <MetricsGrid items={metricsItems} />
     </section>
   );
 }

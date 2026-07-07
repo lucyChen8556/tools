@@ -4,6 +4,7 @@ import { CopyButton } from '../components/CopyButton';
 import { SegmentedTabs } from '../components/SegmentedTabs';
 import { TextInputField } from '../components/TextInputField';
 import { ActionBar, MetricsGrid } from '../components/ToolLayout';
+import type { ToolMetric } from '../components/ToolLayout';
 import { ToolSection } from '../components/ToolSection';
 import { ToolbarButton } from '../components/ToolbarButton';
 import { formatMoney, readNumber } from '../utils/numberFormat';
@@ -42,6 +43,28 @@ function ExpenseTool() {
     `People: ${quickResult.people}`,
     `Each pays: ${formatMoney(quickResult.each, currency)}`,
   ].join('\n');
+  const quickMetricsItems = useMemo<ToolMetric[]>(
+    () => [
+      { label: 'Total', value: formatMoney(quickResult.total, currency) },
+      { label: 'People', value: quickResult.people },
+      { label: 'Each pays', value: formatMoney(quickResult.each, currency) },
+      { label: 'Mode', value: 'Equal split' },
+    ],
+    [currency, quickResult],
+  );
+  const detailedMetricsItems = useMemo<ToolMetric[]>(
+    () => [
+      { label: 'Subtotal', value: formatMoney(result.baseAmount, currency) },
+      { label: 'Tax', value: formatMoney(result.tax, currency) },
+      { label: 'Tip', value: formatMoney(result.tip, currency) },
+      { label: 'Extra', value: formatMoney(result.extra, currency) },
+      { label: 'Total', value: formatMoney(result.total, currency) },
+      { label: 'Per share', value: formatMoney(result.perShare, currency) },
+      { label: 'People', value: participants.length },
+      { label: 'Shares', value: result.totalShares || '-' },
+    ],
+    [currency, participants.length, result],
+  );
 
   function updateParticipant(id: string, field: 'name' | 'shares', value: string) {
     setParticipants((current) => current.map((participant) => (participant.id === id ? { ...participant, [field]: value } : participant)));
@@ -77,14 +100,7 @@ function ExpenseTool() {
             <TextInputField label="People" value={quickPeople} onChange={setQuickPeople} compact />
             <TextInputField label="Currency" value={currency} onChange={setCurrency} compact />
           </div>
-          <MetricsGrid
-            items={[
-              { label: 'Total', value: formatMoney(quickResult.total, currency) },
-              { label: 'People', value: quickResult.people },
-              { label: 'Each pays', value: formatMoney(quickResult.each, currency) },
-              { label: 'Mode', value: 'Equal split' },
-            ]}
-          />
+          <MetricsGrid items={quickMetricsItems} />
           <ActionBar>
             <ToolbarButton title="Use detailed total for quick split" onClick={() => setQuickTotal(result.total.toFixed(2))}>
               <ReceiptText size={16} />
@@ -153,18 +169,7 @@ function ExpenseTool() {
           </ToolSection>
 
           <ToolSection title="Summary">
-            <MetricsGrid
-              items={[
-                { label: 'Subtotal', value: formatMoney(result.baseAmount, currency) },
-                { label: 'Tax', value: formatMoney(result.tax, currency) },
-                { label: 'Tip', value: formatMoney(result.tip, currency) },
-                { label: 'Extra', value: formatMoney(result.extra, currency) },
-                { label: 'Total', value: formatMoney(result.total, currency) },
-                { label: 'Per share', value: formatMoney(result.perShare, currency) },
-                { label: 'People', value: participants.length },
-                { label: 'Shares', value: result.totalShares || '-' },
-              ]}
-            />
+            <MetricsGrid items={detailedMetricsItems} />
             <div className="notice warning">
               <ReceiptText size={16} />
               <span>Shares let one person pay more or less than an equal split.</span>

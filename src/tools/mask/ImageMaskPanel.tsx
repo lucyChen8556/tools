@@ -1,11 +1,11 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import type { DragEvent } from 'react';
 import { ImagePlus } from 'lucide-react';
-import { Field } from '../../components/Field';
-import { SegmentedTabs } from '../../components/SegmentedTabs';
 import { MetricsGrid } from '../../components/ToolLayout';
+import type { ToolMetric } from '../../components/ToolLayout';
 import { ImageMaskActionBar } from './ImageMaskActionBar';
-import { imageMaskModeOptions, imageMaskZoomConfig } from './constants';
+import { ImageMaskLayout } from './ImageMaskLayout';
+import { imageMaskCopy } from './constants';
 import { useImageMaskWorkspace } from './useImageMaskWorkspace';
 
 function ImageMaskPanel() {
@@ -44,6 +44,16 @@ function ImageMaskPanel() {
     zoom,
   } = useImageMaskWorkspace();
 
+  const metricsItems = useMemo<ToolMetric[]>(
+    () => [
+      { label: 'Active image', value: activeImage?.name ?? '-' },
+      { label: 'Current masks', value: activeImage?.masks.length ?? '-' },
+      { label: 'Total images', value: images.length },
+      { label: 'Total masks', value: totalMasks || '-' },
+    ],
+    [activeImage?.masks.length, activeImage?.name, images.length, totalMasks],
+  );
+
   function handleDrop(event: DragEvent<HTMLDivElement>) {
     event.preventDefault();
     setIsDraggingOver(false);
@@ -73,86 +83,32 @@ function ImageMaskPanel() {
             }}
           />
           <ImagePlus size={22} />
-          <span>Drop images here or click to upload</span>
+          <span>{imageMaskCopy.upload}</span>
         </label>
       </div>
 
-      <div className="image-mask-layout">
-        <aside className="image-mask-list" aria-label="Uploaded images">
-          <div className="image-mask-list-header">
-            <span>{images.length} images</span>
-          </div>
-          {images.length === 0 ? (
-            <div className="empty-state compact">No images uploaded</div>
-          ) : (
-            images.map((image) => (
-              <button className={`image-mask-item ${image.id === activeId ? 'active' : ''}`} key={image.id} type="button" onClick={() => selectImage(image)}>
-                <img src={image.url} alt="" />
-                <span>
-                  <strong>{image.name}</strong>
-                  <small>{`${image.width} x ${image.height} · ${image.masks.length} mask${image.masks.length === 1 ? '' : 's'}`}</small>
-                </span>
-              </button>
-            ))
-          )}
-
-          {activeImage ? (
-            <div className="image-mask-regions">
-              <div className="image-mask-list-header">
-                <span>{activeImage.masks.length} regions</span>
-              </div>
-              {activeImage.masks.length === 0 ? (
-                <div className="empty-state compact">No regions yet</div>
-              ) : (
-                activeImage.masks.map((mask, index) => (
-                  <button className={`image-mask-region ${selectedMaskIndex === index ? 'active' : ''}`} key={`${mask.x}-${mask.y}-${index}`} type="button" onClick={() => selectMask(index)}>
-                    <strong>{`#${index + 1} ${mask.mode}`}</strong>
-                    <span>{`${formatPercent(mask.w)} x ${formatPercent(mask.h)} · strength ${mask.strength}`}</span>
-                  </button>
-                ))
-              )}
-            </div>
-          ) : null}
-        </aside>
-
-        <div className="image-mask-workspace">
-          <div className="image-mask-toolbar">
-            <SegmentedTabs compact ariaLabel="Image mask mode" options={imageMaskModeOptions} value={mode} onChange={handleModeChange} />
-            <Field label="Strength" compact>
-              <input type="range" min={4} max={32} value={strength} onChange={(event) => handleStrengthChange(Number(event.target.value))} />
-            </Field>
-            <Field label={`Zoom ${Math.round(zoom * 100)}%`} compact>
-              <input
-                type="range"
-                min={imageMaskZoomConfig.min}
-                max={imageMaskZoomConfig.max}
-                step={imageMaskZoomConfig.step}
-                value={zoom}
-                disabled={!activeImage}
-                onChange={(event) => setZoomValue(Number(event.target.value))}
-              />
-            </Field>
-          </div>
-
-          <div className={`image-mask-canvas-shell ${activeImage && zoom > 1 ? 'zoomed' : ''}`} ref={shellRef} onWheel={handleWheel}>
-            {!activeImage && (
-              <div className="empty-state">
-                <strong>Upload an image, then drag to mask sensitive areas.</strong>
-                <span>Draw multiple regions, move or resize selected masks, then export as PNG.</span>
-              </div>
-            )}
-            <canvas
-              aria-label="Image masking canvas"
-              className={activeImage ? 'ready' : ''}
-              ref={canvasRef}
-              onPointerCancel={cancelInteraction}
-              onPointerDown={handlePointerDown}
-              onPointerMove={handlePointerMove}
-              onPointerUp={finishDrawing}
-            />
-          </div>
-        </div>
-      </div>
+      <ImageMaskLayout
+        activeId={activeId}
+        activeImage={activeImage}
+        cancelInteraction={cancelInteraction}
+        canvasRef={canvasRef}
+        finishDrawing={finishDrawing}
+        formatPercent={formatPercent}
+        handleModeChange={handleModeChange}
+        handlePointerDown={handlePointerDown}
+        handlePointerMove={handlePointerMove}
+        handleStrengthChange={handleStrengthChange}
+        handleWheel={handleWheel}
+        images={images}
+        mode={mode}
+        selectImage={selectImage}
+        selectMask={selectMask}
+        selectedMaskIndex={selectedMaskIndex}
+        setZoomValue={setZoomValue}
+        shellRef={shellRef}
+        strength={strength}
+        zoom={zoom}
+      />
 
       <ImageMaskActionBar
         activeImage={activeImage}
@@ -170,14 +126,7 @@ function ImageMaskPanel() {
         zoom={zoom}
       />
 
-      <MetricsGrid
-        items={[
-          { label: 'Active image', value: activeImage?.name ?? '-' },
-          { label: 'Current masks', value: activeImage?.masks.length ?? '-' },
-          { label: 'Total images', value: images.length },
-          { label: 'Total masks', value: totalMasks || '-' },
-        ]}
-      />
+      <MetricsGrid items={metricsItems} />
     </>
   );
 }

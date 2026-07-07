@@ -3,6 +3,7 @@ import { ArrowDownAZ, Check, Plus, Trash2 } from 'lucide-react';
 import { CopyButton } from '../components/CopyButton';
 import { TextInputField } from '../components/TextInputField';
 import { ActionBar, MetricsGrid } from '../components/ToolLayout';
+import type { ToolMetric } from '../components/ToolLayout';
 import { ToolSection } from '../components/ToolSection';
 import { ToolbarButton } from '../components/ToolbarButton';
 import { buildUrl, parseUrl, removeEmptyQueryRows, rowsFromUrl, sortQueryRows, type QueryRow } from './url/urlUtils';
@@ -12,6 +13,15 @@ function UrlTool() {
   const parsed = useMemo(() => parseUrl(input), [input]);
   const [queryRows, setQueryRows] = useState<QueryRow[]>(() => rowsFromUrl(parsed.url));
   const rebuilt = useMemo(() => buildUrl(parsed.url, queryRows, parsed.relative), [parsed.relative, parsed.url, queryRows]);
+  const metricsItems = useMemo<ToolMetric[]>(
+    () => [
+      { label: 'Mode', value: parsed.relative ? 'Relative' : 'Absolute' },
+      { label: 'Query params', value: queryRows.length },
+      { label: 'Path segments', value: parsed.url ? parsed.url.pathname.split('/').filter(Boolean).length : '-' },
+      { label: 'Has hash', value: parsed.url?.hash ? 'Yes' : 'No' },
+    ],
+    [parsed.relative, parsed.url, queryRows.length],
+  );
 
   useEffect(() => {
     setQueryRows(rowsFromUrl(parsed.url));
@@ -43,14 +53,7 @@ function UrlTool() {
         <TextInputField label="URL" value={input} onChange={setInput} />
       </ToolSection>
       {parsed.error ? <div className="notice error">{parsed.error}</div> : null}
-      <MetricsGrid
-        items={[
-          { label: 'Mode', value: parsed.relative ? 'Relative' : 'Absolute' },
-          { label: 'Query params', value: queryRows.length },
-          { label: 'Path segments', value: parsed.url ? parsed.url.pathname.split('/').filter(Boolean).length : '-' },
-          { label: 'Has hash', value: parsed.url?.hash ? 'Yes' : 'No' },
-        ]}
-      />
+      <MetricsGrid items={metricsItems} />
       <ToolSection title="URL parts">
         <div className="output-grid">
           <TextInputField label="Protocol" value={parsed.url ? parsed.url.protocol.replace(':', '') || '-' : '-'} readOnly />

@@ -1,4 +1,4 @@
-import { imageMaskZoomConfig, type DrawingState, type ImageMask, type MaskImage, type Point, type ResizeHandle } from './constants';
+import { imageMaskInteractionConfig, imageMaskStrengthConfig, imageMaskZoomConfig, type DrawingState, type ImageMask, type MaskImage, type Point, type ResizeHandle } from './constants';
 
 function clamp(value: number, min: number, max: number) {
   return Math.min(Math.max(value, min), max);
@@ -85,18 +85,18 @@ function drawMask(targetCtx: CanvasRenderingContext2D, mask: ImageMask, width: n
 
   if (mask.mode === 'blur') {
     targetCtx.save();
-    targetCtx.filter = `blur(${Math.max(4, mask.strength / 2)}px)`;
+    targetCtx.filter = `blur(${Math.max(imageMaskStrengthConfig.min, mask.strength / 2)}px)`;
     targetCtx.drawImage(targetCtx.canvas, rect.x, rect.y, rect.w, rect.h, rect.x, rect.y, rect.w, rect.h);
     targetCtx.restore();
     return;
   }
 
-  pixelate(targetCtx, rect, Math.max(4, mask.strength));
+  pixelate(targetCtx, rect, Math.max(imageMaskStrengthConfig.min, mask.strength));
 }
 
 function getHandleRects(mask: ImageMask, width: number, height: number) {
   const rect = toPixels(mask, width, height);
-  const size = 12;
+  const size = imageMaskInteractionConfig.handleSize;
   const half = size / 2;
   const cx = rect.x + rect.w / 2;
   const cy = rect.y + rect.h / 2;
@@ -157,7 +157,7 @@ function moveMask(mask: ImageMask, startPoint: Point, point: Point) {
 }
 
 function resizeMask(mask: ImageMask, handle: ResizeHandle, point: Point) {
-  const minSize = 0.006;
+  const minSize = imageMaskInteractionConfig.minSize;
   let left = mask.x;
   let top = mask.y;
   let right = mask.x + mask.w;
@@ -193,7 +193,7 @@ function exportMaskedImage(image: MaskImage) {
     link.href = exportUrl;
     link.download = buildExportName(image.name);
     link.click();
-    window.setTimeout(() => URL.revokeObjectURL(exportUrl), 1000);
+    window.setTimeout(() => URL.revokeObjectURL(exportUrl), imageMaskInteractionConfig.objectUrlRevokeDelayMs);
   }, 'image/png');
 }
 

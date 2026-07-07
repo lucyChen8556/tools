@@ -1,5 +1,7 @@
+import { useMemo } from 'react';
 import { TextAreaField } from '../../components/TextAreaField';
 import { MetricsGrid } from '../../components/ToolLayout';
+import type { ToolMetric } from '../../components/ToolLayout';
 import type { RegexMatchResult } from '../../types';
 import type { HighlightSegment } from './types';
 
@@ -15,17 +17,20 @@ type TestColumnProps = {
 };
 
 function TestColumn({ error, flags, hasPattern, highlightedSample, matches, ruleCount, sample, setSample }: TestColumnProps) {
+  const metricsItems = useMemo<ToolMetric[]>(
+    () => [
+      { label: 'Matches', value: matches.length },
+      { label: 'Rules', value: ruleCount },
+      { label: 'Flags', value: flags || '-' },
+    ],
+    [flags, matches.length, ruleCount],
+  );
+
   return (
     <div className="regex-test-column">
       <TextAreaField label="Test text" value={sample} onChange={setSample} />
       {error ? <div className="notice error">{error}</div> : null}
-      <MetricsGrid
-        items={[
-          { label: 'Matches', value: matches.length },
-          { label: 'Rules', value: ruleCount },
-          { label: 'Flags', value: flags || '-' },
-        ]}
-      />
+      <MetricsGrid items={metricsItems} />
       <div className="regex-preview" aria-label="Highlighted regex matches">
         {highlightedSample.map((segment, index) =>
           segment.type === 'match' ? (

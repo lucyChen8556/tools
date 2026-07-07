@@ -3,6 +3,7 @@ import { ReceiptText, RotateCcw } from 'lucide-react';
 import { CopyButton } from '../components/CopyButton';
 import { TextInputField } from '../components/TextInputField';
 import { ActionBar, MetricsGrid } from '../components/ToolLayout';
+import type { ToolMetric } from '../components/ToolLayout';
 import { ToolSection } from '../components/ToolSection';
 import { ToolbarButton } from '../components/ToolbarButton';
 import { formatMoney, formatNumber } from '../utils/numberFormat';
@@ -18,6 +19,20 @@ function DiscountTool() {
   const result = useMemo(() => {
     return calculateDiscount({ couponAmount, discountPercent, originalPrice, taxPercent });
   }, [couponAmount, discountPercent, originalPrice, taxPercent]);
+
+  const metricsItems = useMemo<ToolMetric[]>(
+    () => [
+      { label: 'Original', value: formatMoney(result.original, currency) },
+      { label: 'Discount', value: formatMoney(result.percentDiscount, currency) },
+      { label: 'Coupon', value: formatMoney(result.coupon, currency) },
+      { label: 'Before tax', value: formatMoney(result.subtotal, currency) },
+      { label: 'Tax', value: formatMoney(result.tax, currency) },
+      { label: 'Final price', value: formatMoney(result.finalPrice, currency) },
+      { label: 'Saved', value: formatMoney(result.saved, currency) },
+      { label: 'Effective off', value: `${formatNumber(result.effectiveDiscount)}%` },
+    ],
+    [currency, result],
+  );
 
   const summary = [
     `Original: ${formatMoney(result.original, currency)}`,
@@ -50,18 +65,7 @@ function DiscountTool() {
       </ToolSection>
 
       <ToolSection title="Result">
-        <MetricsGrid
-          items={[
-            { label: 'Original', value: formatMoney(result.original, currency) },
-            { label: 'Discount', value: formatMoney(result.percentDiscount, currency) },
-            { label: 'Coupon', value: formatMoney(result.coupon, currency) },
-            { label: 'Before tax', value: formatMoney(result.subtotal, currency) },
-            { label: 'Tax', value: formatMoney(result.tax, currency) },
-            { label: 'Final price', value: formatMoney(result.finalPrice, currency) },
-            { label: 'Saved', value: formatMoney(result.saved, currency) },
-            { label: 'Effective off', value: `${formatNumber(result.effectiveDiscount)}%` },
-          ]}
-        />
+        <MetricsGrid items={metricsItems} />
         <ActionBar>
           <ToolbarButton title="Reset sample" variant="primary" onClick={resetSample}>
             <RotateCcw size={16} />

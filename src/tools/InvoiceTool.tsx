@@ -4,6 +4,7 @@ import { CopyButton } from '../components/CopyButton';
 import { SelectField } from '../components/SelectField';
 import { TextInputField } from '../components/TextInputField';
 import { ActionBar, MetricsGrid } from '../components/ToolLayout';
+import type { ToolMetric } from '../components/ToolLayout';
 import { ToolSection } from '../components/ToolSection';
 import { ToolbarButton } from '../components/ToolbarButton';
 import { invoiceRoundingOptions, type InvoiceRoundingMode } from '../config/options';
@@ -23,6 +24,20 @@ function InvoiceTool() {
   const result = useMemo(() => {
     return calculateInvoice({ discountAmount, discountPercent, paidAmount, roundingMode, servicePercent, subtotal, taxPercent });
   }, [discountAmount, discountPercent, paidAmount, roundingMode, servicePercent, subtotal, taxPercent]);
+
+  const metricsItems = useMemo<ToolMetric[]>(
+    () => [
+      { label: 'Subtotal', value: formatMoney(result.subtotal, currency) },
+      { label: 'Discount', value: `-${formatMoney(result.discount, currency)}` },
+      { label: 'Service', value: formatMoney(result.service, currency) },
+      { label: 'Tax', value: formatMoney(result.tax, currency) },
+      { label: 'Before rounding', value: formatMoney(result.beforeRounding, currency) },
+      { label: 'Adjustment', value: formatSignedMoney(result.adjustment, currency) },
+      { label: 'Total due', value: formatMoney(result.total, currency) },
+      { label: result.balance > 0 ? 'Balance' : 'Change', value: formatMoney(result.balance > 0 ? result.balance : result.change, currency) },
+    ],
+    [currency, result],
+  );
 
   const summary = [
     `Subtotal: ${formatMoney(result.subtotal, currency)}`,
@@ -64,18 +79,7 @@ function InvoiceTool() {
       </ToolSection>
 
       <ToolSection title="Receipt">
-        <MetricsGrid
-          items={[
-            { label: 'Subtotal', value: formatMoney(result.subtotal, currency) },
-            { label: 'Discount', value: `-${formatMoney(result.discount, currency)}` },
-            { label: 'Service', value: formatMoney(result.service, currency) },
-            { label: 'Tax', value: formatMoney(result.tax, currency) },
-            { label: 'Before rounding', value: formatMoney(result.beforeRounding, currency) },
-            { label: 'Adjustment', value: formatSignedMoney(result.adjustment, currency) },
-            { label: 'Total due', value: formatMoney(result.total, currency) },
-            { label: result.balance > 0 ? 'Balance' : 'Change', value: formatMoney(result.balance > 0 ? result.balance : result.change, currency) },
-          ]}
-        />
+        <MetricsGrid items={metricsItems} />
         <ActionBar>
           <ToolbarButton title="Reset sample" variant="primary" onClick={resetSample}>
             <RotateCcw size={16} />

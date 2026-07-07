@@ -4,6 +4,7 @@ import { CopyableRows } from '../components/CopyableRows';
 import { SelectField } from '../components/SelectField';
 import { TextInputField } from '../components/TextInputField';
 import { MetricsGrid } from '../components/ToolLayout';
+import type { ToolMetric } from '../components/ToolLayout';
 import { ToolSection } from '../components/ToolSection';
 import { buildClamp, buildCssUnitRows, cssUnitOptions, formatCssNumber, formatPxValue, readCssNumber, type CssUnit } from './cssUnit/cssUnitUtils';
 
@@ -40,6 +41,24 @@ function CssUnitTool() {
       ),
     [basePx, clampMaxSize, clampMaxViewport, clampMinSize, clampMinViewport],
   );
+  const clampMetricsItems = useMemo<ToolMetric[]>(
+    () => [
+      { label: 'Slope', value: Number.isFinite(clampResult.slope) ? `${formatCssNumber(clampResult.slope)}vw` : '-' },
+      { label: 'Intercept', value: formatPxValue(clampResult.intercept) },
+      { label: 'Viewport range', value: `${clampMinViewport}px - ${clampMaxViewport}px` },
+      { label: 'Size range', value: `${clampMinSize}px - ${clampMaxSize}px` },
+    ],
+    [clampMaxSize, clampMaxViewport, clampMinSize, clampMinViewport, clampResult.intercept, clampResult.slope],
+  );
+  const metricsItems = useMemo<ToolMetric[]>(
+    () => [
+      { label: 'Input', value: `${value}${unit}` },
+      { label: 'Normalized px', value: formatCssNumber(result.px) },
+      { label: 'Base', value: `${basePx}px` },
+      { label: 'Viewport', value: `${viewportWidth} x ${viewportHeight}` },
+    ],
+    [basePx, result.px, unit, value, viewportHeight, viewportWidth],
+  );
 
   return (
     <section className="tool-surface">
@@ -73,24 +92,10 @@ function CssUnitTool() {
             { label: 'preferred', value: clampResult.preferred },
           ]}
         />
-        <MetricsGrid
-          items={[
-            { label: 'Slope', value: Number.isFinite(clampResult.slope) ? `${formatCssNumber(clampResult.slope)}vw` : '-' },
-            { label: 'Intercept', value: formatPxValue(clampResult.intercept) },
-            { label: 'Viewport range', value: `${clampMinViewport}px - ${clampMaxViewport}px` },
-            { label: 'Size range', value: `${clampMinSize}px - ${clampMaxSize}px` },
-          ]}
-        />
+        <MetricsGrid items={clampMetricsItems} />
       </ToolSection>
 
-      <MetricsGrid
-        items={[
-          { label: 'Input', value: `${value}${unit}` },
-          { label: 'Normalized px', value: formatCssNumber(result.px) },
-          { label: 'Base', value: `${basePx}px` },
-          { label: 'Viewport', value: `${viewportWidth} x ${viewportHeight}` },
-        ]}
-      />
+      <MetricsGrid items={metricsItems} />
       <div className="notice warning">
         <Ruler size={16} />
         <span>em uses the same base px field here. Use parent px for percentage conversion.</span>

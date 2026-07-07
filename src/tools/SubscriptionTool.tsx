@@ -4,6 +4,7 @@ import { CopyButton } from '../components/CopyButton';
 import { SelectField } from '../components/SelectField';
 import { TextInputField } from '../components/TextInputField';
 import { ActionBar, MetricsGrid } from '../components/ToolLayout';
+import type { ToolMetric } from '../components/ToolLayout';
 import { ToolSection } from '../components/ToolSection';
 import { ToolbarButton } from '../components/ToolbarButton';
 import { formatMoney, formatNumber, readNumber } from '../utils/numberFormat';
@@ -20,6 +21,20 @@ function SubscriptionTool() {
   const result = useMemo(() => {
     return calculateSubscription({ billingCycle, discountPercent, price, seats, splitBy });
   }, [billingCycle, discountPercent, price, seats, splitBy]);
+
+  const metricsItems = useMemo<ToolMetric[]>(
+    () => [
+      { label: 'This period', value: formatMoney(result.periodTotal, currency) },
+      { label: 'Monthly total', value: formatMoney(result.monthlyTotal, currency) },
+      { label: 'Yearly total', value: formatMoney(result.yearlyTotal, currency) },
+      { label: 'Daily total', value: formatMoney(result.dailyTotal, currency) },
+      { label: 'Monthly / person', value: formatMoney(result.monthlyPerPerson, currency) },
+      { label: 'Yearly / person', value: formatMoney(result.yearlyPerPerson, currency) },
+      { label: 'Monthly / seat', value: formatMoney(result.perSeatMonthly, currency) },
+      { label: 'Discount saved', value: `${formatMoney(result.savings, currency)} (${formatNumber(readNumber(discountPercent))}%)` },
+    ],
+    [currency, discountPercent, result],
+  );
 
   const summary = [
     `Billing: ${billingCycle}`,
@@ -54,18 +69,7 @@ function SubscriptionTool() {
       </ToolSection>
 
       <ToolSection title="Cost">
-        <MetricsGrid
-          items={[
-            { label: 'This period', value: formatMoney(result.periodTotal, currency) },
-            { label: 'Monthly total', value: formatMoney(result.monthlyTotal, currency) },
-            { label: 'Yearly total', value: formatMoney(result.yearlyTotal, currency) },
-            { label: 'Daily total', value: formatMoney(result.dailyTotal, currency) },
-            { label: 'Monthly / person', value: formatMoney(result.monthlyPerPerson, currency) },
-            { label: 'Yearly / person', value: formatMoney(result.yearlyPerPerson, currency) },
-            { label: 'Monthly / seat', value: formatMoney(result.perSeatMonthly, currency) },
-            { label: 'Discount saved', value: `${formatMoney(result.savings, currency)} (${formatNumber(readNumber(discountPercent))}%)` },
-          ]}
-        />
+        <MetricsGrid items={metricsItems} />
         <ActionBar>
           <ToolbarButton title="Reset sample" variant="primary" onClick={resetSample}>
             <RotateCcw size={16} />

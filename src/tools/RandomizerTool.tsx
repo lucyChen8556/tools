@@ -4,6 +4,7 @@ import { CopyButton } from '../components/CopyButton';
 import { SelectField } from '../components/SelectField';
 import { TextInputField } from '../components/TextInputField';
 import { ActionBar, MetricsGrid, SplitTextAreas } from '../components/ToolLayout';
+import type { ToolMetric } from '../components/ToolLayout';
 import { ToolSection } from '../components/ToolSection';
 import { ToolbarButton } from '../components/ToolbarButton';
 import { readNumber } from '../utils/numberFormat';
@@ -16,6 +17,15 @@ function RandomizerTool() {
   const [pickCount, setPickCount] = useState('2');
   const [groupCount, setGroupCount] = useState('3');
   const items = useMemo(() => parseList(input), [input]);
+  const metricsItems = useMemo<ToolMetric[]>(
+    () => [
+      { label: 'Items', value: items.length },
+      { label: 'Mode', value: randomModeOptions.find((option) => option.value === mode)?.label ?? mode },
+      { label: 'Pick count', value: pickCount },
+      { label: 'Group count', value: groupCount },
+    ],
+    [groupCount, items.length, mode, pickCount],
+  );
 
   function runRandomizer() {
     const shuffled = shuffleItems(items);
@@ -75,14 +85,7 @@ function RandomizerTool() {
         </ActionBar>
       </ToolSection>
 
-      <MetricsGrid
-        items={[
-          { label: 'Items', value: items.length },
-          { label: 'Mode', value: randomModeOptions.find((option) => option.value === mode)?.label ?? mode },
-          { label: 'Pick count', value: pickCount },
-          { label: 'Group count', value: groupCount },
-        ]}
-      />
+      <MetricsGrid items={metricsItems} />
     </section>
   );
 }

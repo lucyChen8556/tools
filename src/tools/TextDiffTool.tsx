@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { CheckboxControl } from '../components/CheckboxControl';
 import { CopyButton } from '../components/CopyButton';
 import { ActionBar, MetricsGrid, SplitTextAreas } from '../components/ToolLayout';
+import type { ToolMetric } from '../components/ToolLayout';
 import { diffLines } from './textDiff/textDiffUtils';
 
 function TextDiffTool() {
@@ -12,6 +13,15 @@ function TextDiffTool() {
   const added = diffs.filter((diff) => diff.type === 'added').length;
   const removed = diffs.filter((diff) => diff.type === 'removed').length;
   const changed = diffs.filter((diff) => diff.type === 'changed').length;
+  const metricsItems = useMemo<ToolMetric[]>(
+    () => [
+      { label: 'Changed', value: changed },
+      { label: 'Added', value: added },
+      { label: 'Removed', value: removed },
+      { label: 'Lines', value: diffs.length },
+    ],
+    [added, changed, diffs.length, removed],
+  );
   const diffText = diffs
     .map((diff) => {
       if (diff.type === 'same') return `  ${diff.oldText ?? ''}`;
@@ -28,14 +38,7 @@ function TextDiffTool() {
         <CheckboxControl label="Ignore whitespace" checked={ignoreWhitespace} onChange={setIgnoreWhitespace} />
         <CopyButton title="Copy diff" value={diffText} />
       </ActionBar>
-      <MetricsGrid
-        items={[
-          { label: 'Changed', value: changed },
-          { label: 'Added', value: added },
-          { label: 'Removed', value: removed },
-          { label: 'Lines', value: diffs.length },
-        ]}
-      />
+      <MetricsGrid items={metricsItems} />
       <div className="text-diff-view">
         {diffs.map((diff, index) => (
           <div className={`line-diff ${diff.type}`} key={`${diff.type}-${index}`}>

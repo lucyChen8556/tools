@@ -1,6 +1,19 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import type { PointerEvent, WheelEvent } from 'react';
-import { imageMaskZoomConfig, type DrawingState, type ImageMask, type ImageMaskMode, type InteractionState, type MaskImage, type Point, type ResizeHandle } from './constants';
+import {
+  imageMaskCanvasFitConfig,
+  imageMaskDefaultMode,
+  imageMaskInteractionConfig,
+  imageMaskStrengthConfig,
+  imageMaskZoomConfig,
+  type DrawingState,
+  type ImageMask,
+  type ImageMaskMode,
+  type InteractionState,
+  type MaskImage,
+  type Point,
+  type ResizeHandle,
+} from './constants';
 import {
   clamp,
   clampZoom,
@@ -23,9 +36,9 @@ function useImageMaskWorkspace() {
   const interactionRef = useRef<InteractionState | null>(null);
   const [images, setImages] = useState<MaskImage[]>([]);
   const [activeId, setActiveId] = useState<string | null>(null);
-  const [mode, setMode] = useState<ImageMaskMode>('pixelate');
-  const [strength, setStrength] = useState(14);
-  const [zoom, setZoom] = useState(1);
+  const [mode, setMode] = useState<ImageMaskMode>(imageMaskDefaultMode);
+  const [strength, setStrength] = useState(imageMaskStrengthConfig.defaultValue);
+  const [zoom, setZoom] = useState(imageMaskZoomConfig.defaultValue);
   const [selectedMaskIndex, setSelectedMaskIndex] = useState<number | null>(null);
   const [drawing, setDrawing] = useState<DrawingState | null>(null);
 
@@ -39,8 +52,8 @@ function useImageMaskWorkspace() {
     if (!canvas || !shell) return;
 
     const shellRect = shell.getBoundingClientRect();
-    const maxWidth = Math.max(shellRect.width - 32, 240);
-    const maxHeight = Math.max(shellRect.height - 32, 240);
+    const maxWidth = Math.max(shellRect.width - imageMaskCanvasFitConfig.padding, imageMaskCanvasFitConfig.minSize);
+    const maxHeight = Math.max(shellRect.height - imageMaskCanvasFitConfig.padding, imageMaskCanvasFitConfig.minSize);
     const fitScale = Math.min(maxWidth / image.width, maxHeight / image.height);
     const scale = fitScale * zoom;
     const displayWidth = Math.max(1, Math.round(image.width * scale));
@@ -169,8 +182,8 @@ function useImageMaskWorkspace() {
     if (!selectedMask) return;
     const duplicatedMask = {
       ...selectedMask,
-      x: clamp(selectedMask.x + 0.025, 0, 1 - selectedMask.w),
-      y: clamp(selectedMask.y + 0.025, 0, 1 - selectedMask.h),
+      x: clamp(selectedMask.x + imageMaskInteractionConfig.duplicateOffset, 0, 1 - selectedMask.w),
+      y: clamp(selectedMask.y + imageMaskInteractionConfig.duplicateOffset, 0, 1 - selectedMask.h),
     };
     updateActiveImageMasks((masks) => [...masks, duplicatedMask]);
     setSelectedMaskIndex(activeImage?.masks.length ?? 0);
@@ -182,11 +195,11 @@ function useImageMaskWorkspace() {
     interactionRef.current = null;
     setImages([]);
     setActiveId(null);
-    setMode('pixelate');
-    setStrength(14);
+    setMode(imageMaskDefaultMode);
+    setStrength(imageMaskStrengthConfig.defaultValue);
     setSelectedMaskIndex(null);
     setDrawing(null);
-    setZoom(1);
+    setZoom(imageMaskZoomConfig.defaultValue);
   }
 
   function applyMasksToAll() {
@@ -330,7 +343,7 @@ function useImageMaskWorkspace() {
     const rect = normalizeRect({ ...drawing, currentX: point.x, currentY: point.y });
     setDrawing(null);
 
-    if (rect.w <= 0.006 || rect.h <= 0.006) return;
+    if (rect.w <= imageMaskInteractionConfig.minSize || rect.h <= imageMaskInteractionConfig.minSize) return;
 
     updateActiveImageMasks((masks) => [...masks, { ...rect, mode, strength }]);
     setSelectedMaskIndex(activeImage?.masks.length ?? 0);
@@ -348,7 +361,7 @@ function useImageMaskWorkspace() {
   }
 
   function fitImage() {
-    setZoom(1);
+    setZoom(imageMaskZoomConfig.defaultValue);
   }
 
   function cancelInteraction() {

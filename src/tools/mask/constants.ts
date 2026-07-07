@@ -152,23 +152,68 @@ IP: 192.168.10.24
 Taiwan ID: A123456789
 Request ID: 123e4567-e89b-12d3-a456-426614174000`;
 
+const textMaskCustomRuleDefaults = {
+  pattern: 'order_[A-Z0-9]+',
+  flags: 'gi',
+  label: 'CUSTOM',
+};
+
+const textMaskDefaultMode = 'placeholder';
+
 const imageMaskModeOptions = [
   { label: 'Pixelate', value: 'pixelate' },
   { label: 'Blur', value: 'blur' },
   { label: 'Black bar', value: 'bar' },
 ] as const;
 
+const imageMaskDefaultMode = 'pixelate';
+
+const imageMaskStrengthConfig = {
+  min: 4,
+  max: 32,
+  defaultValue: 14,
+};
+
 const imageMaskZoomConfig = {
   min: 1,
   max: 4,
   step: 0.25,
+  defaultValue: 1,
+};
+
+const imageMaskCanvasFitConfig = {
+  padding: 32,
+  minSize: 240,
+};
+
+const imageMaskInteractionConfig = {
+  duplicateOffset: 0.025,
+  minSize: 0.006,
+  handleSize: 12,
+  exportBatchDelayMs: 180,
+  objectUrlRevokeDelayMs: 1000,
+};
+
+const imageMaskCopy = {
+  upload: 'Drop images here or click to upload',
+  noImages: 'No images uploaded',
+  noRegions: 'No regions yet',
+  emptyTitle: 'Upload an image, then drag to mask sensitive areas.',
+  emptyDescription: 'Draw multiple regions, move or resize selected masks, then export as PNG.',
 };
 
 export {
   defaultTextMaskRuleIds,
+  imageMaskCanvasFitConfig,
+  imageMaskCopy,
+  imageMaskDefaultMode,
+  imageMaskInteractionConfig,
   imageMaskModeOptions,
+  imageMaskStrengthConfig,
   imageMaskZoomConfig,
   maskToolTabs,
+  textMaskCustomRuleDefaults,
+  textMaskDefaultMode,
   textMaskRules,
   textMaskSample,
 };
