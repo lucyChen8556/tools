@@ -57,6 +57,14 @@ export const toolHelp: Record<ToolId, ToolHelp> = {
       { title: 'Notes', items: ['Date string parsing follows browser Date behavior.', 'Use explicit timestamps when precision matters.'] },
     ],
   },
+  workday: {
+    overview: 'Calculate a deadline by adding or subtracting workdays from a start date with optional weekend and holiday exclusions.',
+    sections: [
+      { title: 'What it does', items: ['Adds or subtracts a day count from the selected start date.', 'Can skip Saturdays and Sundays.', 'Can skip custom holidays entered as YYYY-MM-DD dates.', 'Shows the final deadline and skipped day counts.'] },
+      { title: 'Good for', items: ['Planning ticket due dates.', 'Estimating response deadlines.', 'Checking delivery, review, or approval windows.'] },
+      { title: 'Notes', items: ['The start date is day 0, so adding 1 day returns the next counted day.', 'Custom holidays are excluded even when weekend exclusion is off.'] },
+    ],
+  },
   text: {
     overview: 'Transform text casing and line order with composable operations.',
     sections: [

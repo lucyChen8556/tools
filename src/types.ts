@@ -5,6 +5,7 @@ export type ToolId =
   | 'text-cleaner'
   | 'mask'
   | 'time'
+  | 'workday'
   | 'text'
   | 'image'
   | 'color'

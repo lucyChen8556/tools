@@ -37,6 +37,7 @@ export const tools: Array<{
   { id: 'text-cleaner', name: 'Text Cleaner', shortName: 'Clean', group: 'Text', icon: <Eraser size={18} /> },
   { id: 'mask', name: 'Mask Tool', shortName: 'Mask', group: 'Text', icon: <ShieldCheck size={18} /> },
   { id: 'time', name: 'Time Converter', shortName: 'Time', group: 'Time', icon: <Clock3 size={18} /> },
+  { id: 'workday', name: 'Workday / Deadline Calculator', shortName: 'Deadline', group: 'Time', icon: <CalendarDays size={18} /> },
   { id: 'text', name: 'Text Processor', shortName: 'Text', group: 'Text', icon: <Type size={18} /> },
   { id: 'image', name: 'Image Compressor', shortName: 'Image', group: 'Media', icon: <ImageDown size={18} /> },
   { id: 'color', name: 'Color Converter', shortName: 'Color', group: 'Design', icon: <Palette size={18} /> },

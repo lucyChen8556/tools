@@ -9,38 +9,12 @@ import type { ToolMetric } from '../components/ToolLayout';
 import { ToolbarButton } from '../components/ToolbarButton';
 import { jsonMergeModeOptions } from '../config/options';
 import type { JsonDiff, JsonMergeMode } from '../types';
+import { formatTargetOptions, jsonModeOptions, sampleLeftJson, sampleRightJson, type JsonFormatTarget, type JsonToolMode } from './json/constants';
 import { compactJson, diffJson, formatJson, mergeJsonByDiff, parseJson, pathLabel, sortJson } from './json/jsonUtils';
 
-const sampleLeftJson = `{
-  "dashboard": {
-    "title": "Order Center",
-    "status": "Draft"
-  },
-  "version": 1
-}`;
-
-const sampleRightJson = `{
-  "dashboard": {
-    "title": "Order Center",
-    "status": "Published",
-    "owner": "Ops"
-  },
-  "version": 2
-}`;
-
-const jsonModeOptions = [
-  { label: 'Compare', value: 'compare' },
-  { label: 'Format', value: 'format' },
-] as const;
-
-const formatTargetOptions = [
-  { label: 'Left', value: 'left' },
-  { label: 'Right', value: 'right' },
-] as const;
-
 function JsonTool() {
-  const [mode, setMode] = useState<'format' | 'compare'>('compare');
-  const [formatTarget, setFormatTarget] = useState<'left' | 'right'>('left');
+  const [mode, setMode] = useState<JsonToolMode>('compare');
+  const [formatTarget, setFormatTarget] = useState<JsonFormatTarget>('left');
   const [left, setLeft] = useState(sampleLeftJson);
   const [right, setRight] = useState(sampleRightJson);
   const [mergeMode, setMergeMode] = useState<JsonMergeMode>('diff');
@@ -77,7 +51,7 @@ function JsonTool() {
     [compareState.diffs],
   );
 
-  function runFormat(target: 'left' | 'right') {
+  function runFormat(target: JsonFormatTarget) {
     try {
       const parsed = parseJson(target === 'left' ? left : right);
       const formatted = formatJson(parsed);
