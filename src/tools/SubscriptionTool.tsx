@@ -7,13 +7,7 @@ import { ActionBar, MetricsGrid } from '../components/ToolLayout';
 import { ToolSection } from '../components/ToolSection';
 import { ToolbarButton } from '../components/ToolbarButton';
 import { formatMoney, formatNumber, readNumber } from '../utils/numberFormat';
-
-const billingOptions = [
-  { label: 'Monthly', value: 'monthly' },
-  { label: 'Yearly', value: 'yearly' },
-] as const;
-
-type BillingCycle = (typeof billingOptions)[number]['value'];
+import { billingOptions, calculateSubscription, type BillingCycle } from './subscription/subscriptionUtils';
 
 function SubscriptionTool() {
   const [price, setPrice] = useState('19.99');
@@ -24,26 +18,7 @@ function SubscriptionTool() {
   const [currency, setCurrency] = useState('$');
 
   const result = useMemo(() => {
-    const enteredPrice = Math.max(0, readNumber(price));
-    const seatCount = Math.max(1, readNumber(seats, 1));
-    const people = Math.max(1, readNumber(splitBy, 1));
-    const discountRate = Math.max(0, readNumber(discountPercent)) / 100;
-    const periodTotal = enteredPrice * seatCount * (1 - discountRate);
-    const monthlyTotal = billingCycle === 'monthly' ? periodTotal : periodTotal / 12;
-    const yearlyTotal = billingCycle === 'monthly' ? periodTotal * 12 : periodTotal;
-
-    return {
-      periodTotal,
-      monthlyTotal,
-      yearlyTotal,
-      dailyTotal: yearlyTotal / 365,
-      monthlyPerPerson: monthlyTotal / people,
-      yearlyPerPerson: yearlyTotal / people,
-      perSeatMonthly: monthlyTotal / seatCount,
-      savings: enteredPrice * seatCount - periodTotal,
-      people,
-      seatCount,
-    };
+    return calculateSubscription({ billingCycle, discountPercent, price, seats, splitBy });
   }, [billingCycle, discountPercent, price, seats, splitBy]);
 
   const summary = [

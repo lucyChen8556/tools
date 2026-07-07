@@ -7,26 +7,10 @@ import { ActionBar, MetricsGrid } from '../components/ToolLayout';
 import { ToolSection } from '../components/ToolSection';
 import { ToolbarButton } from '../components/ToolbarButton';
 import { formatMoney, readNumber } from '../utils/numberFormat';
-
-type Participant = {
-  id: string;
-  name: string;
-  shares: string;
-};
-
-const defaultParticipants: Participant[] = [
-  { id: 'alice', name: 'Alice', shares: '1' },
-  { id: 'ben', name: 'Ben', shares: '1' },
-  { id: 'casey', name: 'Casey', shares: '1.5' },
-];
-
-const splitModeOptions = [
-  { label: 'Quick', value: 'quick' },
-  { label: 'Detailed', value: 'detailed' },
-] as const;
+import { calculateDetailedSplit, calculateQuickSplit, defaultParticipants, splitModeOptions, type Participant, type SplitMode } from './expense/expenseUtils';
 
 function ExpenseTool() {
-  const [mode, setMode] = useState<'quick' | 'detailed'>('quick');
+  const [mode, setMode] = useState<SplitMode>('quick');
   const [quickTotal, setQuickTotal] = useState('1500');
   const [quickPeople, setQuickPeople] = useState('4');
   const [amount, setAmount] = useState('1280');
@@ -37,38 +21,11 @@ function ExpenseTool() {
   const [participants, setParticipants] = useState<Participant[]>(defaultParticipants);
 
   const quickResult = useMemo(() => {
-    const total = Math.max(0, readNumber(quickTotal));
-    const people = Math.max(1, Math.floor(readNumber(quickPeople, 1)));
-    const each = total / people;
-    return { total, people, each };
+    return calculateQuickSplit(quickTotal, quickPeople);
   }, [quickPeople, quickTotal]);
 
   const result = useMemo(() => {
-    const baseAmount = Math.max(0, readNumber(amount));
-    const tax = baseAmount * (Math.max(0, readNumber(taxPercent)) / 100);
-    const tip = baseAmount * (Math.max(0, readNumber(tipPercent)) / 100);
-    const extra = Math.max(0, readNumber(extraFee));
-    const total = baseAmount + tax + tip + extra;
-    const rows = participants.map((participant) => ({
-      ...participant,
-      numericShares: Math.max(0, readNumber(participant.shares)),
-    }));
-    const totalShares = rows.reduce((sum, participant) => sum + participant.numericShares, 0);
-    const perShare = totalShares > 0 ? total / totalShares : 0;
-
-    return {
-      baseAmount,
-      tax,
-      tip,
-      extra,
-      total,
-      totalShares,
-      perShare,
-      rows: rows.map((participant) => ({
-        ...participant,
-        amount: participant.numericShares * perShare,
-      })),
-    };
+    return calculateDetailedSplit({ amount, extraFee, participants, taxPercent, tipPercent });
   }, [amount, extraFee, participants, taxPercent, tipPercent]);
 
   const summary = [

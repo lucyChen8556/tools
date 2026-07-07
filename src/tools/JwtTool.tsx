@@ -4,22 +4,7 @@ import { CopyButton } from '../components/CopyButton';
 import { TextAreaField } from '../components/TextAreaField';
 import { ActionBar, MetricsGrid } from '../components/ToolLayout';
 import { ToolbarButton } from '../components/ToolbarButton';
-import { decodeJwt, type DecodedJwt } from '../utils/jwt';
-
-const sampleJwt =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ0b29scy1odWIiLCJzdWIiOiJ1c2VyLTEyMyIsImF1ZCI6ImRlbW8iLCJpYXQiOjE3ODI4OTI4MDAsImV4cCI6MTc4Mjg5NjQwMCwicm9sZSI6ImFkbWluIn0.5iUx9ME8n6loO2qDkLCZ_DemoSignatureOnly';
-
-function getAlgorithm(decoded: DecodedJwt | null) {
-  if (!decoded || !decoded.header || typeof decoded.header !== 'object' || Array.isArray(decoded.header)) return '-';
-  const algorithm = decoded.header.alg;
-  return typeof algorithm === 'string' ? algorithm : '-';
-}
-
-function getType(decoded: DecodedJwt | null) {
-  if (!decoded || !decoded.header || typeof decoded.header !== 'object' || Array.isArray(decoded.header)) return '-';
-  const type = decoded.header.typ;
-  return typeof type === 'string' ? type : '-';
-}
+import { decodeJwt, getJwtAlgorithm, getJwtType, sampleJwt, type DecodedJwt } from './jwt/jwtUtils';
 
 function JwtTool() {
   const [token, setToken] = useState(sampleJwt);
@@ -70,8 +55,8 @@ function JwtTool() {
       <MetricsGrid
         items={[
           { label: 'Parts', value: tokenParts.length },
-          { label: 'Algorithm', value: getAlgorithm(decoded) },
-          { label: 'Type', value: getType(decoded) },
+          { label: 'Algorithm', value: getJwtAlgorithm(decoded) },
+          { label: 'Type', value: getJwtType(decoded) },
           { label: 'Signature', value: decoded?.signature ? 'Present' : '-' },
         ]}
       />

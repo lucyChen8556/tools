@@ -76,3 +76,12 @@ export function getContrastRatio(
   const darker = Math.min(foregroundLuminance, backgroundLuminance);
   return (lighter + 0.05) / (darker + 0.05);
 }
+
+export function formatContrastRatio(ratio: number | null) {
+  return ratio === null ? 'Invalid color' : `${ratio.toFixed(2)}:1`;
+}
+
+export function getContrastPassLabel(ratio: number | null, threshold: number) {
+  if (ratio === null) return '-';
+  return ratio >= threshold ? 'Pass' : 'Fail';
+}

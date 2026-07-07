@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import type { PointerEvent, WheelEvent } from 'react';
-import { imageMaskZoomConfig, type DrawingState, type ImageMask, type ImageMaskMode, type InteractionState, type MaskImage, type Point, type ResizeHandle } from '../tools/mask/constants';
+import { imageMaskZoomConfig, type DrawingState, type ImageMask, type ImageMaskMode, type InteractionState, type MaskImage, type Point, type ResizeHandle } from './constants';
 import {
   clamp,
   clampZoom,
@@ -14,7 +14,7 @@ import {
   moveMask,
   normalizeRect,
   resizeMask,
-} from '../tools/mask/imageMaskUtils';
+} from './imageMaskUtils';
 
 function useImageMaskWorkspace() {
   const canvasRef = useRef<HTMLCanvasElement>(null);

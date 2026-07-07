@@ -1,4 +1,4 @@
-import type { DiffOp } from '../types';
+import type { DiffOp } from '../../types';
 
 function normalizeLines(value: string, ignoreWhitespace: boolean) {
   return value.replace(/\r\n/g, '\n').split('\n').map((line) => (ignoreWhitespace ? line.trim() : line));

@@ -1,4 +1,4 @@
-import type { JsonValue } from '../types';
+import type { JsonValue } from '../../types';
 
 export type JwtClaimInfo = {
   label: string;
@@ -14,6 +14,9 @@ export type DecodedJwt = {
   signaturePreview: string;
   claims: JwtClaimInfo[];
 };
+
+const sampleJwt =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ0b29scy1odWIiLCJzdWIiOiJ1c2VyLTEyMyIsImF1ZCI6ImRlbW8iLCJpYXQiOjE3ODI4OTI4MDAsImV4cCI6MTc4Mjg5NjQwMCwicm9sZSI6ImFkbWluIn0.5iUx9ME8n6loO2qDkLCZ_DemoSignatureOnly';
 
 function decodeBase64Url(value: string) {
   const normalized = value.replace(/-/g, '+').replace(/_/g, '/');
@@ -82,3 +85,17 @@ export function decodeJwt(token: string): DecodedJwt {
     claims: buildClaimInfo(payload),
   };
 }
+
+export function getJwtAlgorithm(decoded: DecodedJwt | null) {
+  if (!decoded || !decoded.header || typeof decoded.header !== 'object' || Array.isArray(decoded.header)) return '-';
+  const algorithm = decoded.header.alg;
+  return typeof algorithm === 'string' ? algorithm : '-';
+}
+
+export function getJwtType(decoded: DecodedJwt | null) {
+  if (!decoded || !decoded.header || typeof decoded.header !== 'object' || Array.isArray(decoded.header)) return '-';
+  const type = decoded.header.typ;
+  return typeof type === 'string' ? type : '-';
+}
+
+export { sampleJwt };

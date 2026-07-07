@@ -3,7 +3,7 @@ import { Code2 } from 'lucide-react';
 import { CopyButton } from '../components/CopyButton';
 import { ActionBar, SplitTextAreas } from '../components/ToolLayout';
 import { ToolbarButton } from '../components/ToolbarButton';
-import { decodeHtml, escapeHtml, fromBase64, toBase64 } from '../utils/codec';
+import { decodeHtml, escapeHtml, fromBase64, toBase64 } from './encode/codecUtils';
 
 const codecActions = [
   { id: 'url-encode', label: 'URL +', transform: encodeURIComponent },

@@ -5,46 +5,7 @@ import { TextInputField } from '../components/TextInputField';
 import { ActionBar, MetricsGrid } from '../components/ToolLayout';
 import { ToolSection } from '../components/ToolSection';
 import { ToolbarButton } from '../components/ToolbarButton';
-
-type QueryRow = {
-  id: string;
-  key: string;
-  value: string;
-};
-
-function parseUrl(value: string) {
-  const trimmed = value.trim();
-  if (!trimmed) return { url: null, error: 'Enter a URL', relative: false };
-
-  try {
-    return { url: new URL(trimmed), error: '', relative: false };
-  } catch {
-    try {
-      return { url: new URL(trimmed, 'https://example.com'), error: '', relative: true };
-    } catch (error) {
-      return { url: null, error: error instanceof Error ? error.message : 'Invalid URL', relative: false };
-    }
-  }
-}
-
-function rowsFromUrl(url: URL | null) {
-  if (!url) return [];
-  return Array.from(url.searchParams.entries()).map(([key, value], index) => ({
-    id: `${index}-${key}-${value}`,
-    key,
-    value,
-  }));
-}
-
-function buildUrl(url: URL | null, rows: QueryRow[], relative: boolean) {
-  if (!url) return '';
-  const next = new URL(url.toString());
-  next.search = '';
-  rows.forEach((row) => {
-    if (row.key.trim()) next.searchParams.append(row.key, row.value);
-  });
-  return relative ? `${next.pathname}${next.search}${next.hash}` : next.toString();
-}
+import { buildUrl, parseUrl, removeEmptyQueryRows, rowsFromUrl, sortQueryRows, type QueryRow } from './url/urlUtils';
 
 function UrlTool() {
   const [input, setInput] = useState('https://example.com/docs?page=1&sort=desc#intro');
@@ -69,16 +30,11 @@ function UrlTool() {
   }
 
   function sortRows() {
-    setQueryRows((current) =>
-      [...current].sort((left, right) => {
-        const keyCompare = left.key.localeCompare(right.key);
-        return keyCompare === 0 ? left.value.localeCompare(right.value) : keyCompare;
-      }),
-    );
+    setQueryRows(sortQueryRows);
   }
 
   function removeEmptyRows() {
-    setQueryRows((current) => current.filter((row) => row.key.trim() && row.value.trim()));
+    setQueryRows(removeEmptyQueryRows);
   }
 
   return (

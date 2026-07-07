@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import { CheckboxControl } from '../components/CheckboxControl';
 import { CopyButton } from '../components/CopyButton';
 import { ActionBar, MetricsGrid, SplitTextAreas } from '../components/ToolLayout';
-import { diffLines } from '../utils/textDiff';
+import { diffLines } from './textDiff/textDiffUtils';
 
 function TextDiffTool() {
   const [oldText, setOldText] = useState('Release note: Fixed login timeout.\nEmail title: Welcome back');

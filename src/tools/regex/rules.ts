@@ -1,4 +1,4 @@
-import type { RegexToken } from '../../utils/regex';
+import type { RegexToken } from './regexUtils';
 import type { HighlightSegment, RegexRule } from './types';
 
 function canAttachQuantifier(token: RegexRule) {

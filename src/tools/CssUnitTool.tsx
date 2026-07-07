@@ -5,76 +5,7 @@ import { SelectField } from '../components/SelectField';
 import { TextInputField } from '../components/TextInputField';
 import { MetricsGrid } from '../components/ToolLayout';
 import { ToolSection } from '../components/ToolSection';
-
-const cssUnitOptions = [
-  { label: 'px', value: 'px' },
-  { label: 'rem', value: 'rem' },
-  { label: 'em', value: 'em' },
-  { label: '%', value: '%' },
-  { label: 'vw', value: 'vw' },
-  { label: 'vh', value: 'vh' },
-] as const;
-
-type CssUnit = (typeof cssUnitOptions)[number]['value'];
-
-function readNumber(value: string, fallback: number) {
-  const parsed = Number(value);
-  return Number.isFinite(parsed) ? parsed : fallback;
-}
-
-function formatNumber(value: number) {
-  if (!Number.isFinite(value)) return '-';
-  return Number.parseFloat(value.toFixed(4)).toString();
-}
-
-function formatCssValue(value: number, unit: CssUnit) {
-  if (!Number.isFinite(value)) return '-';
-  return `${formatNumber(value)}${unit}`;
-}
-
-function formatPxValue(value: number) {
-  if (!Number.isFinite(value)) return '-';
-  return `${formatNumber(value)}px`;
-}
-
-function formatRemValue(value: number, basePx: number) {
-  if (!Number.isFinite(value) || !Number.isFinite(basePx) || basePx === 0) return '-';
-  return `${formatNumber(value / basePx)}rem`;
-}
-
-function toPixels(value: number, unit: CssUnit, context: { basePx: number; parentPx: number; viewportWidth: number; viewportHeight: number }) {
-  if (unit === 'px') return value;
-  if (unit === 'rem' || unit === 'em') return value * context.basePx;
-  if (unit === '%') return (value / 100) * context.parentPx;
-  if (unit === 'vw') return (value / 100) * context.viewportWidth;
-  return (value / 100) * context.viewportHeight;
-}
-
-function buildClamp(minSize: number, maxSize: number, minViewport: number, maxViewport: number, basePx: number) {
-  const viewportRange = maxViewport - minViewport;
-  if (![minSize, maxSize, minViewport, maxViewport, basePx].every(Number.isFinite) || viewportRange === 0 || basePx === 0) {
-    return {
-      slope: Number.NaN,
-      intercept: Number.NaN,
-      px: 'Invalid range',
-      rem: 'Invalid range',
-      preferred: 'Invalid range',
-    };
-  }
-
-  const slope = ((maxSize - minSize) / viewportRange) * 100;
-  const intercept = minSize - (slope * minViewport) / 100;
-  const preferredPx = `${formatPxValue(intercept)} + ${formatNumber(slope)}vw`;
-  const preferredRem = `${formatRemValue(intercept, basePx)} + ${formatNumber(slope)}vw`;
-
-  return {
-    slope,
-    intercept,
-    px: `clamp(${formatPxValue(minSize)}, calc(${preferredPx}), ${formatPxValue(maxSize)})`,
-    rem: `clamp(${formatRemValue(minSize, basePx)}, calc(${preferredRem}), ${formatRemValue(maxSize, basePx)})`,
-    preferred: `calc(${preferredPx})`,
-  };
-}
+import { buildClamp, buildCssUnitRows, cssUnitOptions, formatCssNumber, formatPxValue, readCssNumber, type CssUnit } from './cssUnit/cssUnitUtils';
 
 function CssUnitTool() {
   const [value, setValue] = useState('24');
@@ -89,35 +20,23 @@ function CssUnitTool() {
   const [clampMaxViewport, setClampMaxViewport] = useState('1440');
 
   const result = useMemo(() => {
-    const numericValue = readNumber(value, Number.NaN);
+    const numericValue = readCssNumber(value, Number.NaN);
     const context = {
-      basePx: readNumber(basePx, 16),
-      parentPx: readNumber(parentPx, 320),
-      viewportWidth: readNumber(viewportWidth, 1440),
-      viewportHeight: readNumber(viewportHeight, 900),
+      basePx: readCssNumber(basePx, 16),
+      parentPx: readCssNumber(parentPx, 320),
+      viewportWidth: readCssNumber(viewportWidth, 1440),
+      viewportHeight: readCssNumber(viewportHeight, 900),
     };
-    const px = toPixels(numericValue, unit, context);
-
-    return {
-      px,
-      rows: [
-        { label: 'px', value: formatCssValue(px, 'px') },
-        { label: 'rem', value: formatCssValue(px / context.basePx, 'rem') },
-        { label: 'em', value: formatCssValue(px / context.basePx, 'em') },
-        { label: '%', value: formatCssValue((px / context.parentPx) * 100, '%') },
-        { label: 'vw', value: formatCssValue((px / context.viewportWidth) * 100, 'vw') },
-        { label: 'vh', value: formatCssValue((px / context.viewportHeight) * 100, 'vh') },
-      ],
-    };
+    return buildCssUnitRows(numericValue, unit, context);
   }, [basePx, parentPx, unit, value, viewportHeight, viewportWidth]);
   const clampResult = useMemo(
     () =>
       buildClamp(
-        readNumber(clampMinSize, Number.NaN),
-        readNumber(clampMaxSize, Number.NaN),
-        readNumber(clampMinViewport, Number.NaN),
-        readNumber(clampMaxViewport, Number.NaN),
-        readNumber(basePx, 16),
+        readCssNumber(clampMinSize, Number.NaN),
+        readCssNumber(clampMaxSize, Number.NaN),
+        readCssNumber(clampMinViewport, Number.NaN),
+        readCssNumber(clampMaxViewport, Number.NaN),
+        readCssNumber(basePx, 16),
       ),
     [basePx, clampMaxSize, clampMaxViewport, clampMinSize, clampMinViewport],
   );
@@ -156,7 +75,7 @@ function CssUnitTool() {
         />
         <MetricsGrid
           items={[
-            { label: 'Slope', value: Number.isFinite(clampResult.slope) ? `${formatNumber(clampResult.slope)}vw` : '-' },
+            { label: 'Slope', value: Number.isFinite(clampResult.slope) ? `${formatCssNumber(clampResult.slope)}vw` : '-' },
             { label: 'Intercept', value: formatPxValue(clampResult.intercept) },
             { label: 'Viewport range', value: `${clampMinViewport}px - ${clampMaxViewport}px` },
             { label: 'Size range', value: `${clampMinSize}px - ${clampMaxSize}px` },
@@ -167,7 +86,7 @@ function CssUnitTool() {
       <MetricsGrid
         items={[
           { label: 'Input', value: `${value}${unit}` },
-          { label: 'Normalized px', value: formatNumber(result.px) },
+          { label: 'Normalized px', value: formatCssNumber(result.px) },
           { label: 'Base', value: `${basePx}px` },
           { label: 'Viewport', value: `${viewportWidth} x ${viewportHeight}` },
         ]}

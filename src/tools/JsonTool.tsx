@@ -8,7 +8,7 @@ import { ActionBar, MetricsGrid, SplitTextAreas } from '../components/ToolLayout
 import { ToolbarButton } from '../components/ToolbarButton';
 import { jsonMergeModeOptions } from '../config/options';
 import type { JsonDiff, JsonMergeMode } from '../types';
-import { compactJson, diffJson, formatJson, mergeJsonByDiff, parseJson, pathLabel, sortJson } from '../utils/json';
+import { compactJson, diffJson, formatJson, mergeJsonByDiff, parseJson, pathLabel, sortJson } from './json/jsonUtils';
 
 const sampleLeftJson = `{
   "dashboard": {

@@ -3,7 +3,7 @@ import { CopyButton } from '../components/CopyButton';
 import { SelectField } from '../components/SelectField';
 import { SplitTextAreas } from '../components/ToolLayout';
 import { csvDelimiterOptions, type CsvDelimiterId } from '../config/options';
-import { csvRowsToObjects, parseCsv } from '../utils/csv';
+import { csvRowsToObjects, parseCsv } from './csv/csvUtils';
 
 function CsvTool() {
   const [input, setInput] = useState('key,zhTW,enUS\nsave,儲存,Save\ncancel,取消,Cancel');

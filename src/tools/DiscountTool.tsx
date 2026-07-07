@@ -5,7 +5,8 @@ import { TextInputField } from '../components/TextInputField';
 import { ActionBar, MetricsGrid } from '../components/ToolLayout';
 import { ToolSection } from '../components/ToolSection';
 import { ToolbarButton } from '../components/ToolbarButton';
-import { formatMoney, formatNumber, readNumber } from '../utils/numberFormat';
+import { formatMoney, formatNumber } from '../utils/numberFormat';
+import { calculateDiscount } from './discount/discountUtils';
 
 function DiscountTool() {
   const [originalPrice, setOriginalPrice] = useState('1299');
@@ -15,18 +16,7 @@ function DiscountTool() {
   const [currency, setCurrency] = useState('$');
 
   const result = useMemo(() => {
-    const original = Math.max(0, readNumber(originalPrice));
-    const discountRate = Math.max(0, readNumber(discountPercent)) / 100;
-    const coupon = Math.max(0, readNumber(couponAmount));
-    const taxRate = Math.max(0, readNumber(taxPercent)) / 100;
-    const percentDiscount = original * discountRate;
-    const subtotal = Math.max(0, original - percentDiscount - coupon);
-    const tax = subtotal * taxRate;
-    const finalPrice = subtotal + tax;
-    const saved = Math.max(0, original - subtotal);
-    const effectiveDiscount = original > 0 ? (saved / original) * 100 : 0;
-
-    return { original, percentDiscount, coupon, subtotal, tax, finalPrice, saved, effectiveDiscount };
+    return calculateDiscount({ couponAmount, discountPercent, originalPrice, taxPercent });
   }, [couponAmount, discountPercent, originalPrice, taxPercent]);
 
   const summary = [

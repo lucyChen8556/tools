@@ -13,6 +13,7 @@ import {
   type OutputFormat,
 } from '../config/options';
 import { downloadBlob } from '../utils/file';
+import { compressImagePreview, readImageFileAsDataUrl } from './image/imageUtils';
 
 function ImageTool() {
   const [file, setFile] = useState<File | null>(null);
@@ -30,12 +31,7 @@ function ImageTool() {
   const selectedFormat = outputFormatOptions.find((option) => option.value === outputFormat) ?? outputFormatOptions[0];
 
   async function readImagePreview(nextFile: File) {
-    const dataUrl = await new Promise<string>((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => resolve(String(reader.result));
-      reader.onerror = reject;
-      reader.readAsDataURL(nextFile);
-    });
+    const dataUrl = await readImageFileAsDataUrl(nextFile);
     setFile(nextFile);
     setFileName(nextFile.name);
     setPreview(dataUrl);
@@ -50,30 +46,13 @@ function ImageTool() {
 
     setStatus('Processing');
 
-    const image = await new Promise<HTMLImageElement>((resolve, reject) => {
-      const img = new Image();
-      img.onload = () => resolve(img);
-      img.onerror = reject;
-      img.src = preview;
-    });
-
-    const ratio = Math.min(1, maxWidth / image.width);
-    const width = Math.round(image.width * ratio);
-    const height = Math.round(image.height * ratio);
-    const canvas = document.createElement('canvas');
-    canvas.width = width;
-    canvas.height = height;
-    const context = canvas.getContext('2d');
-    if (!context) return;
-
-    context.drawImage(image, 0, 0, width, height);
-    const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, outputFormat, quality));
-    if (!blob) return;
+    const compressed = await compressImagePreview({ file, maxWidth, outputFormat, preview, quality });
+    if (!compressed) return;
 
     if (resultUrl) URL.revokeObjectURL(resultUrl);
-    const nextUrl = URL.createObjectURL(blob);
+    const nextUrl = URL.createObjectURL(compressed.blob);
     setResultUrl(nextUrl);
-    setStats({ original: file.size, compressed: blob.size, width, height });
+    setStats(compressed.stats);
     setStatus('Ready');
   }
 

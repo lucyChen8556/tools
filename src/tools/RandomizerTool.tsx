@@ -7,39 +7,7 @@ import { ActionBar, MetricsGrid, SplitTextAreas } from '../components/ToolLayout
 import { ToolSection } from '../components/ToolSection';
 import { ToolbarButton } from '../components/ToolbarButton';
 import { readNumber } from '../utils/numberFormat';
-
-const randomModeOptions = [
-  { label: 'Pick winners', value: 'pick' },
-  { label: 'Shuffle list', value: 'shuffle' },
-  { label: 'Make groups', value: 'groups' },
-] as const;
-
-type RandomMode = (typeof randomModeOptions)[number]['value'];
-
-function parseList(value: string) {
-  return value
-    .split(/\r?\n|,/)
-    .map((item) => item.trim())
-    .filter(Boolean);
-}
-
-function shuffleItems<T>(items: T[]) {
-  const next = [...items];
-  for (let index = next.length - 1; index > 0; index -= 1) {
-    const randomIndex = Math.floor(Math.random() * (index + 1));
-    [next[index], next[randomIndex]] = [next[randomIndex], next[index]];
-  }
-  return next;
-}
-
-function makeGroups(items: string[], groupCount: number) {
-  const count = Math.max(1, Math.min(groupCount, items.length || 1));
-  const groups = Array.from({ length: count }, () => [] as string[]);
-  items.forEach((item, index) => {
-    groups[index % count].push(item);
-  });
-  return groups;
-}
+import { formatGroups, formatNumberedList, makeGroups, parseList, randomModeOptions, shuffleItems, type RandomMode } from './randomizer/randomizerUtils';
 
 function RandomizerTool() {
   const [input, setInput] = useState('Alice\nBen\nCasey\nDora\nEvan\nFiona\nGrace\nHank');
@@ -54,17 +22,17 @@ function RandomizerTool() {
 
     if (mode === 'pick') {
       const count = Math.max(1, Math.min(readNumber(pickCount, 1), shuffled.length));
-      setOutput(shuffled.slice(0, count).map((item, index) => `${index + 1}. ${item}`).join('\n'));
+      setOutput(formatNumberedList(shuffled.slice(0, count)));
       return;
     }
 
     if (mode === 'groups') {
       const groups = makeGroups(shuffled, readNumber(groupCount, 1));
-      setOutput(groups.map((group, index) => [`Group ${index + 1}`, ...group.map((item) => `- ${item}`)].join('\n')).join('\n\n'));
+      setOutput(formatGroups(groups));
       return;
     }
 
-    setOutput(shuffled.map((item, index) => `${index + 1}. ${item}`).join('\n'));
+    setOutput(formatNumberedList(shuffled));
   }
 
   function resetSample() {
@@ -94,7 +62,7 @@ function RandomizerTool() {
           </ToolbarButton>
           <ToolbarButton title="Shuffle list" onClick={() => {
             setMode('shuffle');
-            setOutput(shuffleItems(items).map((item, index) => `${index + 1}. ${item}`).join('\n'));
+            setOutput(formatNumberedList(shuffleItems(items)));
           }} disabled={items.length === 0}>
             <Shuffle size={16} />
             <span>Quick shuffle</span>

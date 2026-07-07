@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { TextInputField } from '../components/TextInputField';
-import { analyzeRegexPattern, collectRegexMatches } from '../utils/regex';
+import { analyzeRegexPattern, collectRegexMatches } from './regex/regexUtils';
 import { AnalysisColumn } from './regex/AnalysisColumn';
 import { commonPatterns } from './regex/patterns';
 import { buildHighlightSegments, buildRegexRules } from './regex/rules';

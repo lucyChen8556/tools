@@ -5,19 +5,7 @@ import { CopyButton } from '../components/CopyButton';
 import { TextAreaField } from '../components/TextAreaField';
 import { ActionBar, MetricsGrid } from '../components/ToolLayout';
 import { ToolbarButton } from '../components/ToolbarButton';
-
-const hashAlgorithms = ['SHA-1', 'SHA-256', 'SHA-384', 'SHA-512'] as const;
-
-type HashResult = {
-  algorithm: (typeof hashAlgorithms)[number];
-  value: string;
-};
-
-function toHex(buffer: ArrayBuffer) {
-  return Array.from(new Uint8Array(buffer))
-    .map((byte) => byte.toString(16).padStart(2, '0'))
-    .join('');
-}
+import { buildHashResults, hashAlgorithms, type HashResult } from './hash/hashUtils';
 
 function HashTool() {
   const [input, setInput] = useState('hello world');
@@ -29,13 +17,7 @@ function HashTool() {
 
     async function buildHashes() {
       try {
-        const payload = new TextEncoder().encode(input);
-        const nextResults = await Promise.all(
-          hashAlgorithms.map(async (algorithm) => ({
-            algorithm,
-            value: toHex(await crypto.subtle.digest(algorithm, payload)),
-          })),
-        );
+        const nextResults = await buildHashResults(input);
         if (!cancelled) {
           setResults(nextResults);
           setError('');

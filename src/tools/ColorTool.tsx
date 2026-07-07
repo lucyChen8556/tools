@@ -4,16 +4,7 @@ import { TextInputField } from '../components/TextInputField';
 import { MetricsGrid } from '../components/ToolLayout';
 import { ToolSection } from '../components/ToolSection';
 import { ToolbarButton } from '../components/ToolbarButton';
-import { getContrastRatio, parseHexColor } from '../utils/color';
-
-function formatRatio(ratio: number | null) {
-  return ratio === null ? 'Invalid color' : `${ratio.toFixed(2)}:1`;
-}
-
-function passLabel(ratio: number | null, threshold: number) {
-  if (ratio === null) return '-';
-  return ratio >= threshold ? 'Pass' : 'Fail';
-}
+import { formatContrastRatio, getContrastPassLabel, getContrastRatio, parseHexColor } from './color/colorUtils';
 
 function ColorTool() {
   const [value, setValue] = useState('#2F6F73');
@@ -84,12 +75,12 @@ function ColorTool() {
           </div>
           <MetricsGrid
             items={[
-              { label: 'Ratio', value: formatRatio(contrastRatio) },
-              { label: 'Normal AA', value: passLabel(contrastRatio, 4.5) },
-              { label: 'Normal AAA', value: passLabel(contrastRatio, 7) },
-              { label: 'Large AA', value: passLabel(contrastRatio, 3) },
-              { label: 'Large AAA', value: passLabel(contrastRatio, 4.5) },
-              { label: 'UI components', value: passLabel(contrastRatio, 3) },
+              { label: 'Ratio', value: formatContrastRatio(contrastRatio) },
+              { label: 'Normal AA', value: getContrastPassLabel(contrastRatio, 4.5) },
+              { label: 'Normal AAA', value: getContrastPassLabel(contrastRatio, 7) },
+              { label: 'Large AA', value: getContrastPassLabel(contrastRatio, 3) },
+              { label: 'Large AAA', value: getContrastPassLabel(contrastRatio, 4.5) },
+              { label: 'UI components', value: getContrastPassLabel(contrastRatio, 3) },
             ]}
           />
         </div>
