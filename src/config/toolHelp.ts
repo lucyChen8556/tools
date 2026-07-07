@@ -82,11 +82,11 @@ export const toolHelp: Record<ToolId, ToolHelp> = {
     ],
   },
   color: {
-    overview: 'Convert colors and check foreground/background contrast.',
+    overview: 'Convert colors, build palettes, and check foreground/background contrast.',
     sections: [
-      { title: 'What it does', items: ['Accepts HEX input or color picker selection.', 'Shows HEX, RGB, and HSL outputs.', 'Checks WCAG contrast ratio for foreground and background colors.'] },
-      { title: 'Good for', items: ['Design token checks.', 'CSS value conversion.', 'Accessibility checks before shipping UI colors.'] },
-      { title: 'Notes', items: ['Contrast uses WCAG relative luminance and contrast ratio.', 'Alpha channel conversion is not included yet.'] },
+      { title: 'What it does', items: ['Accepts HEX input or color picker selection.', 'Shows HEX, RGB, and HSL outputs.', 'Builds swatches from a pasted color list.', 'Checks WCAG contrast ratio for foreground and background colors.'] },
+      { title: 'Good for', items: ['Design token checks.', 'CSS value conversion.', 'Palette cleanup.', 'Accessibility checks before shipping UI colors.'] },
+      { title: 'Notes', items: ['Palette input supports HEX colors separated by spaces, commas, or new lines.', 'Contrast uses WCAG relative luminance and contrast ratio.', 'Alpha channel conversion is not included yet.'] },
     ],
   },
   regex: {

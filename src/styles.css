@@ -888,6 +888,26 @@
     @apply min-h-44 rounded-md border border-ink-200 shadow-[0_1px_2px_rgba(17,24,39,0.04)];
   }
 
+  .palette-grid {
+    @apply grid grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-3;
+  }
+
+  .palette-swatch {
+    @apply grid min-h-36 overflow-hidden rounded-md border border-ink-300 bg-white text-left shadow-[0_1px_2px_rgba(17,24,39,0.04)] transition hover:-translate-y-0.5 hover:border-teal-600 hover:shadow-[0_8px_18px_rgba(17,24,39,0.08)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600;
+  }
+
+  .palette-swatch > span {
+    @apply block min-h-20 border-b border-ink-200;
+  }
+
+  .palette-swatch strong {
+    @apply px-3 pt-2 font-mono text-sm text-ink-950;
+  }
+
+  .palette-swatch small {
+    @apply px-3 pb-3 pt-1 font-mono text-xs text-ink-500;
+  }
+
   .contrast-panel {
     @apply grid grid-cols-[minmax(260px,0.75fr)_minmax(0,1.25fr)] gap-4 max-lg:grid-cols-1;
   }

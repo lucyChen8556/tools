@@ -4,7 +4,7 @@ import { ApplyTextButton } from '../../components/ApplyTextButton';
 import { CheckboxControl } from '../../components/CheckboxControl';
 import { CopyButton } from '../../components/CopyButton';
 import { SelectField } from '../../components/SelectField';
-import { TextInputField } from '../../components/TextInputField';
+import { TextInputControls } from '../../components/TextInputControls';
 import { ActionBar, MetricsGrid, SplitTextAreas } from '../../components/ToolLayout';
 import type { ToolMetric } from '../../components/ToolLayout';
 import { ToolbarButton } from '../../components/ToolbarButton';
@@ -105,9 +105,14 @@ function TextMaskPanel() {
       </div>
       <div className="mask-custom-rule">
         <CheckboxControl label="Use custom regex rule" checked={customEnabled} onChange={setCustomEnabled} />
-        <TextInputField label="Custom pattern" value={customPattern} onChange={setCustomPattern} compact placeholder={textMaskCustomRuleDefaults.pattern} />
-        <TextInputField label="Flags" value={customFlags} onChange={setCustomFlags} compact placeholder={textMaskCustomRuleDefaults.flags} />
-        <TextInputField label="Placeholder label" value={customLabel} onChange={setCustomLabel} compact placeholder={textMaskCustomRuleDefaults.label} />
+        <TextInputControls
+          wide={false}
+          controls={[
+            { label: 'Custom pattern', value: customPattern, onChange: setCustomPattern, placeholder: textMaskCustomRuleDefaults.pattern },
+            { label: 'Flags', value: customFlags, onChange: setCustomFlags, placeholder: textMaskCustomRuleDefaults.flags },
+            { label: 'Placeholder label', value: customLabel, onChange: setCustomLabel, placeholder: textMaskCustomRuleDefaults.label },
+          ]}
+        />
       </div>
       {error ? <div className="notice error">{error}</div> : null}
       <ActionBar>

@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import { Plus, ReceiptText, RotateCcw, Trash2 } from 'lucide-react';
 import { CopyButton } from '../components/CopyButton';
 import { SegmentedTabs } from '../components/SegmentedTabs';
-import { TextInputField } from '../components/TextInputField';
+import { TextInputControls } from '../components/TextInputControls';
 import { ActionBar, MetricsGrid } from '../components/ToolLayout';
 import type { ToolMetric } from '../components/ToolLayout';
 import { ToolSection } from '../components/ToolSection';
@@ -95,11 +95,14 @@ function ExpenseTool() {
 
       {mode === 'quick' ? (
         <ToolSection title="Quick split">
-          <div className="inline-controls wide life-controls">
-            <TextInputField label="Total" value={quickTotal} onChange={setQuickTotal} compact />
-            <TextInputField label="People" value={quickPeople} onChange={setQuickPeople} compact />
-            <TextInputField label="Currency" value={currency} onChange={setCurrency} compact />
-          </div>
+          <TextInputControls
+            className="life-controls"
+            controls={[
+              { label: 'Total', value: quickTotal, onChange: setQuickTotal },
+              { label: 'People', value: quickPeople, onChange: setQuickPeople },
+              { label: 'Currency', value: currency, onChange: setCurrency },
+            ]}
+          />
           <MetricsGrid items={quickMetricsItems} />
           <ActionBar>
             <ToolbarButton title="Use detailed total for quick split" onClick={() => setQuickTotal(result.total.toFixed(2))}>
@@ -116,12 +119,15 @@ function ExpenseTool() {
       ) : (
         <>
           <ToolSection title="Bill">
-            <div className="inline-controls wide expense-controls">
-              <TextInputField label="Subtotal" value={amount} onChange={setAmount} compact />
-              <TextInputField label="Tax %" value={taxPercent} onChange={setTaxPercent} compact />
-              <TextInputField label="Tip %" value={tipPercent} onChange={setTipPercent} compact />
-              <TextInputField label="Extra fee" value={extraFee} onChange={setExtraFee} compact />
-            </div>
+            <TextInputControls
+              className="expense-controls"
+              controls={[
+                { label: 'Subtotal', value: amount, onChange: setAmount },
+                { label: 'Tax %', value: taxPercent, onChange: setTaxPercent },
+                { label: 'Tip %', value: tipPercent, onChange: setTipPercent },
+                { label: 'Extra fee', value: extraFee, onChange: setExtraFee },
+              ]}
+            />
           </ToolSection>
 
           <ToolSection title="People">

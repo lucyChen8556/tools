@@ -55,6 +55,25 @@ export function parseHexColor(input: string) {
   };
 }
 
+export function parseColorPalette(input: string) {
+  const rawItems = input
+    .split(/[\s,;|]+/)
+    .map((item) => item.trim().replace(/^['"]|['"]$/g, ''))
+    .filter(Boolean);
+
+  const colors = rawItems.flatMap((item) => {
+    const color = parseHexColor(item);
+    return color ? [{ source: item, ...color }] : [];
+  });
+  const invalidItems = rawItems.filter((item) => !parseHexColor(item));
+
+  return { colors, invalidItems, totalItems: rawItems.length };
+}
+
+export function formatPaletteOutput(colors: Array<{ hex: string; rgb: string; hsl: string }>) {
+  return colors.map((color) => `${color.hex}\t${color.rgb}\t${color.hsl}`).join('\n');
+}
+
 function linearizeChannel(value: number) {
   const channel = value / 255;
   return channel <= 0.03928 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4;

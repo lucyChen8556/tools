@@ -3,6 +3,7 @@ import { Ruler } from 'lucide-react';
 import { CopyableRows } from '../components/CopyableRows';
 import { SelectField } from '../components/SelectField';
 import { TextInputField } from '../components/TextInputField';
+import { TextInputControls } from '../components/TextInputControls';
 import { MetricsGrid } from '../components/ToolLayout';
 import type { ToolMetric } from '../components/ToolLayout';
 import { ToolSection } from '../components/ToolSection';
@@ -78,13 +79,16 @@ function CssUnitTool() {
       </ToolSection>
 
       <ToolSection title="Clamp calculator">
-        <div className="inline-controls wide clamp-controls">
-          <TextInputField label="Min size px" value={clampMinSize} onChange={setClampMinSize} compact />
-          <TextInputField label="Max size px" value={clampMaxSize} onChange={setClampMaxSize} compact />
-          <TextInputField label="Min viewport px" value={clampMinViewport} onChange={setClampMinViewport} compact />
-          <TextInputField label="Max viewport px" value={clampMaxViewport} onChange={setClampMaxViewport} compact />
-          <TextInputField label="Base px" value={basePx} onChange={setBasePx} compact />
-        </div>
+        <TextInputControls
+          className="clamp-controls"
+          controls={[
+            { label: 'Min size px', value: clampMinSize, onChange: setClampMinSize },
+            { label: 'Max size px', value: clampMaxSize, onChange: setClampMaxSize },
+            { label: 'Min viewport px', value: clampMinViewport, onChange: setClampMinViewport },
+            { label: 'Max viewport px', value: clampMaxViewport, onChange: setClampMaxViewport },
+            { label: 'Base px', value: basePx, onChange: setBasePx },
+          ]}
+        />
         <CopyableRows
           rows={[
             { label: 'clamp px', value: clampResult.px },

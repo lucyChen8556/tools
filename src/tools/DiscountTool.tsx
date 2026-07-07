@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { ReceiptText, RotateCcw } from 'lucide-react';
 import { CopyButton } from '../components/CopyButton';
-import { TextInputField } from '../components/TextInputField';
+import { TextInputControls } from '../components/TextInputControls';
 import { ActionBar, MetricsGrid } from '../components/ToolLayout';
 import type { ToolMetric } from '../components/ToolLayout';
 import { ToolSection } from '../components/ToolSection';
@@ -55,13 +55,16 @@ function DiscountTool() {
   return (
     <section className="tool-surface">
       <ToolSection title="Discount">
-        <div className="inline-controls wide life-controls">
-          <TextInputField label="Original price" value={originalPrice} onChange={setOriginalPrice} compact />
-          <TextInputField label="Discount %" value={discountPercent} onChange={setDiscountPercent} compact />
-          <TextInputField label="Coupon amount" value={couponAmount} onChange={setCouponAmount} compact />
-          <TextInputField label="Tax %" value={taxPercent} onChange={setTaxPercent} compact />
-          <TextInputField label="Currency" value={currency} onChange={setCurrency} compact />
-        </div>
+        <TextInputControls
+          className="life-controls"
+          controls={[
+            { label: 'Original price', value: originalPrice, onChange: setOriginalPrice },
+            { label: 'Discount %', value: discountPercent, onChange: setDiscountPercent },
+            { label: 'Coupon amount', value: couponAmount, onChange: setCouponAmount },
+            { label: 'Tax %', value: taxPercent, onChange: setTaxPercent },
+            { label: 'Currency', value: currency, onChange: setCurrency },
+          ]}
+        />
       </ToolSection>
 
       <ToolSection title="Result">
