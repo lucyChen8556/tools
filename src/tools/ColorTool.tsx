@@ -10,9 +10,12 @@ import { ToolSection } from '../components/ToolSection';
 import { ToolbarButton } from '../components/ToolbarButton';
 import {
   formatContrastRatio,
+  formatGeneratedPaletteOutput,
   formatPaletteOutput,
+  generateColorPalettes,
   getContrastPassLabel,
   getContrastRatio,
+  normalizeGeneratedCount,
   parseColorPalette,
   parseHexColor,
 } from './color/colorUtils';
@@ -20,6 +23,7 @@ import {
 const colorToolTabs = [
   { label: 'Convert', value: 'convert' },
   { label: 'Palette', value: 'palette' },
+  { label: 'Generate', value: 'generate' },
   { label: 'Contrast', value: 'contrast' },
 ] as const;
 
@@ -31,12 +35,17 @@ function ColorTool() {
   const [foreground, setForeground] = useState('#111827');
   const [background, setBackground] = useState('#FFFFFF');
   const [paletteInput, setPaletteInput] = useState('#2F6F73 #111827 #FFFFFF\n#0D9488, #F97316, #EAB308');
+  const [generatorColor, setGeneratorColor] = useState('#2F6F73');
+  const [generatorCount, setGeneratorCount] = useState('10');
   const color = parseHexColor(value);
   const foregroundColor = parseHexColor(foreground);
   const backgroundColor = parseHexColor(background);
   const contrastRatio = getContrastRatio(foregroundColor, backgroundColor);
   const palette = useMemo(() => parseColorPalette(paletteInput), [paletteInput]);
   const paletteOutput = useMemo(() => formatPaletteOutput(palette.colors), [palette.colors]);
+  const generatedCount = normalizeGeneratedCount(generatorCount);
+  const generatedPalette = useMemo(() => generateColorPalettes(generatorColor, generatedCount), [generatorColor, generatedCount]);
+  const generatedOutput = useMemo(() => formatGeneratedPaletteOutput(generatedPalette.groups), [generatedPalette.groups]);
   const contrastMetricsItems = useMemo<ToolMetric[]>(
     () => [
       { label: 'Ratio', value: formatContrastRatio(contrastRatio) },
@@ -112,6 +121,79 @@ function ColorTool() {
               <span>{`Ignored: ${palette.invalidItems.slice(0, 6).join(', ')}${palette.invalidItems.length > 6 ? '...' : ''}`}</span>
             </div>
           ) : null}
+        </ToolSection>
+      ) : null}
+
+      {activeTab === 'generate' ? (
+        <ToolSection title="Color generator">
+          <div className="inline-controls wide">
+            <TextInputField label="Base color" value={generatorColor} onChange={setGeneratorColor} compact />
+            <input
+              className="color-picker"
+              type="color"
+              value={generatedPalette.baseColor?.hex ?? '#000000'}
+              onChange={(event) => setGeneratorColor(event.target.value)}
+              title="Pick base color"
+            />
+            <TextInputField
+              label="Swatches per type"
+              type="number"
+              min={1}
+              max={24}
+              value={generatorCount}
+              onChange={setGeneratorCount}
+              compact
+            />
+          </div>
+
+          {!generatedPalette.baseColor ? (
+            <div className="notice error">Enter a valid HEX color to generate palettes.</div>
+          ) : (
+            <>
+              {generatedPalette.groups.map((group) => (
+                <div className="generated-palette-group" key={group.id}>
+                  <div className="palette-group-heading">
+                    <strong>{group.label}</strong>
+                    <span>{`${group.colors.length} swatches`}</span>
+                  </div>
+                  <div className="palette-grid" aria-label={`${group.label} swatches`}>
+                    {group.colors.map((generatedColor) => (
+                      <button
+                        className="palette-swatch"
+                        key={`${group.id}-${generatedColor.label}-${generatedColor.css}`}
+                        type="button"
+                        onClick={() => {
+                          setValue(generatedColor.baseHex);
+                          setActiveTab('convert');
+                        }}
+                        title={`Use ${generatedColor.baseHex} in converter`}
+                      >
+                        <span style={{ background: generatedColor.preview }} />
+                        <strong>{generatedColor.css}</strong>
+                        <small>{generatedColor.label}</small>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              ))}
+              <ActionBar>
+                <CopyButton title="Copy generated palettes" value={generatedOutput} label="Copy palettes" />
+                <CopyButton
+                  title="Copy generated CSS values"
+                  value={generatedPalette.groups.flatMap((group) => group.colors.map((generatedColor) => generatedColor.css)).join('\n')}
+                  label="Copy values"
+                />
+              </ActionBar>
+              <MetricsGrid
+                items={[
+                  { label: 'Base color', value: generatedPalette.baseColor.hex },
+                  { label: 'Types', value: generatedPalette.groups.length },
+                  { label: 'Per type', value: generatedPalette.count },
+                  { label: 'Total swatches', value: generatedPalette.groups.reduce((sum, group) => sum + group.colors.length, 0) },
+                ]}
+              />
+            </>
+          )}
         </ToolSection>
       ) : null}
 

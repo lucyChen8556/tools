@@ -1,17 +1,19 @@
 import { useMemo, useState } from 'react';
-import { CalendarDays, RotateCcw } from 'lucide-react';
+import { CalendarDays, Plus, RotateCcw, X } from 'lucide-react';
 import { CheckboxControl } from '../components/CheckboxControl';
 import { CopyButton } from '../components/CopyButton';
 import { SelectField } from '../components/SelectField';
-import { TextAreaField } from '../components/TextAreaField';
 import { TextInputField } from '../components/TextInputField';
 import { ActionBar, MetricsGrid } from '../components/ToolLayout';
 import type { ToolMetric } from '../components/ToolLayout';
 import { ToolSection } from '../components/ToolSection';
 import { ToolbarButton } from '../components/ToolbarButton';
 import {
+  addHolidayDate,
   calculateWorkdayDeadline,
+  formatHolidayLabel,
   getTodayDateInputValue,
+  removeHolidayDate,
   workdayDefaults,
   workdayDirectionOptions,
   workdaySample,
@@ -23,11 +25,12 @@ function WorkdayTool() {
   const [dayCount, setDayCount] = useState(workdayDefaults.dayCount);
   const [direction, setDirection] = useState<WorkdayDirection>(workdayDefaults.direction);
   const [excludeWeekends, setExcludeWeekends] = useState(workdayDefaults.excludeWeekends);
-  const [holidayInput, setHolidayInput] = useState(workdayDefaults.holidayInput);
+  const [holidayDate, setHolidayDate] = useState('');
+  const [holidayDates, setHolidayDates] = useState<string[]>(workdayDefaults.holidayDates);
 
   const result = useMemo(
-    () => calculateWorkdayDeadline({ dayCount, direction, excludeWeekends, holidayInput, startDate }),
-    [dayCount, direction, excludeWeekends, holidayInput, startDate],
+    () => calculateWorkdayDeadline({ dayCount, direction, excludeWeekends, holidayDates, startDate }),
+    [dayCount, direction, excludeWeekends, holidayDates, startDate],
   );
 
   const metricsItems = useMemo<ToolMetric[]>(
@@ -58,11 +61,17 @@ function WorkdayTool() {
     setDayCount(workdaySample.dayCount);
     setDirection(workdaySample.direction);
     setExcludeWeekends(workdaySample.excludeWeekends);
-    setHolidayInput(workdaySample.holidayInput);
+    setHolidayDates(workdaySample.holidayDates);
+    setHolidayDate('');
   }
 
   function useToday() {
     setStartDate(getTodayDateInputValue());
+  }
+
+  function addHoliday() {
+    setHolidayDates((current) => addHolidayDate(current, holidayDate));
+    setHolidayDate('');
   }
 
   return (
@@ -77,7 +86,35 @@ function WorkdayTool() {
       </ToolSection>
 
       <ToolSection title="Holidays">
-        <TextAreaField label="Custom holidays" value={holidayInput} onChange={setHolidayInput} spellCheck={false} />
+        <div className="inline-controls wide holiday-controls">
+          <TextInputField label="Custom holiday" type="date" value={holidayDate} onChange={setHolidayDate} compact />
+          <ToolbarButton title="Add custom holiday" variant="primary" onClick={addHoliday} disabled={!holidayDate}>
+            <Plus size={16} />
+            <span>Add holiday</span>
+          </ToolbarButton>
+          <ToolbarButton title="Clear custom holidays" onClick={() => setHolidayDates([])} disabled={holidayDates.length === 0}>
+            <X size={16} />
+            <span>Clear holidays</span>
+          </ToolbarButton>
+        </div>
+        {holidayDates.length ? (
+          <div className="holiday-list" aria-label="Selected custom holidays">
+            {holidayDates.map((date) => (
+              <button
+                className="holiday-chip"
+                key={date}
+                type="button"
+                onClick={() => setHolidayDates((current) => removeHolidayDate(current, date))}
+                title={`Remove ${date}`}
+              >
+                <span>{formatHolidayLabel(date)}</span>
+                <X size={14} />
+              </button>
+            ))}
+          </div>
+        ) : (
+          <div className="empty-state compact">No custom holidays selected</div>
+        )}
         {result.invalidHolidays.length ? <div className="notice error">{`Invalid holidays: ${result.invalidHolidays.join(', ')}`}</div> : null}
       </ToolSection>
 

@@ -901,11 +901,27 @@
   }
 
   .palette-swatch strong {
-    @apply px-3 pt-2 font-mono text-sm text-ink-950;
+    @apply min-w-0 break-all px-3 pt-2 font-mono text-sm text-ink-950;
   }
 
   .palette-swatch small {
     @apply px-3 pb-3 pt-1 font-mono text-xs text-ink-500;
+  }
+
+  .generated-palette-group {
+    @apply space-y-3 border-b border-ink-200 pb-5 last:border-b-0 last:pb-0;
+  }
+
+  .palette-group-heading {
+    @apply flex items-center justify-between gap-3 text-sm;
+  }
+
+  .palette-group-heading strong {
+    @apply text-ink-950;
+  }
+
+  .palette-group-heading span {
+    @apply rounded bg-ink-100 px-2 py-1 text-xs font-semibold text-ink-500;
   }
 
   .contrast-panel {
@@ -938,6 +954,18 @@
 
   .hash-row code {
     @apply min-w-0 break-all rounded bg-ink-50 px-2 py-1 font-mono text-xs text-ink-700;
+  }
+
+  .holiday-controls {
+    @apply items-end;
+  }
+
+  .holiday-list {
+    @apply flex flex-wrap gap-2;
+  }
+
+  .holiday-chip {
+    @apply inline-flex min-h-9 items-center gap-2 rounded-md border border-ink-300 bg-white px-3 py-1.5 text-sm font-semibold text-ink-700 shadow-sm transition hover:border-red-300 hover:bg-red-50 hover:text-red-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600;
   }
 
   .match-row > strong {

@@ -5,7 +5,7 @@ type WorkdayInput = {
   dayCount: string;
   direction: WorkdayDirection;
   excludeWeekends: boolean;
-  holidayInput: string;
+  holidayDates: string[];
 };
 
 type WorkdayResult = {
@@ -31,7 +31,7 @@ const workdayDefaults = {
   dayCount: '10',
   direction: 'add' as WorkdayDirection,
   excludeWeekends: true,
-  holidayInput: '',
+  holidayDates: [] as string[],
 };
 
 const workdaySample = {
@@ -39,7 +39,7 @@ const workdaySample = {
   dayCount: '10',
   direction: 'add' as WorkdayDirection,
   excludeWeekends: true,
-  holidayInput: '2026-07-10\n2026-07-17',
+  holidayDates: ['2026-07-10', '2026-07-17'],
 };
 
 function padDatePart(value: number) {
@@ -82,11 +82,7 @@ function formatDisplayDate(date: Date) {
   return `${formatDateOnly(date)} (${weekday})`;
 }
 
-function parseHolidayInput(input: string) {
-  const values = input
-    .split(/[\s,;]+/)
-    .map((value) => value.trim())
-    .filter(Boolean);
+function normalizeHolidayDates(values: string[]) {
   const holidays = new Set<string>();
   const invalidHolidays: string[] = [];
 
@@ -105,6 +101,21 @@ function parseHolidayInput(input: string) {
   };
 }
 
+function addHolidayDate(values: string[], value: string) {
+  const date = parseDateOnly(value);
+  if (!date) return values;
+  return Array.from(new Set([...values, formatDateOnly(date)])).sort((left, right) => left.localeCompare(right));
+}
+
+function removeHolidayDate(values: string[], value: string) {
+  return values.filter((item) => item !== value);
+}
+
+function formatHolidayLabel(value: string) {
+  const date = parseDateOnly(value);
+  return date ? formatDisplayDate(date) : value;
+}
+
 function readDayCount(value: string) {
   const numericValue = Number(value);
   if (!Number.isFinite(numericValue) || numericValue < 0) return null;
@@ -114,7 +125,7 @@ function readDayCount(value: string) {
 function calculateWorkdayDeadline(input: WorkdayInput): WorkdayResult {
   const start = parseDateOnly(input.startDate);
   const dayCount = readDayCount(input.dayCount);
-  const { holidays, invalidHolidays } = parseHolidayInput(input.holidayInput);
+  const { holidays, invalidHolidays } = normalizeHolidayDates(input.holidayDates);
   const directionStep = input.direction === 'add' ? 1 : -1;
   const directionLabel = input.direction === 'add' ? 'Added' : 'Subtracted';
 
@@ -189,5 +200,14 @@ function calculateWorkdayDeadline(input: WorkdayInput): WorkdayResult {
   };
 }
 
-export { calculateWorkdayDeadline, getTodayDateInputValue, workdayDefaults, workdayDirectionOptions, workdaySample };
+export {
+  addHolidayDate,
+  calculateWorkdayDeadline,
+  formatHolidayLabel,
+  getTodayDateInputValue,
+  removeHolidayDate,
+  workdayDefaults,
+  workdayDirectionOptions,
+  workdaySample,
+};
 export type { WorkdayDirection, WorkdayInput, WorkdayResult };
