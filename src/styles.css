@@ -940,6 +940,313 @@
     @apply max-w-md text-sm leading-6 opacity-80;
   }
 
+  .season-layout {
+    @apply grid grid-cols-[minmax(300px,0.42fr)_minmax(0,1fr)] gap-5 max-xl:grid-cols-1;
+  }
+
+  .season-input-column,
+  .season-result-column {
+    @apply flex min-w-0 flex-col gap-5;
+  }
+
+  .season-input-column {
+    @apply xl:sticky xl:top-5 xl:self-start;
+  }
+
+  .season-hint {
+    @apply m-0 text-sm leading-6 text-ink-600;
+  }
+
+  .season-quick-grid {
+    @apply grid grid-cols-2 gap-2 max-sm:grid-cols-1;
+  }
+
+  .season-quick-grid button {
+    @apply grid gap-2 rounded-md border border-ink-200 bg-white p-3 text-left text-sm font-semibold text-ink-800 shadow-[0_1px_2px_rgba(17,24,39,0.04)] hover:border-teal-600;
+  }
+
+  .season-quick-grid i {
+    @apply grid h-8 overflow-hidden rounded;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .season-quick-grid b {
+    @apply block;
+  }
+
+  .season-photo-drop {
+    @apply flex min-h-48 cursor-pointer items-center justify-center overflow-hidden rounded-md border border-dashed border-ink-300 bg-white text-sm font-semibold text-ink-600 hover:border-teal-600 hover:bg-teal-50;
+  }
+
+  .season-photo-drop input {
+    @apply hidden;
+  }
+
+  .season-photo-drop img {
+    @apply h-64 w-full object-cover;
+  }
+
+  .season-photo-drop span {
+    @apply flex items-center gap-2;
+  }
+
+  .season-photo-swatches {
+    @apply grid gap-2;
+  }
+
+  .season-photo-row {
+    @apply grid grid-cols-[28px_minmax(76px,0.8fr)_minmax(110px,1fr)] items-end gap-2 rounded-md border border-ink-200 bg-white p-2 max-sm:grid-cols-1;
+  }
+
+  .season-photo-row > span,
+  .season-mini-swatches span {
+    @apply block rounded border border-ink-200;
+  }
+
+  .season-photo-row > span {
+    @apply h-7 w-7;
+  }
+
+  .season-photo-row code {
+    @apply self-center font-mono text-xs text-ink-600;
+  }
+
+  .season-color-entry {
+    @apply grid grid-cols-[auto_minmax(0,1fr)_auto] items-end gap-2 max-sm:grid-cols-1;
+  }
+
+  .season-sample-list {
+    @apply grid gap-2;
+  }
+
+  .season-sample-chip {
+    @apply grid grid-cols-[36px_minmax(0,1fr)_32px] items-center gap-2 rounded-md border border-ink-200 bg-white p-2;
+  }
+
+  .season-sample-chip > span {
+    @apply h-9 w-9 rounded-md border border-ink-200;
+  }
+
+  .season-sample-chip div {
+    @apply grid min-w-0;
+  }
+
+  .season-sample-chip code,
+  .season-sample-chip small {
+    @apply overflow-hidden text-ellipsis whitespace-nowrap;
+  }
+
+  .season-sample-chip code {
+    @apply font-mono text-sm text-ink-950;
+  }
+
+  .season-sample-chip small {
+    @apply text-xs font-semibold text-ink-500;
+  }
+
+  .season-sample-chip button {
+    @apply grid h-8 w-8 place-items-center rounded-full border-0 bg-transparent text-ink-500 hover:bg-ink-100 hover:text-ink-950;
+  }
+
+  .season-hero {
+    @apply grid min-h-80 grid-cols-[minmax(0,1fr)_minmax(96px,136px)] items-end gap-5 rounded-md border border-ink-300 bg-cover bg-center p-8 text-white shadow-[0_14px_36px_rgba(17,24,39,0.12)] max-md:grid-cols-1 max-sm:p-5;
+  }
+
+  .season-hero p {
+    @apply m-0 text-xs font-bold uppercase tracking-normal text-white/75;
+  }
+
+  .season-hero h3 {
+    @apply my-2 text-4xl font-semibold tracking-normal max-sm:text-3xl;
+  }
+
+  .season-hero span {
+    @apply block max-w-3xl text-sm leading-7 text-white/90;
+  }
+
+  .season-hero strong {
+    @apply grid aspect-square w-full place-items-center rounded-full border border-white/40 bg-white/10 text-5xl font-black text-white max-md:w-32;
+  }
+
+  .season-tabs {
+    @apply grid grid-cols-4 gap-2 rounded-md border border-ink-200 bg-white p-2;
+  }
+
+  .season-tabs button {
+    @apply min-h-10 rounded-[5px] border-0 bg-transparent px-3 text-sm font-semibold text-ink-600 hover:bg-ink-100 disabled:cursor-not-allowed disabled:opacity-40;
+  }
+
+  .season-tabs button.active {
+    @apply bg-ink-950 text-white;
+  }
+
+  .season-subtype {
+    @apply grid grid-cols-[minmax(0,1fr)_minmax(240px,0.72fr)] gap-4 max-lg:grid-cols-1;
+  }
+
+  .season-subtype h4 {
+    @apply m-0 text-2xl font-semibold tracking-normal text-ink-950;
+  }
+
+  .season-subtype p,
+  .season-boundary p {
+    @apply mb-0 mt-2 text-sm leading-6 text-ink-600;
+  }
+
+  .season-pill-list {
+    @apply flex flex-wrap gap-2;
+  }
+
+  .season-pill-list span,
+  .season-boundary strong,
+  .season-category-heading span {
+    @apply rounded-full bg-ink-100 px-3 py-1.5 text-xs font-semibold text-ink-700;
+  }
+
+  .season-boundary {
+    @apply rounded-md border border-teal-200 bg-teal-50 p-4;
+  }
+
+  .season-boundary strong {
+    @apply inline-block bg-white text-teal-700;
+  }
+
+  .season-analysis-grid {
+    @apply grid grid-cols-2 gap-5 max-lg:grid-cols-1;
+  }
+
+  .season-metrics,
+  .season-ranking,
+  .season-category-list {
+    @apply grid gap-4;
+  }
+
+  .season-metric-row {
+    @apply grid gap-2;
+  }
+
+  .season-metric-row div {
+    @apply flex items-center justify-between gap-3 text-sm;
+  }
+
+  .season-metric-row div span {
+    @apply font-semibold text-ink-600;
+  }
+
+  .season-metric-row i,
+  .season-ranking i {
+    @apply block h-2.5 overflow-hidden rounded-full bg-ink-100;
+  }
+
+  .season-metric-row b,
+  .season-ranking b {
+    @apply block h-full rounded-full;
+  }
+
+  .season-metric-row small {
+    @apply text-xs text-ink-500;
+  }
+
+  .season-ranking > div {
+    @apply grid grid-cols-[112px_minmax(0,1fr)_40px] items-center gap-3 text-sm;
+  }
+
+  .season-ranking span {
+    @apply font-semibold text-ink-800;
+  }
+
+  .season-ranking b {
+    @apply bg-ink-950;
+  }
+
+  .season-ranking strong {
+    @apply text-right;
+  }
+
+  .season-group-grid {
+    @apply grid grid-cols-[repeat(auto-fit,minmax(180px,1fr))] gap-3;
+  }
+
+  .season-group-card {
+    @apply grid gap-2 rounded-md border border-ink-200 bg-white p-3;
+  }
+
+  .season-group-card > div:first-child {
+    @apply flex items-center justify-between gap-3 text-sm;
+  }
+
+  .season-group-card p {
+    @apply m-0 text-sm text-ink-600;
+  }
+
+  .season-mini-swatches {
+    @apply flex flex-wrap gap-1.5;
+  }
+
+  .season-mini-swatches span {
+    @apply h-6 w-6;
+  }
+
+  .season-category-list section {
+    @apply grid gap-3 border-b border-ink-200 pb-5 last:border-b-0 last:pb-0;
+  }
+
+  .season-category-heading {
+    @apply flex items-end justify-between gap-4;
+  }
+
+  .season-category-heading strong {
+    @apply text-sm text-ink-950;
+  }
+
+  .season-category-heading p {
+    @apply m-0 mt-1 text-xs leading-5 text-ink-500;
+  }
+
+  .season-palette-grid {
+    @apply grid grid-cols-[repeat(auto-fit,minmax(128px,1fr))] gap-3;
+  }
+
+  .season-swatch-card {
+    @apply grid overflow-hidden rounded-md border border-ink-200 bg-white shadow-[0_1px_2px_rgba(17,24,39,0.04)];
+  }
+
+  .season-swatch-card > span {
+    @apply h-20 border-b border-ink-200;
+  }
+
+  .season-swatch-card strong {
+    @apply min-w-0 overflow-hidden text-ellipsis whitespace-nowrap px-3 pt-2 text-sm text-ink-950;
+  }
+
+  .season-swatch-card code {
+    @apply px-3 pb-3 pt-1 font-mono text-xs text-ink-500;
+  }
+
+  .season-palette-grid.avoid .season-swatch-card > span {
+    @apply relative;
+  }
+
+  .season-guidance {
+    @apply grid grid-cols-[minmax(0,1fr)_minmax(220px,0.42fr)] gap-4 max-lg:grid-cols-1;
+  }
+
+  .season-guidance p {
+    @apply m-0 text-sm leading-7 text-ink-700;
+  }
+
+  .season-guidance div {
+    @apply rounded-md bg-ink-950 p-4 text-white;
+  }
+
+  .season-guidance strong {
+    @apply mb-2 block text-xs uppercase tracking-normal text-white/65;
+  }
+
+  .season-guidance span {
+    @apply text-sm leading-6 text-white/85;
+  }
+
   .match-row {
     @apply grid grid-cols-[88px_1fr_80px] items-center gap-3 border-b border-ink-200 px-3 py-2.5 text-sm last:border-b-0 hover:bg-ink-50 max-md:grid-cols-[72px_1fr] max-sm:grid-cols-1;
   }

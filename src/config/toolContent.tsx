@@ -15,6 +15,7 @@ import { MaskTool } from '../tools/MaskTool';
 import { NumberTool } from '../tools/NumberTool';
 import { RandomizerTool } from '../tools/RandomizerTool';
 import { RegexTool } from '../tools/RegexTool';
+import { SeasonColorTool } from '../tools/SeasonColorTool';
 import { SubscriptionTool } from '../tools/SubscriptionTool';
 import { TextCleanerTool } from '../tools/TextCleanerTool';
 import { TextDiffTool } from '../tools/TextDiffTool';
@@ -35,6 +36,7 @@ const toolComponents: Record<ToolId, ComponentType> = {
   text: TextTool,
   image: ImageTool,
   color: ColorTool,
+  'season-color': SeasonColorTool,
   regex: RegexTool,
   jwt: JwtTool,
   hash: HashTool,

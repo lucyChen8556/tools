@@ -89,6 +89,14 @@ export const toolHelp: Record<ToolId, ToolHelp> = {
       { title: 'Notes', items: ['Palette input supports HEX colors separated by spaces, commas, or new lines.', 'Generated palettes default to 10 swatches per type and cap at 24.', 'Contrast uses WCAG relative luminance and contrast ratio.'] },
     ],
   },
+  'season-color': {
+    overview: 'Analyze pasted swatches or photo-extracted colors against four-season personal color palettes.',
+    sections: [
+      { title: 'What it does', items: ['Parses labeled HEX swatches for skin, eyes, sclera, hair, brows, and lips.', 'Extracts representative colors from uploaded photos locally in the browser.', 'Scores Spring, Summer, Autumn, and Winter palettes with subtype guidance.', 'Shows suitable palettes, avoid palettes, rankings, and personal color group observations.'] },
+      { title: 'Good for', items: ['Personal color exploration.', 'Checking wardrobe, makeup, or accessory colors.', 'Turning a color reference photo into a structured palette.'] },
+      { title: 'Notes', items: ['Photo extraction is heuristic and depends on lighting quality.', 'Use natural light and clear face references for better color sampling.', 'Everything runs locally in the browser.'] },
+    ],
+  },
   regex: {
     overview: 'Test JavaScript regular expressions, inspect matches, and read token-level explanations.',
     sections: [

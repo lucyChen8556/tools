@@ -9,6 +9,7 @@ export type ToolId =
   | 'text'
   | 'image'
   | 'color'
+  | 'season-color'
   | 'regex'
   | 'jwt'
   | 'hash'
