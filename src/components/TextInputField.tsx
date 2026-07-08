@@ -12,6 +12,7 @@ type TextInputFieldProps = {
   max?: string | number;
   step?: string | number;
   placeholder?: string;
+  lang?: string;
 };
 
 function TextInputField({
@@ -25,6 +26,7 @@ function TextInputField({
   max,
   step,
   placeholder,
+  lang,
 }: TextInputFieldProps) {
   return (
     <Field label={label} compact={compact}>
@@ -36,6 +38,7 @@ function TextInputField({
         max={max}
         step={step}
         placeholder={placeholder}
+        lang={lang}
         onChange={onChange ? (event) => onChange(event.target.value) : undefined}
       />
     </Field>

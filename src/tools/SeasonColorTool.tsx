@@ -5,14 +5,12 @@ import { SelectField } from '../components/SelectField';
 import { SegmentedTabs } from '../components/SegmentedTabs';
 import { TextAreaField } from '../components/TextAreaField';
 import { TextInputField } from '../components/TextInputField';
-import { ActionBar, MetricsGrid } from '../components/ToolLayout';
-import type { ToolMetric } from '../components/ToolLayout';
+import { ActionBar } from '../components/ToolLayout';
 import { ToolSection } from '../components/ToolSection';
 import { ToolbarButton } from '../components/ToolbarButton';
 import { groupMeta, paletteCategories, photoEditableGroups, quickPalettes, seasonColorDefaults, seasonData } from './seasonColor/seasonColorData';
 import {
   analyzeSwatches,
-  buildHeroPattern,
   describeChroma,
   describeLightness,
   describeWarmth,
@@ -22,7 +20,7 @@ import {
   parseBulkSwatches,
   seasonKeys,
 } from './seasonColor/seasonColorUtils';
-import type { ColorGroup, PaletteSwatch, SeasonKey, SeasonSwatch } from './seasonColor/seasonColorTypes';
+import type { ColorGroup, PaletteSwatch, SeasonAnalysis, SeasonKey, SeasonSwatch } from './seasonColor/seasonColorTypes';
 import { usePhotoSwatches } from './seasonColor/usePhotoSwatches';
 
 const sourceOptions = [
@@ -45,15 +43,6 @@ function SeasonColorTool() {
     setSwatches(nextSwatches);
     setSelectedSeason(null);
   });
-  const metricsItems = useMemo<ToolMetric[]>(
-    () => [
-      { label: 'Samples', value: swatches.length },
-      { label: 'Best season', value: analysis ? seasonData[analysis.bestSeason].name : '-' },
-      { label: 'Active season', value: seasonData[activeSeason].name },
-      { label: 'Subtype', value: view?.subtype.name ?? '-' },
-    ],
-    [activeSeason, analysis, swatches.length, view?.subtype.name],
-  );
   const copySummary = view
     ? [
         `Season: ${view.seasonName}`,
@@ -68,13 +57,13 @@ function SeasonColorTool() {
   function applyBulkInput() {
     const parsed = parseBulkSwatches(bulkInput);
     if (parsed.length === 0) {
-      setStatus('沒有找到可用的 HEX 色碼。');
+      setStatus('No usable HEX colors were found.');
       return;
     }
     setSourceMode('swatches');
     setSwatches(parsed);
     setSelectedSeason(null);
-    setStatus(`已整理 ${parsed.length} 個色票，並依文字標籤完成分類。`);
+    setStatus(`Parsed ${parsed.length} color samples and grouped them from the surrounding labels.`);
   }
 
   function loadExample() {
@@ -83,7 +72,7 @@ function SeasonColorTool() {
     const parsed = parseBulkSwatches(seasonColorDefaults.bulkInput);
     setSwatches(parsed);
     setSelectedSeason(null);
-    setStatus(`已整理 ${parsed.length} 個色票，並依文字標籤完成分類。`);
+    setStatus(`Parsed ${parsed.length} color samples and grouped them from the surrounding labels.`);
   }
 
   function loadQuickPalette(season: SeasonKey) {
@@ -92,25 +81,25 @@ function SeasonColorTool() {
     setSwatches(palette.map((hex) => ({ hex, group: 'reference' })));
     setManualColor(palette[0]);
     setSelectedSeason(season);
-    setStatus(`已載入 ${seasonData[season].name} 快速範例。`);
+    setStatus(`Loaded the ${seasonData[season].name} quick sample.`);
   }
 
   function addManualColor() {
     const normalized = normalizeHex(manualColor);
     if (!normalized) {
-      setStatus('請輸入有效 HEX 色碼。');
+      setStatus('Enter a valid HEX color.');
       return;
     }
     setSwatches((current) => [...current, { hex: normalized, group: 'manual' }]);
     setManualColor(normalized);
     setSelectedSeason(null);
-    setStatus(`已加入 ${normalized}。`);
+    setStatus(`Added ${normalized}.`);
   }
 
   function clearAll() {
     setSwatches([]);
     setSelectedSeason(null);
-    setStatus('已清空色票。');
+    setStatus('All color samples have been cleared.');
   }
 
   function removeSwatch(index: number) {
@@ -190,19 +179,17 @@ function SeasonColorTool() {
         </div>
 
         <div className="season-result-column">
-          <div className="season-hero" style={{ backgroundImage: `linear-gradient(rgba(24,25,28,.28), rgba(24,25,28,.55)), ${view?.heroPattern ?? buildHeroPattern(['#F7C65D', '#87A8C7', '#9A5D3B', '#1F2937', '#F5F0E8'])}` }}>
-            <div>
-              <p>Analysis result</p>
-              <h3>{view ? view.seasonName : '加入顏色開始分析'}</h3>
-              <span>{view?.summary ?? '貼上含有分類與 HEX 的色票，工具會整理出冷暖、明度、彩度、對比與四季類型。'}</span>
-            </div>
-            <strong>{view?.score ?? '--'}</strong>
-          </div>
+          <ResultOverview
+            activeSeason={activeSeason}
+            analysis={analysis}
+            sampleCount={swatches.length}
+            view={view}
+          />
 
           <div className="season-tabs">
             {seasonKeys.map((season) => (
               <button className={activeSeason === season ? 'active' : ''} key={season} type="button" disabled={!analysis} onClick={() => setSelectedSeason(season)}>
-                {seasonData[season].name.replace(/季$/, '')}
+                {season[0].toUpperCase() + season.slice(1)}
               </button>
             ))}
           </div>
@@ -222,13 +209,11 @@ function SeasonColorTool() {
                 </div>
                 {view.boundary ? (
                   <div className="season-boundary">
-                    <strong>{`${view.boundary.primarySubtype.name} · 鄰近 ${view.boundary.neighborSubtype.name}`}</strong>
-                    <p>{`主季節 ${view.boundary.primarySeasonName} 仍是核心，但 ${view.boundary.neighborSeasonName} 分數很近。`}</p>
+                    <strong>{`${view.boundary.primarySubtype.name} · Near ${view.boundary.neighborSubtype.name}`}</strong>
+                    <p>{`${view.boundary.primarySeasonName} remains the core season, but ${view.boundary.neighborSeasonName} is close.`}</p>
                   </div>
                 ) : null}
               </ToolSection>
-
-              <MetricsGrid items={metricsItems} />
 
               <div className="season-analysis-grid">
                 <ToolSection title="Color tendency">
@@ -260,8 +245,8 @@ function SeasonColorTool() {
                 <div className="season-group-grid">
                   {analysis.groups.map((group) => (
                     <div className="season-group-card" key={group.key}>
-                      <div><strong>{group.label}</strong><span>{group.count} 色</span></div>
-                      <p>{`${describeWarmth(group.warmth)}、${describeLightness(group.lightness)}、${describeChroma(group.chroma)}`}</p>
+                      <div><strong>{group.label}</strong><span>{`${group.count} colors`}</span></div>
+                      <p>{`${describeWarmth(group.warmth)}, ${describeLightness(group.lightness)}, ${describeChroma(group.chroma)}`}</p>
                       <MiniSwatches colors={group.colors} />
                     </div>
                   ))}
@@ -275,7 +260,7 @@ function SeasonColorTool() {
               <ToolSection title="Style guidance">
                 <div className="season-guidance">
                   <p>{view.guidance}</p>
-                  <div><strong>避免</strong><span>{view.avoidance}</span></div>
+                  <div><strong>Avoid</strong><span>{view.avoidance}</span></div>
                 </div>
                 <ActionBar>
                   <CopyButton title="Copy season color summary" value={copySummary} label="Copy summary" />
@@ -297,6 +282,57 @@ function SeasonColorTool() {
   );
 }
 
+function ResultOverview({
+  activeSeason,
+  analysis,
+  sampleCount,
+  view,
+}: {
+  activeSeason: SeasonKey;
+  analysis: SeasonAnalysis | null;
+  sampleCount: number;
+  view: ReturnType<typeof getSeasonView> | null;
+}) {
+  const score = view?.score ?? 0;
+  const accentColors = view?.season.hero ?? seasonData[activeSeason].hero;
+  const stats = [
+    { label: 'Samples', value: sampleCount },
+    { label: 'Best match', value: analysis ? seasonData[analysis.bestSeason].name : '-' },
+    { label: 'Viewing', value: seasonData[activeSeason].name },
+    { label: 'Subtype', value: view?.subtype.name ?? '-' },
+  ];
+
+  return (
+    <section className={`season-hero ${view ? '' : 'empty'}`}>
+      <div className="season-hero-accent" aria-hidden="true">
+        {accentColors.map((color) => <span key={color} style={{ background: color }} />)}
+      </div>
+
+      <div className="season-hero-copy">
+        <p>Analysis result</p>
+        <h3>{view ? view.seasonName : 'Add colors to start analysis'}</h3>
+        <span>{view?.summary ?? 'Paste labeled HEX swatches and the tool will analyze temperature, value, chroma, contrast, depth, and seasonal fit.'}</span>
+      </div>
+
+      <div className="season-score-panel">
+        <span>Season score</span>
+        <strong>{view ? score : '--'}</strong>
+        <small>{view ? `${score}/100 match confidence` : 'Waiting for samples'}</small>
+        <i><b style={{ width: `${score}%` }} /></i>
+      </div>
+
+      <div className="season-result-stats">
+        {stats.map((stat) => (
+          <div key={stat.label}>
+            <span>{stat.label}</span>
+            <strong>{stat.value}</strong>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 function SampleList({ swatches, onRemove }: { swatches: SeasonSwatch[]; onRemove: (index: number) => void }) {
   if (swatches.length === 0) return <div className="empty-state compact">No colors yet</div>;
   return (
@@ -304,7 +340,7 @@ function SampleList({ swatches, onRemove }: { swatches: SeasonSwatch[]; onRemove
       {swatches.map((swatch, index) => (
         <div className="season-sample-chip" key={`${swatch.hex}-${index}`}>
           <span style={{ background: swatch.hex }} />
-          <div><code>{swatch.hex}</code><small>{groupMeta[swatch.group]?.label ?? '未分類'}</small></div>
+          <div><code>{swatch.hex}</code><small>{groupMeta[swatch.group]?.label ?? 'Uncategorized'}</small></div>
           <button type="button" title={`Remove ${swatch.hex}`} onClick={() => onRemove(index)}><Trash2 size={14} /></button>
         </div>
       ))}
@@ -341,7 +377,7 @@ function CategorizedPalette({ swatches }: { swatches: PaletteSwatch[] }) {
         <section key={category.key}>
           <div className="season-category-heading">
             <div><strong>{category.label}</strong><p>{category.note}</p></div>
-            <span>{category.swatches.length} 色</span>
+            <span>{`${category.swatches.length} colors`}</span>
           </div>
           <div className="season-palette-grid">
             {category.swatches.map((swatch) => <SwatchCard key={`${swatch.name}-${swatch.hex}`} swatch={swatch} />)}

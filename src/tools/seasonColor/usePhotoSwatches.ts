@@ -18,12 +18,12 @@ function usePhotoSwatches(onApply: (swatches: SeasonSwatch[]) => void) {
   async function loadPhoto(file: File | null) {
     if (!file) return;
     if (!file.type.startsWith('image/')) {
-      setPhotoStatus('請選擇圖片檔。');
+      setPhotoStatus('Please choose an image file.');
       return;
     }
 
     setLoading(true);
-    setPhotoStatus('正在讀取照片並抽色...');
+    setPhotoStatus('Reading the photo and extracting colors...');
 
     try {
       const { image, url } = await loadImageFromFile(file);
@@ -34,13 +34,13 @@ function usePhotoSwatches(onApply: (swatches: SeasonSwatch[]) => void) {
       const swatches = extractPhotoSwatches(image);
       setPhotoSwatches(swatches);
       if (swatches.length === 0) {
-        setPhotoStatus('沒有抽到足夠明確的色片，建議換成自然光、臉部清楚的照片。');
+        setPhotoStatus('No clear color samples were detected. Try a naturally lit photo with a clear face reference.');
         return;
       }
-      setPhotoStatus(`已自動推測 ${swatches.length} 個色票，可調整分類後再判斷。`);
+      setPhotoStatus(`Detected ${swatches.length} color samples. Adjust the groups before reviewing the result.`);
       onApply(swatches);
     } catch {
-      setPhotoStatus('照片讀取失敗，請換一張圖片再試。');
+      setPhotoStatus('The photo could not be read. Try another image.');
     } finally {
       setLoading(false);
     }
@@ -52,13 +52,13 @@ function usePhotoSwatches(onApply: (swatches: SeasonSwatch[]) => void) {
       onApply(next);
       return next;
     });
-    setPhotoStatus('已更新照片色片分類，分析結果已同步重算。');
+    setPhotoStatus('Photo color group updated. The analysis has been recalculated.');
   }
 
   function applyPhotoSwatches() {
     if (photoSwatches.length === 0) return;
     onApply(photoSwatches);
-    setPhotoStatus(`已套用照片自動抽出的 ${photoSwatches.length} 個色票。`);
+    setPhotoStatus(`Applied ${photoSwatches.length} photo-extracted color samples.`);
   }
 
   function clearPhoto() {

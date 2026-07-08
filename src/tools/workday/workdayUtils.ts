@@ -78,7 +78,7 @@ function isWeekend(date: Date) {
 }
 
 function formatDisplayDate(date: Date) {
-  const weekday = new Intl.DateTimeFormat(undefined, { weekday: 'short' }).format(date);
+  const weekday = new Intl.DateTimeFormat('en-US', { weekday: 'short' }).format(date);
   return `${formatDateOnly(date)} (${weekday})`;
 }
 

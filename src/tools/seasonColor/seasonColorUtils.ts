@@ -228,7 +228,7 @@ function getBoundaryResult(analysis: SeasonAnalysis, subtypeResult: ReturnType<t
 
   return {
     gap,
-    strength: gap <= 3 && analysis.metrics.deepContrast >= 0.72 ? '高' : '中',
+    strength: gap <= 3 && analysis.metrics.deepContrast >= 0.72 ? 'High' : 'Medium',
     primarySeasonKey: primarySeasonScore.key,
     primarySeasonName: seasonData[primarySeasonScore.key].name,
     primarySeasonScore: primarySeasonScore.score,
@@ -242,10 +242,10 @@ function getBoundaryResult(analysis: SeasonAnalysis, subtypeResult: ReturnType<t
 
 function categorizePaletteSwatch(name: string, hex: string): PaletteCategory {
   const luminance = relativeLuminance(hexToRgb(hex));
-  if (luminance < 0.08 || /深|墨|黑|午夜|海軍|咖啡豆|巧克力|酒紅|葡萄|莓|松/.test(name)) return 'deep';
-  if (/白|米|象牙|奶|香草|杏仁|灰|銀|駝|棕|褐|可可|蘑菇|咖啡|茶|白金/.test(name)) return 'neutral';
-  if (/粉|紅|莓|玫瑰|桃|珊瑚|番茄|磚|酒|唇|蔓越莓|櫻桃|洋紅|覆盆|李子/.test(name)) return 'lip';
-  if (/亮|電光|寶石|罌粟|向日葵|萊姆|孔雀|金盞|紫羅蘭|皇家|鈷|正紅/.test(name)) return 'accent';
+  if (luminance < 0.08 || /deep|ink|black|midnight|navy|coffee|chocolate|burgundy|grape|berry|pine/i.test(name)) return 'deep';
+  if (/white|cream|ivory|oat|gray|silver|camel|brown|taupe|caramel|tea/i.test(name)) return 'neutral';
+  if (/pink|red|berry|rose|peach|coral|tomato|brick|wine|lip|cherry|magenta|plum/i.test(name)) return 'lip';
+  if (/bright|electric|jewel|sunflower|lime|peacock|marigold|violet|royal|cobalt|emerald|true red/i.test(name)) return 'accent';
   return 'main';
 }
 
@@ -261,10 +261,10 @@ function buildSeasonPalette(seasonKey: SeasonKey): PaletteSwatch[] {
 
 function createSeasonVariant(seasonKey: SeasonKey, swatch: PaletteSwatch, index: number) {
   const variantMode = index % 4;
-  if (seasonKey === 'spring') return { name: `${variantMode < 2 ? '清亮' : '柔光'}${swatch.name}`, hex: adjustHex(swatch.hex, variantMode < 2 ? 0.1 : 0.18, '#FFF6D7') };
-  if (seasonKey === 'summer') return { name: `${variantMode < 2 ? '霧感' : '冷柔'}${swatch.name}`, hex: adjustHex(swatch.hex, variantMode < 2 ? 0.16 : 0.24, '#D7DCE3') };
-  if (seasonKey === 'autumn') return { name: `${variantMode < 2 ? '濃郁' : '暖霧'}${swatch.name}`, hex: adjustHex(swatch.hex, variantMode < 2 ? 0.14 : 0.2, variantMode < 2 ? '#5A3324' : '#C79A5E') };
-  return { name: `${variantMode < 2 ? '冰亮' : '深冷'}${swatch.name}`, hex: adjustHex(swatch.hex, variantMode < 2 ? 0.14 : 0.18, variantMode < 2 ? '#F7FAFF' : '#101827') };
+  if (seasonKey === 'spring') return { name: `${variantMode < 2 ? 'Clear' : 'Soft Glow'} ${swatch.name}`, hex: adjustHex(swatch.hex, variantMode < 2 ? 0.1 : 0.18, '#FFF6D7') };
+  if (seasonKey === 'summer') return { name: `${variantMode < 2 ? 'Misty' : 'Cool Soft'} ${swatch.name}`, hex: adjustHex(swatch.hex, variantMode < 2 ? 0.16 : 0.24, '#D7DCE3') };
+  if (seasonKey === 'autumn') return { name: `${variantMode < 2 ? 'Rich' : 'Warm Muted'} ${swatch.name}`, hex: adjustHex(swatch.hex, variantMode < 2 ? 0.14 : 0.2, variantMode < 2 ? '#5A3324' : '#C79A5E') };
+  return { name: `${variantMode < 2 ? 'Icy' : 'Deep Cool'} ${swatch.name}`, hex: adjustHex(swatch.hex, variantMode < 2 ? 0.14 : 0.18, variantMode < 2 ? '#F7FAFF' : '#101827') };
 }
 
 function getSubtypePalette(seasonKey: SeasonKey, subtype: Subtype): PaletteSwatch[] {
@@ -280,12 +280,12 @@ function getSubtypePalette(seasonKey: SeasonKey, subtype: Subtype): PaletteSwatc
 
 function createSubtypeVariant(subtype: Subtype, swatch: PaletteSwatch, index: number) {
   const key = subtype.key.toLowerCase();
-  if (/light/.test(key)) return { ...swatch, name: `淺彩${swatch.name}`, hex: adjustHex(swatch.hex, 0.22, subtype.profile.warmth > 0.5 ? '#FFF2D8' : '#EEF3FA') };
-  if (/soft/.test(key)) return { ...swatch, name: `柔霧${swatch.name}`, hex: adjustHex(swatch.hex, 0.2, subtype.profile.warmth > 0.5 ? '#A48D76' : '#9CA6B0') };
-  if (/warm/.test(key)) return { ...swatch, name: `暖調${swatch.name}`, hex: adjustHex(swatch.hex, 0.15, '#C6813B') };
-  if (/deep/.test(key)) return { ...swatch, name: `深調${swatch.name}`, hex: adjustHex(swatch.hex, 0.22, subtype.profile.warmth > 0.5 ? '#2C2018' : '#111827') };
-  if (/cool/.test(key)) return { ...swatch, name: `冷調${swatch.name}`, hex: adjustHex(swatch.hex, 0.16, '#DDE7F3') };
-  if (/clear/.test(key)) return { ...swatch, name: `清亮${swatch.name}`, hex: adjustHex(swatch.hex, index % 2 === 0 ? 0.08 : 0.05, relativeLuminance(hexToRgb(swatch.hex)) > 0.45 ? '#FFFFFF' : '#111318') };
+  if (/light/.test(key)) return { ...swatch, name: `Light ${swatch.name}`, hex: adjustHex(swatch.hex, 0.22, subtype.profile.warmth > 0.5 ? '#FFF2D8' : '#EEF3FA') };
+  if (/soft/.test(key)) return { ...swatch, name: `Soft ${swatch.name}`, hex: adjustHex(swatch.hex, 0.2, subtype.profile.warmth > 0.5 ? '#A48D76' : '#9CA6B0') };
+  if (/warm/.test(key)) return { ...swatch, name: `Warm ${swatch.name}`, hex: adjustHex(swatch.hex, 0.15, '#C6813B') };
+  if (/deep/.test(key)) return { ...swatch, name: `Deep ${swatch.name}`, hex: adjustHex(swatch.hex, 0.22, subtype.profile.warmth > 0.5 ? '#2C2018' : '#111827') };
+  if (/cool/.test(key)) return { ...swatch, name: `Cool ${swatch.name}`, hex: adjustHex(swatch.hex, 0.16, '#DDE7F3') };
+  if (/clear/.test(key)) return { ...swatch, name: `Clear ${swatch.name}`, hex: adjustHex(swatch.hex, index % 2 === 0 ? 0.08 : 0.05, relativeLuminance(hexToRgb(swatch.hex)) > 0.45 ? '#FFFFFF' : '#111318') };
   return swatch;
 }
 
@@ -331,47 +331,47 @@ function getPersonalizedAvoidPalette(seasonKey: SeasonKey, analysis: SeasonAnaly
 }
 
 function isNearBlack(name: string, hex: string) {
-  return relativeLuminance(hexToRgb(hex)) < 0.04 || /純黑|墨黑|炭灰|柔黑|黑灰|黑莓|梅子黑|墨茶黑/.test(name);
+  return relativeLuminance(hexToRgb(hex)) < 0.04 || /pure black|ink black|charcoal|blackberry|tea black/i.test(name);
 }
 
 function getMetricRows(metrics: Pick<SeasonAnalysis['metrics'], 'warmth' | 'lightness' | 'chroma' | 'contrast' | 'depth'>) {
   return [
-    { label: '冷暖', left: '冷', right: '暖', value: metrics.warmth, detail: describeWarmth(metrics.warmth), bar: '#BF6F38' },
-    { label: '明度', left: '深', right: '亮', value: metrics.lightness, detail: describeLightness(metrics.lightness), bar: '#5D7FA6' },
-    { label: '彩度', left: '柔', right: '鮮', value: metrics.chroma, detail: describeChroma(metrics.chroma), bar: '#2F9E7E' },
-    { label: '對比', left: '低', right: '高', value: metrics.contrast, detail: describeContrast(metrics.contrast), bar: '#7C3AED' },
-    { label: '深度', left: '淺', right: '深', value: metrics.depth, detail: describeDepth(metrics.depth), bar: '#2D3748' },
+    { label: 'Temperature', left: 'Cool', right: 'Warm', value: metrics.warmth, detail: describeWarmth(metrics.warmth), bar: '#BF6F38' },
+    { label: 'Value', left: 'Deep', right: 'Light', value: metrics.lightness, detail: describeLightness(metrics.lightness), bar: '#5D7FA6' },
+    { label: 'Chroma', left: 'Soft', right: 'Vivid', value: metrics.chroma, detail: describeChroma(metrics.chroma), bar: '#2F9E7E' },
+    { label: 'Contrast', left: 'Low', right: 'High', value: metrics.contrast, detail: describeContrast(metrics.contrast), bar: '#7C3AED' },
+    { label: 'Depth', left: 'Light', right: 'Deep', value: metrics.depth, detail: describeDepth(metrics.depth), bar: '#2D3748' },
   ];
 }
 
 function describeWarmth(value: number) {
-  if (value >= 0.62) return '偏暖';
-  if (value <= 0.38) return '偏冷';
-  return '中性';
+  if (value >= 0.62) return 'Warm';
+  if (value <= 0.38) return 'Cool';
+  return 'Neutral';
 }
 
 function describeLightness(value: number) {
-  if (value >= 0.58) return '偏亮';
-  if (value <= 0.34) return '偏深';
-  return '中等';
+  if (value >= 0.58) return 'Light';
+  if (value <= 0.34) return 'Deep';
+  return 'Medium';
 }
 
 function describeChroma(value: number) {
-  if (value >= 0.58) return '清晰';
-  if (value <= 0.34) return '柔和';
-  return '中彩度';
+  if (value >= 0.58) return 'Clear';
+  if (value <= 0.34) return 'Soft';
+  return 'Medium chroma';
 }
 
 function describeContrast(value: number) {
-  if (value >= 0.62) return '高對比';
-  if (value <= 0.34) return '低對比';
-  return '中高對比';
+  if (value >= 0.62) return 'High contrast';
+  if (value <= 0.34) return 'Low contrast';
+  return 'Medium-high contrast';
 }
 
 function describeDepth(value: number) {
-  if (value >= 0.62) return '深色量高';
-  if (value <= 0.38) return '淺色量高';
-  return '中等深度';
+  if (value >= 0.62) return 'High depth';
+  if (value <= 0.38) return 'Low depth';
+  return 'Medium depth';
 }
 
 function buildDetailedSummary(analysis: SeasonAnalysis, seasonKey: SeasonKey, boundary: BoundaryResult | null) {
@@ -383,26 +383,26 @@ function buildDetailedSummary(analysis: SeasonAnalysis, seasonKey: SeasonKey, bo
   const lips = analysis.groups.find((group) => group.key === 'lips');
   const cues = [describeWarmth(analysis.metrics.warmth), describeDepth(analysis.metrics.depth), describeContrast(analysis.metrics.contrast), describeChroma(analysis.metrics.chroma)];
   const categoryNotes = [];
-  if (skin) categoryNotes.push(`皮膚 ${describeWarmth(skin.warmth)}、${describeLightness(skin.lightness)}`);
-  if (hair) categoryNotes.push(`頭髮${describeDepth(1 - hair.lightness)}且穩定壓低明度`);
-  if (eyes) categoryNotes.push('眼睛提供深色對比');
-  if (lips) categoryNotes.push(`唇色落在${describeWarmth(lips.warmth)}的玫瑰棕/莓調區`);
-  const boundaryText = boundary ? `第二接近 ${boundary.neighborSubtype.name}，屬於${boundary.strength}交界型，建議以主類型為核心並借用鄰近深色。` : '';
-  return `判斷為 ${season.name}，細分更接近 ${subtype.name}。${boundaryText}整體訊號是 ${cues.join('、')}；${categoryNotes.join('，')}。`;
+  if (skin) categoryNotes.push(`skin reads ${describeWarmth(skin.warmth).toLowerCase()} and ${describeLightness(skin.lightness).toLowerCase()}`);
+  if (hair) categoryNotes.push(`hair adds ${describeDepth(1 - hair.lightness).toLowerCase()} and lowers the overall value`);
+  if (eyes) categoryNotes.push('eyes add structural contrast');
+  if (lips) categoryNotes.push(`lips lean ${describeWarmth(lips.warmth).toLowerCase()} in rose or berry territory`);
+  const boundaryText = boundary ? `The next closest subtype is ${boundary.neighborSubtype.name}; this is a ${boundary.strength.toLowerCase()} bridge result, so use the main season as the base and borrow nearby deep anchors. ` : '';
+  return `The result leans ${season.name}, with ${subtype.name} as the closest subtype. ${boundaryText}Overall signals: ${cues.join(', ')}. ${categoryNotes.join('; ')}.`;
 }
 
 function buildGuidance(seasonKey: SeasonKey) {
-  if (seasonKey === 'winter') return '你的深髮、深眼與偏冷的眼白/唇色會吃得住清楚對比。適合黑白、冷紅、莓色、寶石藍、深葡萄、冷灰與亮銀。';
-  if (seasonKey === 'autumn') return '你的暖膚訊號明顯，可以使用橄欖、駝色、陶土、暖棕與古銅金，但因髮眼偏深，配色要保留一點深色骨架。';
-  if (seasonKey === 'summer') return '你的冷調柔和色可放在唇頰與上衣；若髮眼很深，夏季色需要加入灰藍或莓色支撐。';
-  return '你的暖亮色適合放在點綴與提氣的位置；若五官深色對比強，春季色要選清亮但不螢光的版本。';
+  if (seasonKey === 'winter') return 'Deep hair, deep eyes, and cooler whites or lips can carry crisp contrast. Use black-white contrast, cool red, berry, jewel blue, deep grape, cool gray, and bright silver.';
+  if (seasonKey === 'autumn') return 'Warm skin signals can support olive, camel, terracotta, warm brown, and bronze. If hair and eyes are deep, keep a darker structure in the outfit.';
+  if (seasonKey === 'summer') return 'Cool muted colors can work well near the face and lips. If hair and eyes are deep, add gray blue or berry anchors instead of using only pale colors.';
+  return 'Warm bright colors work well as energizing accents. If facial contrast is strong, choose clear Spring colors without going neon.';
 }
 
 function buildAvoidance(seasonKey: SeasonKey) {
-  if (seasonKey === 'winter') return '避開橘棕、黃駝、濁米、橄欖泥綠與過灰的裸唇。';
-  if (seasonKey === 'autumn') return '避開冰白、亮銀、冷紫粉、螢光桃粉與藍調很強的正紅。';
-  if (seasonKey === 'summer') return '避開焦糖棕、南瓜橘、高飽和黃綠與強烈黑白對比。';
-  return '避開灰濁深色、沉重酒紅、冷藍紫與髒感卡其。';
+  if (seasonKey === 'winter') return 'Avoid orange brown, yellow camel, muddy beige, dirty olive, and overly gray nude lip colors.';
+  if (seasonKey === 'autumn') return 'Avoid icy white, bright silver, cool purple pink, neon peach, and strongly blue-based reds.';
+  if (seasonKey === 'summer') return 'Avoid caramel brown, pumpkin orange, high-saturation yellow green, and stark black-white contrast.';
+  return 'Avoid gray muddy darks, heavy burgundy, cool blue-purple, and dirty khaki.';
 }
 
 function buildHeroPattern(colors: string[]) {
@@ -418,7 +418,7 @@ function getSeasonView(analysis: SeasonAnalysis, seasonKey: SeasonKey) {
   const score = analysis.scores.find((item) => item.key === seasonKey)?.score ?? 0;
   return {
     season: seasonData[seasonKey],
-    seasonName: boundary ? `${seasonData[seasonKey].name} · 交界型` : seasonData[seasonKey].name,
+    seasonName: boundary ? `${seasonData[seasonKey].name} · Bridge Type` : seasonData[seasonKey].name,
     score,
     subtype,
     subtypeScores: subtypeResult.scores,

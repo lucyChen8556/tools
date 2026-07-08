@@ -78,7 +78,7 @@ function WorkdayTool() {
     <section className="tool-surface">
       <ToolSection title="Deadline">
         <div className="inline-controls wide time-controls">
-          <TextInputField label="Start date" type="date" value={startDate} onChange={setStartDate} compact />
+          <TextInputField label="Start date" type="date" value={startDate} onChange={setStartDate} lang="en-US" compact />
           <SelectField label="Direction" value={direction} options={workdayDirectionOptions} onChange={setDirection} />
           <TextInputField label="Days" type="number" min={0} step={1} value={dayCount} onChange={setDayCount} compact />
           <CheckboxControl label="Exclude weekends" checked={excludeWeekends} onChange={setExcludeWeekends} />
@@ -87,7 +87,7 @@ function WorkdayTool() {
 
       <ToolSection title="Holidays">
         <div className="inline-controls wide holiday-controls">
-          <TextInputField label="Custom holiday" type="date" value={holidayDate} onChange={setHolidayDate} compact />
+          <TextInputField label="Custom holiday" type="date" value={holidayDate} onChange={setHolidayDate} lang="en-US" compact />
           <ToolbarButton title="Add custom holiday" variant="primary" onClick={addHoliday} disabled={!holidayDate}>
             <Plus size={16} />
             <span>Add holiday</span>
