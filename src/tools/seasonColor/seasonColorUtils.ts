@@ -268,13 +268,21 @@ function createSeasonVariant(seasonKey: SeasonKey, swatch: PaletteSwatch, index:
 }
 
 function getSubtypePalette(seasonKey: SeasonKey, subtype: Subtype): PaletteSwatch[] {
-  return buildSeasonPalette(seasonKey)
+  const candidates = buildSeasonPalette(seasonKey)
+    .flatMap((swatch, index) => [
+      swatch,
+      { ...createSubtypeVariant(subtype, swatch, index), category: swatch.category },
+      ...createTonalVariants(seasonKey, subtype, swatch, index),
+    ]);
+
+  return uniquePaletteSwatches(candidates)
     .map((swatch, index) => ({
       ...createSubtypeVariant(subtype, swatch, index),
       category: swatch.category,
       rank: scoreSwatchForSubtype(swatch.hex, subtype.profile, swatch.category),
     }))
     .sort((a, b) => b.rank - a.rank)
+    .slice(0, 100)
     .map(({ rank, ...swatch }) => swatch);
 }
 
@@ -287,6 +295,44 @@ function createSubtypeVariant(subtype: Subtype, swatch: PaletteSwatch, index: nu
   if (/cool/.test(key)) return { ...swatch, name: `Cool ${swatch.name}`, hex: adjustHex(swatch.hex, 0.16, '#DDE7F3') };
   if (/clear/.test(key)) return { ...swatch, name: `Clear ${swatch.name}`, hex: adjustHex(swatch.hex, index % 2 === 0 ? 0.08 : 0.05, relativeLuminance(hexToRgb(swatch.hex)) > 0.45 ? '#FFFFFF' : '#111318') };
   return swatch;
+}
+
+function createTonalVariants(seasonKey: SeasonKey, subtype: Subtype, swatch: PaletteSwatch, index: number): PaletteSwatch[] {
+  const warm = subtype.profile.warmth > 0.5;
+  const light = subtype.profile.lightness > 0.55;
+  const vivid = subtype.profile.chroma > 0.55;
+  const deep = subtype.profile.depth > 0.55;
+  const luminance = relativeLuminance(hexToRgb(swatch.hex));
+  const seasonTargets: Record<SeasonKey, { glow: string; anchor: string; mute: string }> = {
+    spring: { glow: '#FFF2C7', anchor: '#9A5D28', mute: '#C7A56F' },
+    summer: { glow: '#EEF3FA', anchor: '#40516B', mute: '#9EAAB7' },
+    autumn: { glow: '#F2D8A8', anchor: '#3B281E', mute: '#9B8263' },
+    winter: { glow: '#F7FAFF', anchor: '#0F172A', mute: '#7C8796' },
+  };
+  const targets = seasonTargets[seasonKey];
+  const clearTarget = luminance > 0.45 ? '#FFFFFF' : '#111318';
+  const variants = [
+    { label: light ? 'Airy' : 'Lifted', amount: light ? 0.18 : 0.1, target: warm ? targets.glow : '#EFF6FF' },
+    { label: deep ? 'Deepened' : 'Grounded', amount: deep ? 0.2 : 0.12, target: targets.anchor },
+    { label: vivid ? 'Polished' : 'Muted', amount: vivid ? 0.08 : 0.2, target: vivid ? clearTarget : targets.mute },
+    { label: index % 2 === 0 ? 'Face Frame' : 'Accent', amount: vivid ? 0.12 : 0.08, target: clearTarget },
+  ];
+
+  return variants.map((variant) => ({
+    name: `${variant.label} ${swatch.name}`,
+    hex: adjustHex(swatch.hex, variant.amount, variant.target),
+    category: swatch.category,
+  }));
+}
+
+function uniquePaletteSwatches(swatches: PaletteSwatch[]) {
+  const seen = new Set<string>();
+  return swatches.filter((swatch) => {
+    const key = `${swatch.name}-${swatch.hex}`;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
 }
 
 function scoreSwatchForSubtype(hex: string, profile: SeasonProfile, category: PaletteCategory) {
