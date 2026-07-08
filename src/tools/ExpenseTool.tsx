@@ -8,17 +8,25 @@ import type { ToolMetric } from '../components/ToolLayout';
 import { ToolSection } from '../components/ToolSection';
 import { ToolbarButton } from '../components/ToolbarButton';
 import { formatMoney, readNumber } from '../utils/numberFormat';
-import { calculateDetailedSplit, calculateQuickSplit, defaultParticipants, splitModeOptions, type Participant, type SplitMode } from './expense/expenseUtils';
+import {
+  calculateDetailedSplit,
+  calculateQuickSplit,
+  defaultParticipants,
+  expenseDefaults,
+  splitModeOptions,
+  type Participant,
+  type SplitMode,
+} from './expense/expenseUtils';
 
 function ExpenseTool() {
-  const [mode, setMode] = useState<SplitMode>('quick');
-  const [quickTotal, setQuickTotal] = useState('1500');
-  const [quickPeople, setQuickPeople] = useState('4');
-  const [amount, setAmount] = useState('1280');
-  const [taxPercent, setTaxPercent] = useState('5');
-  const [tipPercent, setTipPercent] = useState('10');
-  const [extraFee, setExtraFee] = useState('0');
-  const [currency, setCurrency] = useState('$');
+  const [mode, setMode] = useState<SplitMode>(expenseDefaults.mode);
+  const [quickTotal, setQuickTotal] = useState(expenseDefaults.quickTotal);
+  const [quickPeople, setQuickPeople] = useState(expenseDefaults.quickPeople);
+  const [amount, setAmount] = useState(expenseDefaults.amount);
+  const [taxPercent, setTaxPercent] = useState(expenseDefaults.taxPercent);
+  const [tipPercent, setTipPercent] = useState(expenseDefaults.tipPercent);
+  const [extraFee, setExtraFee] = useState(expenseDefaults.extraFee);
+  const [currency, setCurrency] = useState(expenseDefaults.currency);
   const [participants, setParticipants] = useState<Participant[]>(defaultParticipants);
 
   const quickResult = useMemo(() => {
@@ -79,13 +87,14 @@ function ExpenseTool() {
   }
 
   function resetSample() {
-    setQuickTotal('1500');
-    setQuickPeople('4');
-    setAmount('1280');
-    setTaxPercent('5');
-    setTipPercent('10');
-    setExtraFee('0');
-    setCurrency('$');
+    setMode(expenseDefaults.mode);
+    setQuickTotal(expenseDefaults.quickTotal);
+    setQuickPeople(expenseDefaults.quickPeople);
+    setAmount(expenseDefaults.amount);
+    setTaxPercent(expenseDefaults.taxPercent);
+    setTipPercent(expenseDefaults.tipPercent);
+    setExtraFee(expenseDefaults.extraFee);
+    setCurrency(expenseDefaults.currency);
     setParticipants(defaultParticipants);
   }
 

@@ -9,6 +9,8 @@ import type { ToolMetric } from '../components/ToolLayout';
 import { ToolSection } from '../components/ToolSection';
 import { ToolbarButton } from '../components/ToolbarButton';
 import {
+  colorDefaults,
+  colorToolTabs,
   formatContrastRatio,
   formatGeneratedPaletteOutput,
   formatPaletteOutput,
@@ -18,25 +20,17 @@ import {
   normalizeGeneratedCount,
   parseColorPalette,
   parseHexColor,
+  type ColorToolTab,
 } from './color/colorUtils';
 
-const colorToolTabs = [
-  { label: 'Convert', value: 'convert' },
-  { label: 'Palette', value: 'palette' },
-  { label: 'Generate', value: 'generate' },
-  { label: 'Contrast', value: 'contrast' },
-] as const;
-
-type ColorToolTab = (typeof colorToolTabs)[number]['value'];
-
 function ColorTool() {
-  const [activeTab, setActiveTab] = useState<ColorToolTab>('convert');
-  const [value, setValue] = useState('#2F6F73');
-  const [foreground, setForeground] = useState('#111827');
-  const [background, setBackground] = useState('#FFFFFF');
-  const [paletteInput, setPaletteInput] = useState('#2F6F73 #111827 #FFFFFF\n#0D9488, #F97316, #EAB308');
-  const [generatorColor, setGeneratorColor] = useState('#2F6F73');
-  const [generatorCount, setGeneratorCount] = useState('10');
+  const [activeTab, setActiveTab] = useState<ColorToolTab>(colorDefaults.activeTab);
+  const [value, setValue] = useState(colorDefaults.value);
+  const [foreground, setForeground] = useState(colorDefaults.foreground);
+  const [background, setBackground] = useState(colorDefaults.background);
+  const [paletteInput, setPaletteInput] = useState(colorDefaults.paletteInput);
+  const [generatorColor, setGeneratorColor] = useState(colorDefaults.generatorColor);
+  const [generatorCount, setGeneratorCount] = useState(colorDefaults.generatorCount);
   const color = parseHexColor(value);
   const foregroundColor = parseHexColor(foreground);
   const backgroundColor = parseHexColor(background);
@@ -66,10 +60,10 @@ function ColorTool() {
         <ToolSection title="Color converter">
           <div className="inline-controls wide">
             <TextInputField label="HEX" value={value} onChange={setValue} compact />
-            <input className="color-picker" type="color" value={color?.hex ?? '#000000'} onChange={(event) => setValue(event.target.value)} title="Pick color" />
+            <input className="color-picker" type="color" value={color?.hex ?? colorDefaults.colorPickerFallback} onChange={(event) => setValue(event.target.value)} title="Pick color" />
           </div>
           <div className="color-panel">
-            <div className="swatch" style={{ background: color?.hex ?? '#f2f4f6' }} />
+            <div className="swatch" style={{ background: color?.hex ?? colorDefaults.panelFallback }} />
             <div className="output-grid">
               <TextInputField label="HEX" value={color?.hex ?? 'Invalid color'} readOnly />
               <TextInputField label="RGB" value={color?.rgb ?? 'Invalid color'} readOnly />
@@ -131,7 +125,7 @@ function ColorTool() {
             <input
               className="color-picker"
               type="color"
-              value={generatedPalette.baseColor?.hex ?? '#000000'}
+              value={generatedPalette.baseColor?.hex ?? colorDefaults.colorPickerFallback}
               onChange={(event) => setGeneratorColor(event.target.value)}
               title="Pick base color"
             />
@@ -139,7 +133,7 @@ function ColorTool() {
               label="Swatches per type"
               type="number"
               min={1}
-              max={24}
+              max={colorDefaults.maxGeneratedCount}
               value={generatorCount}
               onChange={setGeneratorCount}
               compact
@@ -204,7 +198,7 @@ function ColorTool() {
             <input
               className="color-picker"
               type="color"
-              value={foregroundColor?.hex ?? '#000000'}
+              value={foregroundColor?.hex ?? colorDefaults.colorPickerFallback}
               onChange={(event) => setForeground(event.target.value)}
               title="Pick foreground color"
             />
@@ -212,7 +206,7 @@ function ColorTool() {
             <input
               className="color-picker"
               type="color"
-              value={backgroundColor?.hex ?? '#FFFFFF'}
+              value={backgroundColor?.hex ?? colorDefaults.background}
               onChange={(event) => setBackground(event.target.value)}
               title="Pick background color"
             />
@@ -232,8 +226,8 @@ function ColorTool() {
             <div
               className="contrast-preview"
               style={{
-                background: backgroundColor?.hex ?? '#ffffff',
-                color: foregroundColor?.hex ?? '#111827',
+                background: backgroundColor?.hex ?? colorDefaults.background,
+                color: foregroundColor?.hex ?? colorDefaults.foreground,
               }}
             >
               <strong>Readable interface text</strong>

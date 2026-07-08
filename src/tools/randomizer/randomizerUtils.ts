@@ -6,6 +6,15 @@ const randomModeOptions = [
 
 type RandomMode = (typeof randomModeOptions)[number]['value'];
 
+const randomizerDefaults = {
+  input: 'Alice\nBen\nCasey\nDora\nEvan\nFiona\nGrace\nHank',
+  output: '',
+  mode: 'pick' as RandomMode,
+  pickCount: '2',
+  groupCount: '3',
+  minimumCount: 1,
+};
+
 function parseList(value: string) {
   return value
     .split(/\r?\n|,/)
@@ -39,5 +48,5 @@ function formatGroups(groups: string[][]) {
   return groups.map((group, index) => [`Group ${index + 1}`, ...group.map((item) => `- ${item}`)].join('\n')).join('\n\n');
 }
 
-export { formatGroups, formatNumberedList, makeGroups, parseList, randomModeOptions, shuffleItems };
+export { formatGroups, formatNumberedList, makeGroups, parseList, randomizerDefaults, randomModeOptions, shuffleItems };
 export type { RandomMode };

@@ -2,6 +2,10 @@ const hashAlgorithms = ['SHA-1', 'SHA-256', 'SHA-384', 'SHA-512'] as const;
 
 type HashAlgorithm = (typeof hashAlgorithms)[number];
 
+const hashDefaults = {
+  input: 'hello world',
+};
+
 type HashResult = {
   algorithm: HashAlgorithm;
   value: string;
@@ -23,5 +27,5 @@ async function buildHashResults(input: string) {
   );
 }
 
-export { buildHashResults, hashAlgorithms };
+export { buildHashResults, hashAlgorithms, hashDefaults };
 export type { HashResult };

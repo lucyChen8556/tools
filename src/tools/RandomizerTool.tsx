@@ -8,14 +8,23 @@ import type { ToolMetric } from '../components/ToolLayout';
 import { ToolSection } from '../components/ToolSection';
 import { ToolbarButton } from '../components/ToolbarButton';
 import { readNumber } from '../utils/numberFormat';
-import { formatGroups, formatNumberedList, makeGroups, parseList, randomModeOptions, shuffleItems, type RandomMode } from './randomizer/randomizerUtils';
+import {
+  formatGroups,
+  formatNumberedList,
+  makeGroups,
+  parseList,
+  randomizerDefaults,
+  randomModeOptions,
+  shuffleItems,
+  type RandomMode,
+} from './randomizer/randomizerUtils';
 
 function RandomizerTool() {
-  const [input, setInput] = useState('Alice\nBen\nCasey\nDora\nEvan\nFiona\nGrace\nHank');
-  const [output, setOutput] = useState('');
-  const [mode, setMode] = useState<RandomMode>('pick');
-  const [pickCount, setPickCount] = useState('2');
-  const [groupCount, setGroupCount] = useState('3');
+  const [input, setInput] = useState(randomizerDefaults.input);
+  const [output, setOutput] = useState(randomizerDefaults.output);
+  const [mode, setMode] = useState<RandomMode>(randomizerDefaults.mode);
+  const [pickCount, setPickCount] = useState(randomizerDefaults.pickCount);
+  const [groupCount, setGroupCount] = useState(randomizerDefaults.groupCount);
   const items = useMemo(() => parseList(input), [input]);
   const metricsItems = useMemo<ToolMetric[]>(
     () => [
@@ -31,13 +40,13 @@ function RandomizerTool() {
     const shuffled = shuffleItems(items);
 
     if (mode === 'pick') {
-      const count = Math.max(1, Math.min(readNumber(pickCount, 1), shuffled.length));
+      const count = Math.max(randomizerDefaults.minimumCount, Math.min(readNumber(pickCount, randomizerDefaults.minimumCount), shuffled.length));
       setOutput(formatNumberedList(shuffled.slice(0, count)));
       return;
     }
 
     if (mode === 'groups') {
-      const groups = makeGroups(shuffled, readNumber(groupCount, 1));
+      const groups = makeGroups(shuffled, readNumber(groupCount, randomizerDefaults.minimumCount));
       setOutput(formatGroups(groups));
       return;
     }
@@ -46,11 +55,11 @@ function RandomizerTool() {
   }
 
   function resetSample() {
-    setInput('Alice\nBen\nCasey\nDora\nEvan\nFiona\nGrace\nHank');
-    setOutput('');
-    setMode('pick');
-    setPickCount('2');
-    setGroupCount('3');
+    setInput(randomizerDefaults.input);
+    setOutput(randomizerDefaults.output);
+    setMode(randomizerDefaults.mode);
+    setPickCount(randomizerDefaults.pickCount);
+    setGroupCount(randomizerDefaults.groupCount);
   }
 
   return (

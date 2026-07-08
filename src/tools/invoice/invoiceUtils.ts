@@ -11,6 +11,17 @@ type InvoiceInput = {
   roundingMode: InvoiceRoundingMode;
 };
 
+const invoiceDefaults = {
+  subtotal: '1200',
+  discountPercent: '10',
+  discountAmount: '0',
+  servicePercent: '10',
+  taxPercent: '5',
+  paidAmount: '1500',
+  currency: '$',
+  roundingMode: 'nearest-1' as InvoiceRoundingMode,
+};
+
 function roundTo(value: number, unit: number) {
   return Math.round(value / unit) * unit;
 }
@@ -61,4 +72,4 @@ function calculateInvoice(input: InvoiceInput) {
   };
 }
 
-export { calculateInvoice, formatSignedMoney };
+export { calculateInvoice, formatSignedMoney, invoiceDefaults };

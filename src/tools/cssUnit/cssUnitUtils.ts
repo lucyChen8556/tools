@@ -9,6 +9,19 @@ const cssUnitOptions = [
 
 type CssUnit = (typeof cssUnitOptions)[number]['value'];
 
+const cssUnitDefaults = {
+  value: '24',
+  unit: 'px' as CssUnit,
+  basePx: '16',
+  parentPx: '320',
+  viewportWidth: '1440',
+  viewportHeight: '900',
+  clampMinSize: '16',
+  clampMaxSize: '32',
+  clampMinViewport: '375',
+  clampMaxViewport: '1440',
+};
+
 type CssUnitContext = {
   basePx: number;
   parentPx: number;
@@ -91,5 +104,5 @@ function buildClamp(minSize: number, maxSize: number, minViewport: number, maxVi
   };
 }
 
-export { buildClamp, buildCssUnitRows, cssUnitOptions, formatCssNumber, formatPxValue, readCssNumber };
+export { buildClamp, buildCssUnitRows, cssUnitDefaults, cssUnitOptions, formatCssNumber, formatPxValue, readCssNumber };
 export type { CssUnit };

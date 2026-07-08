@@ -4,6 +4,10 @@ type QueryRow = {
   value: string;
 };
 
+const urlDefaults = {
+  input: 'https://example.com/docs?page=1&sort=desc#intro',
+};
+
 function parseUrl(value: string) {
   const trimmed = value.trim();
   if (!trimmed) return { url: null, error: 'Enter a URL', relative: false };
@@ -49,5 +53,5 @@ function removeEmptyQueryRows(rows: QueryRow[]) {
   return rows.filter((row) => row.key.trim() && row.value.trim());
 }
 
-export { buildUrl, parseUrl, removeEmptyQueryRows, rowsFromUrl, sortQueryRows };
+export { buildUrl, parseUrl, removeEmptyQueryRows, rowsFromUrl, sortQueryRows, urlDefaults };
 export type { QueryRow };

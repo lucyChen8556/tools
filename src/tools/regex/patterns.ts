@@ -90,3 +90,7 @@ export const commonPatterns = [
 ] as const;
 
 export type RegexPatternPreset = (typeof commonPatterns)[number];
+
+const defaultRegexPattern = commonPatterns[0];
+
+export { defaultRegexPattern };

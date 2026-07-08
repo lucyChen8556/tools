@@ -2,16 +2,16 @@ import { useMemo, useState } from 'react';
 import { TextInputField } from '../components/TextInputField';
 import { analyzeRegexPattern, collectRegexMatches } from './regex/regexUtils';
 import { AnalysisColumn } from './regex/AnalysisColumn';
-import { commonPatterns } from './regex/patterns';
+import { commonPatterns, defaultRegexPattern } from './regex/patterns';
 import { buildHighlightSegments, buildRegexRules } from './regex/rules';
 import { TestColumn } from './regex/TestColumn';
 import type { RegexRule } from './regex/types';
 
 function RegexTool() {
-  const [presetId, setPresetId] = useState('email');
-  const [pattern, setPattern] = useState('\\b\\w+@\\w+\\.\\w+\\b');
-  const [flags, setFlags] = useState('gi');
-  const [sample, setSample] = useState('dev@example.com\nsales@example.com\nnot-an-email');
+  const [presetId, setPresetId] = useState<string>(defaultRegexPattern.id);
+  const [pattern, setPattern] = useState<string>(defaultRegexPattern.pattern);
+  const [flags, setFlags] = useState<string>(defaultRegexPattern.flags);
+  const [sample, setSample] = useState<string>(defaultRegexPattern.sample);
   const [activeRuleId, setActiveRuleId] = useState('');
   const [patternsOpen, setPatternsOpen] = useState(false);
   const [referenceOpen, setReferenceOpen] = useState(false);

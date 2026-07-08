@@ -1,3 +1,10 @@
+import type { CsvDelimiterId } from '../../config/options';
+
+const csvDefaults = {
+  input: 'key,zhTW,enUS\nsave,儲存,Save\ncancel,取消,Cancel',
+  delimiter: 'comma' as CsvDelimiterId,
+};
+
 export function parseCsv(input: string, delimiter: string) {
   const rows: string[][] = [];
   let row: string[] = [];
@@ -31,6 +38,8 @@ export function parseCsv(input: string, delimiter: string) {
   if (row.some((item) => item.length > 0) || input.endsWith(delimiter)) rows.push(row);
   return rows;
 }
+
+export { csvDefaults };
 
 export function csvRowsToObjects(rows: string[][]) {
   const [headers = [], ...body] = rows;

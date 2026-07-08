@@ -6,11 +6,11 @@ import { TextInputField } from '../components/TextInputField';
 import { ActionBar, MetricsGrid } from '../components/ToolLayout';
 import type { ToolMetric } from '../components/ToolLayout';
 import { ToolbarButton } from '../components/ToolbarButton';
-import { baseOptions, buildNumberRows, parseBigInt, type BaseMode } from './number/numberUtils';
+import { baseOptions, buildNumberRows, numberDefaults, parseBigInt, type BaseMode } from './number/numberUtils';
 
 function NumberTool() {
-  const [input, setInput] = useState('0xff');
-  const [baseMode, setBaseMode] = useState<BaseMode>('auto');
+  const [input, setInput] = useState(numberDefaults.input);
+  const [baseMode, setBaseMode] = useState<BaseMode>(numberDefaults.baseMode);
   const parsed = useMemo(() => parseBigInt(input, baseMode), [baseMode, input]);
   const value = parsed.value;
   const rows = buildNumberRows(value);
@@ -34,7 +34,7 @@ function NumberTool() {
       <MetricsGrid items={metricsItems} />
       <CopyableRows rows={rows} />
       <ActionBar>
-        <ToolbarButton title="Reset sample" variant="primary" onClick={() => setInput('0xff')}>
+        <ToolbarButton title="Reset sample" variant="primary" onClick={() => setInput(numberDefaults.input)}>
           <RotateCcw size={16} />
           <span>Sample</span>
         </ToolbarButton>

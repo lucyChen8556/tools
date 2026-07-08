@@ -1,3 +1,25 @@
+const colorToolTabs = [
+  { label: 'Convert', value: 'convert' },
+  { label: 'Palette', value: 'palette' },
+  { label: 'Generate', value: 'generate' },
+  { label: 'Contrast', value: 'contrast' },
+] as const;
+
+type ColorToolTab = (typeof colorToolTabs)[number]['value'];
+
+const colorDefaults = {
+  activeTab: 'convert' as ColorToolTab,
+  value: '#2F6F73',
+  foreground: '#111827',
+  background: '#FFFFFF',
+  paletteInput: '#2F6F73 #111827 #FFFFFF\n#0D9488, #F97316, #EAB308',
+  generatorColor: '#2F6F73',
+  generatorCount: '10',
+  colorPickerFallback: '#000000',
+  panelFallback: '#f2f4f6',
+  maxGeneratedCount: 24,
+};
+
 function rgbToHsl(r: number, g: number, b: number) {
   const nr = r / 255;
   const ng = g / 255;
@@ -163,9 +185,9 @@ export function formatPaletteOutput(colors: Array<{ hex: string; rgb: string; hs
   return colors.map((color) => `${color.hex}\t${color.rgb}\t${color.hsl}`).join('\n');
 }
 
-export function normalizeGeneratedCount(value: string | number, max = 24) {
+export function normalizeGeneratedCount(value: string | number, max = colorDefaults.maxGeneratedCount) {
   const parsed = Number(value);
-  if (!Number.isFinite(parsed)) return 10;
+  if (!Number.isFinite(parsed)) return Number(colorDefaults.generatorCount);
   return Math.round(clamp(parsed, 1, max));
 }
 
@@ -266,3 +288,6 @@ export function getContrastPassLabel(ratio: number | null, threshold: number) {
   if (ratio === null) return '-';
   return ratio >= threshold ? 'Pass' : 'Fail';
 }
+
+export { colorDefaults, colorToolTabs };
+export type { ColorToolTab };

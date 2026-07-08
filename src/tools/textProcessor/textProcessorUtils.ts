@@ -2,6 +2,15 @@ import type { TextCaseMode } from '../../config/options';
 
 type TextTransformId = 'trim' | 'sort' | 'dedupe';
 
+const textProcessorDefaults = {
+  input: 'Apple\nbanana\nApple\n  carrot  ',
+  output: '',
+  caseMode: 'none' as TextCaseMode,
+  selectedTransforms: ['trim'] as TextTransformId[],
+  dedupeIgnoreCase: false,
+  dedupeTrimKey: true,
+};
+
 const textTransforms: Array<{ id: TextTransformId; label: string }> = [
   { id: 'trim', label: 'Trim lines' },
   { id: 'sort', label: 'Sort lines' },
@@ -94,5 +103,5 @@ function countDuplicateLines(lines: string[], options: { ignoreCase: boolean; tr
   return lines.length - new Set(lines.map((line) => getDedupeKey(line, options))).size;
 }
 
-export { countDuplicateLines, runTextTransforms, textTransforms };
+export { countDuplicateLines, runTextTransforms, textProcessorDefaults, textTransforms };
 export type { TextTransformId };

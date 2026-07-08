@@ -8,15 +8,15 @@ import type { ToolMetric } from '../components/ToolLayout';
 import { ToolSection } from '../components/ToolSection';
 import { ToolbarButton } from '../components/ToolbarButton';
 import { formatMoney, formatNumber, readNumber } from '../utils/numberFormat';
-import { billingOptions, calculateSubscription, type BillingCycle } from './subscription/subscriptionUtils';
+import { billingOptions, calculateSubscription, subscriptionDefaults, type BillingCycle } from './subscription/subscriptionUtils';
 
 function SubscriptionTool() {
-  const [price, setPrice] = useState('19.99');
-  const [billingCycle, setBillingCycle] = useState<BillingCycle>('monthly');
-  const [seats, setSeats] = useState('3');
-  const [splitBy, setSplitBy] = useState('3');
-  const [discountPercent, setDiscountPercent] = useState('0');
-  const [currency, setCurrency] = useState('$');
+  const [price, setPrice] = useState(subscriptionDefaults.price);
+  const [billingCycle, setBillingCycle] = useState<BillingCycle>(subscriptionDefaults.billingCycle);
+  const [seats, setSeats] = useState(subscriptionDefaults.seats);
+  const [splitBy, setSplitBy] = useState(subscriptionDefaults.splitBy);
+  const [discountPercent, setDiscountPercent] = useState(subscriptionDefaults.discountPercent);
+  const [currency, setCurrency] = useState(subscriptionDefaults.currency);
 
   const result = useMemo(() => {
     return calculateSubscription({ billingCycle, discountPercent, price, seats, splitBy });
@@ -47,12 +47,12 @@ function SubscriptionTool() {
   ].join('\n');
 
   function resetSample() {
-    setPrice('19.99');
-    setBillingCycle('monthly');
-    setSeats('3');
-    setSplitBy('3');
-    setDiscountPercent('0');
-    setCurrency('$');
+    setPrice(subscriptionDefaults.price);
+    setBillingCycle(subscriptionDefaults.billingCycle);
+    setSeats(subscriptionDefaults.seats);
+    setSplitBy(subscriptionDefaults.splitBy);
+    setDiscountPercent(subscriptionDefaults.discountPercent);
+    setCurrency(subscriptionDefaults.currency);
   }
 
   return (

@@ -8,15 +8,15 @@ import { ActionBar, MetricsGrid, SplitTextAreas } from '../components/ToolLayout
 import type { ToolMetric } from '../components/ToolLayout';
 import { ToolbarButton } from '../components/ToolbarButton';
 import { textCaseOptions, type TextCaseMode } from '../config/options';
-import { countDuplicateLines, runTextTransforms, textTransforms, type TextTransformId } from './textProcessor/textProcessorUtils';
+import { countDuplicateLines, runTextTransforms, textProcessorDefaults, textTransforms, type TextTransformId } from './textProcessor/textProcessorUtils';
 
 function TextTool() {
-  const [input, setInput] = useState('Apple\nbanana\nApple\n  carrot  ');
-  const [output, setOutput] = useState('');
-  const [caseMode, setCaseMode] = useState<TextCaseMode>('none');
-  const [selectedTransforms, setSelectedTransforms] = useState<TextTransformId[]>(['trim']);
-  const [dedupeIgnoreCase, setDedupeIgnoreCase] = useState(false);
-  const [dedupeTrimKey, setDedupeTrimKey] = useState(true);
+  const [input, setInput] = useState(textProcessorDefaults.input);
+  const [output, setOutput] = useState(textProcessorDefaults.output);
+  const [caseMode, setCaseMode] = useState<TextCaseMode>(textProcessorDefaults.caseMode);
+  const [selectedTransforms, setSelectedTransforms] = useState<TextTransformId[]>(textProcessorDefaults.selectedTransforms);
+  const [dedupeIgnoreCase, setDedupeIgnoreCase] = useState(textProcessorDefaults.dedupeIgnoreCase);
+  const [dedupeTrimKey, setDedupeTrimKey] = useState(textProcessorDefaults.dedupeTrimKey);
 
   const lines = input.split(/\r?\n/);
   const words = input.trim() ? input.trim().split(/\s+/).length : 0;

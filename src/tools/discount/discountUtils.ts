@@ -7,6 +7,14 @@ type DiscountInput = {
   taxPercent: string;
 };
 
+const discountDefaults = {
+  originalPrice: '1299',
+  discountPercent: '20',
+  couponAmount: '100',
+  taxPercent: '5',
+  currency: '$',
+};
+
 function calculateDiscount(input: DiscountInput) {
   const original = Math.max(0, readNumber(input.originalPrice));
   const discountRate = Math.max(0, readNumber(input.discountPercent)) / 100;
@@ -22,4 +30,4 @@ function calculateDiscount(input: DiscountInput) {
   return { original, percentDiscount, coupon, subtotal, tax, finalPrice, saved, effectiveDiscount };
 }
 
-export { calculateDiscount };
+export { calculateDiscount, discountDefaults };

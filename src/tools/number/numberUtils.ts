@@ -8,6 +8,11 @@ const baseOptions = [
 
 type BaseMode = (typeof baseOptions)[number]['value'];
 
+const numberDefaults = {
+  input: '0xff',
+  baseMode: 'auto' as BaseMode,
+};
+
 function detectBase(value: string, mode: BaseMode) {
   const normalized = value.trim().replace(/_/g, '').replace(/\s+/g, '');
   if (!normalized) return { digits: '', base: 10, label: 'Decimal' };
@@ -61,5 +66,5 @@ function buildNumberRows(value: bigint | null) {
   ];
 }
 
-export { baseOptions, buildNumberRows, parseBigInt };
+export { baseOptions, buildNumberRows, numberDefaults, parseBigInt };
 export type { BaseMode };

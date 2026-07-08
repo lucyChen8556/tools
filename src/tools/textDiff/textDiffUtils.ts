@@ -1,5 +1,11 @@
 import type { DiffOp } from '../../types';
 
+const textDiffDefaults = {
+  oldText: 'Release note: Fixed login timeout.\nEmail title: Welcome back',
+  newText: 'Release note: Fixed session timeout.\nEmail title: Welcome back\nCTA: Continue',
+  ignoreWhitespace: false,
+};
+
 function normalizeLines(value: string, ignoreWhitespace: boolean) {
   return value.replace(/\r\n/g, '\n').split('\n').map((line) => (ignoreWhitespace ? line.trim() : line));
 }
@@ -59,3 +65,5 @@ export function diffLines(oldText: string, newText: string, ignoreWhitespace: bo
 
   return compacted;
 }
+
+export { textDiffDefaults };

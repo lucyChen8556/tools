@@ -1,3 +1,12 @@
+const timeDefaults = {
+  batchInput: '1720000000\n1720000000000\n2026-07-02T10:03:23.263Z',
+  batchOutput: '',
+  locale: 'default',
+  timeZone: 'default',
+  customFormat: 'YYYY-MM-DD HH:mm:ss',
+  formatPreset: 'custom',
+};
+
 function getTimeParts(date: Date, locale: string | undefined, timeZone: string | undefined) {
   const numericFormatter = new Intl.DateTimeFormat('en-US', {
     year: 'numeric',
@@ -150,4 +159,4 @@ function formatBatchTimestamps(input: string, customFormat: string, locale: stri
     .trim();
 }
 
-export { formatBatchTimestamps, formatCustomDate, formatDuration, inspectDateInput };
+export { formatBatchTimestamps, formatCustomDate, formatDuration, inspectDateInput, timeDefaults };

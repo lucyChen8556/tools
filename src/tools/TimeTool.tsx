@@ -8,15 +8,15 @@ import type { ToolMetric } from '../components/ToolLayout';
 import { ToolSection } from '../components/ToolSection';
 import { ToolbarButton } from '../components/ToolbarButton';
 import { localeOptions, timeFormatPresetOptions, timeZoneOptions } from '../config/options';
-import { formatBatchTimestamps, formatCustomDate, formatDuration, inspectDateInput } from './time/timeUtils';
+import { formatBatchTimestamps, formatCustomDate, formatDuration, inspectDateInput, timeDefaults } from './time/timeUtils';
 
 function TimeTool() {
   const [value, setValue] = useState(() => String(Date.now()));
-  const [batchInput, setBatchInput] = useState('1720000000\n1720000000000\n2026-07-02T10:03:23.263Z');
-  const [batchOutput, setBatchOutput] = useState('');
-  const [locale, setLocale] = useState('default');
-  const [timeZone, setTimeZone] = useState('default');
-  const [customFormat, setCustomFormat] = useState('YYYY-MM-DD HH:mm:ss');
+  const [batchInput, setBatchInput] = useState(timeDefaults.batchInput);
+  const [batchOutput, setBatchOutput] = useState(timeDefaults.batchOutput);
+  const [locale, setLocale] = useState(timeDefaults.locale);
+  const [timeZone, setTimeZone] = useState(timeDefaults.timeZone);
+  const [customFormat, setCustomFormat] = useState(timeDefaults.customFormat);
   const inspection = useMemo(() => inspectDateInput(value), [value]);
   const date = inspection.date;
   const valid = !Number.isNaN(date.getTime());
@@ -32,9 +32,9 @@ function TimeTool() {
       }).format(date)
     : 'Invalid date';
   const customFormatted = valid ? formatCustomDate(date, customFormat, selectedLocale, selectedTimeZone) : 'Invalid date';
-  const selectedFormatPreset = (timeFormatPresetOptions as readonly string[]).includes(customFormat) ? customFormat : 'custom';
+  const selectedFormatPreset = (timeFormatPresetOptions as readonly string[]).includes(customFormat) ? customFormat : timeDefaults.formatPreset;
   const formatPresetOptions = [
-    { label: 'Custom', value: 'custom' },
+    { label: 'Custom', value: timeDefaults.formatPreset },
     ...timeFormatPresetOptions.map((option) => ({ label: option, value: option })),
   ];
   const detectedItems = [

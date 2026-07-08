@@ -3,7 +3,7 @@ import { Code2 } from 'lucide-react';
 import { CopyButton } from '../components/CopyButton';
 import { ActionBar, SplitTextAreas } from '../components/ToolLayout';
 import { ToolbarButton } from '../components/ToolbarButton';
-import { decodeHtml, escapeHtml, fromBase64, toBase64 } from './encode/codecUtils';
+import { decodeHtml, encodeDefaults, escapeHtml, fromBase64, toBase64 } from './encode/codecUtils';
 
 const codecActions = [
   { id: 'url-encode', label: 'URL +', transform: encodeURIComponent },
@@ -15,9 +15,9 @@ const codecActions = [
 ] as const;
 
 function EncodeTool() {
-  const [input, setInput] = useState('hello 世界');
-  const [output, setOutput] = useState('');
-  const [error, setError] = useState('');
+  const [input, setInput] = useState(encodeDefaults.input);
+  const [output, setOutput] = useState(encodeDefaults.output);
+  const [error, setError] = useState(encodeDefaults.error);
 
   function run(transform: (value: string) => string) {
     try {

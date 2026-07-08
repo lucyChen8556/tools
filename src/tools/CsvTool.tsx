@@ -3,11 +3,11 @@ import { CopyButton } from '../components/CopyButton';
 import { SelectField } from '../components/SelectField';
 import { SplitTextAreas } from '../components/ToolLayout';
 import { csvDelimiterOptions, type CsvDelimiterId } from '../config/options';
-import { csvRowsToObjects, parseCsv } from './csv/csvUtils';
+import { csvDefaults, csvRowsToObjects, parseCsv } from './csv/csvUtils';
 
 function CsvTool() {
-  const [input, setInput] = useState('key,zhTW,enUS\nsave,儲存,Save\ncancel,取消,Cancel');
-  const [delimiter, setDelimiter] = useState<CsvDelimiterId>('comma');
+  const [input, setInput] = useState(csvDefaults.input);
+  const [delimiter, setDelimiter] = useState<CsvDelimiterId>(csvDefaults.delimiter);
   const selectedDelimiter = csvDelimiterOptions.find((option) => option.value === delimiter) ?? csvDelimiterOptions[0];
   const rows = useMemo(() => parseCsv(input, selectedDelimiter.delimiter), [input, selectedDelimiter.delimiter]);
   const json = useMemo(() => JSON.stringify(csvRowsToObjects(rows), null, 2), [rows]);

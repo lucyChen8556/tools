@@ -19,9 +19,21 @@ const splitModeOptions = [
 
 type SplitMode = (typeof splitModeOptions)[number]['value'];
 
+const expenseDefaults = {
+  mode: 'quick' as SplitMode,
+  quickTotal: '1500',
+  quickPeople: '4',
+  amount: '1280',
+  taxPercent: '5',
+  tipPercent: '10',
+  extraFee: '0',
+  currency: '$',
+  minimumPeople: 1,
+};
+
 function calculateQuickSplit(totalInput: string, peopleInput: string) {
   const total = Math.max(0, readNumber(totalInput));
-  const people = Math.max(1, Math.floor(readNumber(peopleInput, 1)));
+  const people = Math.max(expenseDefaults.minimumPeople, Math.floor(readNumber(peopleInput, expenseDefaults.minimumPeople)));
   const each = total / people;
   return { total, people, each };
 }
@@ -60,5 +72,5 @@ function calculateDetailedSplit(input: {
   };
 }
 
-export { calculateDetailedSplit, calculateQuickSplit, defaultParticipants, splitModeOptions };
+export { calculateDetailedSplit, calculateQuickSplit, defaultParticipants, expenseDefaults, splitModeOptions };
 export type { Participant, SplitMode };

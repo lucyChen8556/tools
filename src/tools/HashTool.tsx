@@ -6,10 +6,10 @@ import { TextAreaField } from '../components/TextAreaField';
 import { ActionBar, MetricsGrid } from '../components/ToolLayout';
 import type { ToolMetric } from '../components/ToolLayout';
 import { ToolbarButton } from '../components/ToolbarButton';
-import { buildHashResults, hashAlgorithms, type HashResult } from './hash/hashUtils';
+import { buildHashResults, hashAlgorithms, hashDefaults, type HashResult } from './hash/hashUtils';
 
 function HashTool() {
-  const [input, setInput] = useState('hello world');
+  const [input, setInput] = useState(hashDefaults.input);
   const [results, setResults] = useState<HashResult[]>([]);
   const [error, setError] = useState('');
   const metricsItems = useMemo<ToolMetric[]>(
@@ -53,7 +53,7 @@ function HashTool() {
       <MetricsGrid items={metricsItems} />
       <CopyableRows rows={results.map((result) => ({ label: result.algorithm, value: result.value }))} />
       <ActionBar>
-        <ToolbarButton title="Use sample text" variant="primary" onClick={() => setInput('hello world')}>
+        <ToolbarButton title="Use sample text" variant="primary" onClick={() => setInput(hashDefaults.input)}>
           <Fingerprint size={16} />
           <span>Sample</span>
         </ToolbarButton>

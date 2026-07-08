@@ -6,10 +6,10 @@ import { ActionBar, MetricsGrid } from '../components/ToolLayout';
 import type { ToolMetric } from '../components/ToolLayout';
 import { ToolSection } from '../components/ToolSection';
 import { ToolbarButton } from '../components/ToolbarButton';
-import { buildUrl, parseUrl, removeEmptyQueryRows, rowsFromUrl, sortQueryRows, type QueryRow } from './url/urlUtils';
+import { buildUrl, parseUrl, removeEmptyQueryRows, rowsFromUrl, sortQueryRows, urlDefaults, type QueryRow } from './url/urlUtils';
 
 function UrlTool() {
-  const [input, setInput] = useState('https://example.com/docs?page=1&sort=desc#intro');
+  const [input, setInput] = useState(urlDefaults.input);
   const parsed = useMemo(() => parseUrl(input), [input]);
   const [queryRows, setQueryRows] = useState<QueryRow[]>(() => rowsFromUrl(parsed.url));
   const rebuilt = useMemo(() => buildUrl(parsed.url, queryRows, parsed.relative), [parsed.relative, parsed.url, queryRows]);

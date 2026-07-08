@@ -7,14 +7,14 @@ import type { ToolMetric } from '../components/ToolLayout';
 import { ToolSection } from '../components/ToolSection';
 import { ToolbarButton } from '../components/ToolbarButton';
 import { formatMoney, formatNumber } from '../utils/numberFormat';
-import { calculateDiscount } from './discount/discountUtils';
+import { calculateDiscount, discountDefaults } from './discount/discountUtils';
 
 function DiscountTool() {
-  const [originalPrice, setOriginalPrice] = useState('1299');
-  const [discountPercent, setDiscountPercent] = useState('20');
-  const [couponAmount, setCouponAmount] = useState('100');
-  const [taxPercent, setTaxPercent] = useState('5');
-  const [currency, setCurrency] = useState('$');
+  const [originalPrice, setOriginalPrice] = useState(discountDefaults.originalPrice);
+  const [discountPercent, setDiscountPercent] = useState(discountDefaults.discountPercent);
+  const [couponAmount, setCouponAmount] = useState(discountDefaults.couponAmount);
+  const [taxPercent, setTaxPercent] = useState(discountDefaults.taxPercent);
+  const [currency, setCurrency] = useState(discountDefaults.currency);
 
   const result = useMemo(() => {
     return calculateDiscount({ couponAmount, discountPercent, originalPrice, taxPercent });
@@ -45,11 +45,11 @@ function DiscountTool() {
   ].join('\n');
 
   function resetSample() {
-    setOriginalPrice('1299');
-    setDiscountPercent('20');
-    setCouponAmount('100');
-    setTaxPercent('5');
-    setCurrency('$');
+    setOriginalPrice(discountDefaults.originalPrice);
+    setDiscountPercent(discountDefaults.discountPercent);
+    setCouponAmount(discountDefaults.couponAmount);
+    setTaxPercent(discountDefaults.taxPercent);
+    setCurrency(discountDefaults.currency);
   }
 
   return (

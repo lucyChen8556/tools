@@ -7,27 +7,36 @@ import { TextInputControls } from '../components/TextInputControls';
 import { MetricsGrid } from '../components/ToolLayout';
 import type { ToolMetric } from '../components/ToolLayout';
 import { ToolSection } from '../components/ToolSection';
-import { buildClamp, buildCssUnitRows, cssUnitOptions, formatCssNumber, formatPxValue, readCssNumber, type CssUnit } from './cssUnit/cssUnitUtils';
+import {
+  buildClamp,
+  buildCssUnitRows,
+  cssUnitDefaults,
+  cssUnitOptions,
+  formatCssNumber,
+  formatPxValue,
+  readCssNumber,
+  type CssUnit,
+} from './cssUnit/cssUnitUtils';
 
 function CssUnitTool() {
-  const [value, setValue] = useState('24');
-  const [unit, setUnit] = useState<CssUnit>('px');
-  const [basePx, setBasePx] = useState('16');
-  const [parentPx, setParentPx] = useState('320');
-  const [viewportWidth, setViewportWidth] = useState('1440');
-  const [viewportHeight, setViewportHeight] = useState('900');
-  const [clampMinSize, setClampMinSize] = useState('16');
-  const [clampMaxSize, setClampMaxSize] = useState('32');
-  const [clampMinViewport, setClampMinViewport] = useState('375');
-  const [clampMaxViewport, setClampMaxViewport] = useState('1440');
+  const [value, setValue] = useState(cssUnitDefaults.value);
+  const [unit, setUnit] = useState<CssUnit>(cssUnitDefaults.unit);
+  const [basePx, setBasePx] = useState(cssUnitDefaults.basePx);
+  const [parentPx, setParentPx] = useState(cssUnitDefaults.parentPx);
+  const [viewportWidth, setViewportWidth] = useState(cssUnitDefaults.viewportWidth);
+  const [viewportHeight, setViewportHeight] = useState(cssUnitDefaults.viewportHeight);
+  const [clampMinSize, setClampMinSize] = useState(cssUnitDefaults.clampMinSize);
+  const [clampMaxSize, setClampMaxSize] = useState(cssUnitDefaults.clampMaxSize);
+  const [clampMinViewport, setClampMinViewport] = useState(cssUnitDefaults.clampMinViewport);
+  const [clampMaxViewport, setClampMaxViewport] = useState(cssUnitDefaults.clampMaxViewport);
 
   const result = useMemo(() => {
     const numericValue = readCssNumber(value, Number.NaN);
     const context = {
-      basePx: readCssNumber(basePx, 16),
-      parentPx: readCssNumber(parentPx, 320),
-      viewportWidth: readCssNumber(viewportWidth, 1440),
-      viewportHeight: readCssNumber(viewportHeight, 900),
+      basePx: readCssNumber(basePx, Number(cssUnitDefaults.basePx)),
+      parentPx: readCssNumber(parentPx, Number(cssUnitDefaults.parentPx)),
+      viewportWidth: readCssNumber(viewportWidth, Number(cssUnitDefaults.viewportWidth)),
+      viewportHeight: readCssNumber(viewportHeight, Number(cssUnitDefaults.viewportHeight)),
     };
     return buildCssUnitRows(numericValue, unit, context);
   }, [basePx, parentPx, unit, value, viewportHeight, viewportWidth]);
@@ -38,7 +47,7 @@ function CssUnitTool() {
         readCssNumber(clampMaxSize, Number.NaN),
         readCssNumber(clampMinViewport, Number.NaN),
         readCssNumber(clampMaxViewport, Number.NaN),
-        readCssNumber(basePx, 16),
+        readCssNumber(basePx, Number(cssUnitDefaults.basePx)),
       ),
     [basePx, clampMaxSize, clampMaxViewport, clampMinSize, clampMinViewport],
   );

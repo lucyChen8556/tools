@@ -9,17 +9,17 @@ import { ToolSection } from '../components/ToolSection';
 import { ToolbarButton } from '../components/ToolbarButton';
 import { invoiceRoundingOptions, type InvoiceRoundingMode } from '../config/options';
 import { formatMoney, formatNumber, readNumber } from '../utils/numberFormat';
-import { calculateInvoice, formatSignedMoney } from './invoice/invoiceUtils';
+import { calculateInvoice, formatSignedMoney, invoiceDefaults } from './invoice/invoiceUtils';
 
 function InvoiceTool() {
-  const [subtotal, setSubtotal] = useState('1200');
-  const [discountPercent, setDiscountPercent] = useState('10');
-  const [discountAmount, setDiscountAmount] = useState('0');
-  const [servicePercent, setServicePercent] = useState('10');
-  const [taxPercent, setTaxPercent] = useState('5');
-  const [paidAmount, setPaidAmount] = useState('1500');
-  const [currency, setCurrency] = useState('$');
-  const [roundingMode, setRoundingMode] = useState<InvoiceRoundingMode>('nearest-1');
+  const [subtotal, setSubtotal] = useState(invoiceDefaults.subtotal);
+  const [discountPercent, setDiscountPercent] = useState(invoiceDefaults.discountPercent);
+  const [discountAmount, setDiscountAmount] = useState(invoiceDefaults.discountAmount);
+  const [servicePercent, setServicePercent] = useState(invoiceDefaults.servicePercent);
+  const [taxPercent, setTaxPercent] = useState(invoiceDefaults.taxPercent);
+  const [paidAmount, setPaidAmount] = useState(invoiceDefaults.paidAmount);
+  const [currency, setCurrency] = useState(invoiceDefaults.currency);
+  const [roundingMode, setRoundingMode] = useState<InvoiceRoundingMode>(invoiceDefaults.roundingMode);
 
   const result = useMemo(() => {
     return calculateInvoice({ discountAmount, discountPercent, paidAmount, roundingMode, servicePercent, subtotal, taxPercent });
@@ -53,14 +53,14 @@ function InvoiceTool() {
   ].join('\n');
 
   function resetSample() {
-    setSubtotal('1200');
-    setDiscountPercent('10');
-    setDiscountAmount('0');
-    setServicePercent('10');
-    setTaxPercent('5');
-    setPaidAmount('1500');
-    setCurrency('$');
-    setRoundingMode('nearest-1');
+    setSubtotal(invoiceDefaults.subtotal);
+    setDiscountPercent(invoiceDefaults.discountPercent);
+    setDiscountAmount(invoiceDefaults.discountAmount);
+    setServicePercent(invoiceDefaults.servicePercent);
+    setTaxPercent(invoiceDefaults.taxPercent);
+    setPaidAmount(invoiceDefaults.paidAmount);
+    setCurrency(invoiceDefaults.currency);
+    setRoundingMode(invoiceDefaults.roundingMode);
   }
 
   return (

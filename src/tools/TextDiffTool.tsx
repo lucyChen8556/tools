@@ -3,12 +3,12 @@ import { CheckboxControl } from '../components/CheckboxControl';
 import { CopyButton } from '../components/CopyButton';
 import { ActionBar, MetricsGrid, SplitTextAreas } from '../components/ToolLayout';
 import type { ToolMetric } from '../components/ToolLayout';
-import { diffLines } from './textDiff/textDiffUtils';
+import { diffLines, textDiffDefaults } from './textDiff/textDiffUtils';
 
 function TextDiffTool() {
-  const [oldText, setOldText] = useState('Release note: Fixed login timeout.\nEmail title: Welcome back');
-  const [newText, setNewText] = useState('Release note: Fixed session timeout.\nEmail title: Welcome back\nCTA: Continue');
-  const [ignoreWhitespace, setIgnoreWhitespace] = useState(false);
+  const [oldText, setOldText] = useState(textDiffDefaults.oldText);
+  const [newText, setNewText] = useState(textDiffDefaults.newText);
+  const [ignoreWhitespace, setIgnoreWhitespace] = useState(textDiffDefaults.ignoreWhitespace);
   const diffs = useMemo(() => diffLines(oldText, newText, ignoreWhitespace), [oldText, newText, ignoreWhitespace]);
   const added = diffs.filter((diff) => diff.type === 'added').length;
   const removed = diffs.filter((diff) => diff.type === 'removed').length;

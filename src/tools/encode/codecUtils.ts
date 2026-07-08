@@ -1,3 +1,9 @@
+const encodeDefaults = {
+  input: 'hello 世界',
+  output: '',
+  error: '',
+};
+
 export function escapeHtml(value: string) {
   return value.replace(/[&<>"']/g, (match) => {
     const entities: Record<string, string> = {
@@ -31,3 +37,5 @@ export function fromBase64(value: string) {
   const bytes = Uint8Array.from(binary, (char) => char.charCodeAt(0));
   return new TextDecoder().decode(bytes);
 }
+
+export { encodeDefaults };

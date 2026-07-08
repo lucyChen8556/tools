@@ -15,10 +15,21 @@ type SubscriptionInput = {
   discountPercent: string;
 };
 
+const subscriptionDefaults = {
+  price: '19.99',
+  billingCycle: 'monthly' as BillingCycle,
+  seats: '3',
+  splitBy: '3',
+  discountPercent: '0',
+  currency: '$',
+  minimumSeats: 1,
+  minimumPeople: 1,
+};
+
 function calculateSubscription(input: SubscriptionInput) {
   const enteredPrice = Math.max(0, readNumber(input.price));
-  const seatCount = Math.max(1, readNumber(input.seats, 1));
-  const people = Math.max(1, readNumber(input.splitBy, 1));
+  const seatCount = Math.max(subscriptionDefaults.minimumSeats, readNumber(input.seats, subscriptionDefaults.minimumSeats));
+  const people = Math.max(subscriptionDefaults.minimumPeople, readNumber(input.splitBy, subscriptionDefaults.minimumPeople));
   const discountRate = Math.max(0, readNumber(input.discountPercent)) / 100;
   const periodTotal = enteredPrice * seatCount * (1 - discountRate);
   const monthlyTotal = input.billingCycle === 'monthly' ? periodTotal : periodTotal / 12;
@@ -38,5 +49,5 @@ function calculateSubscription(input: SubscriptionInput) {
   };
 }
 
-export { billingOptions, calculateSubscription };
+export { billingOptions, calculateSubscription, subscriptionDefaults };
 export type { BillingCycle };
