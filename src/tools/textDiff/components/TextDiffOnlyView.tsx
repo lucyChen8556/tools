@@ -7,14 +7,12 @@ type TextDiffOnlyViewProps = {
 };
 
 function TextDiffOnlyColumn({
-  copyLabel,
   emptyText,
   items,
   marker,
   title,
   type,
 }: {
-  copyLabel: string;
   emptyText: string;
   items: string[];
   marker: string;
@@ -29,7 +27,7 @@ function TextDiffOnlyColumn({
         <strong>{title}</strong>
         <div className="text-diff-only-actions">
           <span>{items.length}</span>
-          <CopyButton title={`Copy ${title} values`} value={copyValue} label={copyLabel} />
+          <CopyButton title={`Copy ${title} values`} value={copyValue} />
         </div>
       </div>
       {items.length === 0 ? (
@@ -51,8 +49,8 @@ function TextDiffOnlyColumn({
 function TextDiffOnlyView({ onlyInA, onlyInB }: TextDiffOnlyViewProps) {
   return (
     <div className="text-diff-only-grid">
-      <TextDiffOnlyColumn copyLabel="Copy A" emptyText="No values only in A" items={onlyInA} marker="-" title="Only in A" type="removed" />
-      <TextDiffOnlyColumn copyLabel="Copy B" emptyText="No values only in B" items={onlyInB} marker="+" title="Only in B" type="added" />
+      <TextDiffOnlyColumn emptyText="No before-only values" items={onlyInA} marker="-" title="Before only" type="removed" />
+      <TextDiffOnlyColumn emptyText="No after-only values" items={onlyInB} marker="+" title="After only" type="added" />
     </div>
   );
 }

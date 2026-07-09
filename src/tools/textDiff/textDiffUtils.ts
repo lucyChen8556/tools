@@ -9,7 +9,7 @@ const textDiffDefaults = {
 
 const textDiffViewOptions = [
   { label: 'Diff', value: 'diff' },
-  { label: 'Only A/B', value: 'only' },
+  { label: 'Only', value: 'only' },
 ] as const;
 
 type TextDiffView = (typeof textDiffViewOptions)[number]['value'];
@@ -92,10 +92,10 @@ function getOnlyInSides(oldText: string, newText: string, ignoreWhitespace: bool
 
 function formatOnlyInSides(onlyInA: string[], onlyInB: string[]) {
   return [
-    'Only in A',
+    'Before only',
     ...(onlyInA.length > 0 ? onlyInA.map((line) => `- ${line}`) : ['- None']),
     '',
-    'Only in B',
+    'After only',
     ...(onlyInB.length > 0 ? onlyInB.map((line) => `+ ${line}`) : ['+ None']),
   ].join('\n');
 }

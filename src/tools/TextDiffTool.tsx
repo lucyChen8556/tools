@@ -30,8 +30,8 @@ function TextDiffTool() {
       { label: 'Changed', value: changed },
       { label: 'Added', value: added },
       { label: 'Removed', value: removed },
-      { label: 'Only A', value: onlyInSides.onlyInA.length },
-      { label: 'Only B', value: onlyInSides.onlyInB.length },
+      { label: 'Before only', value: onlyInSides.onlyInA.length },
+      { label: 'After only', value: onlyInSides.onlyInB.length },
       { label: 'Lines', value: diffs.length },
     ],
     [added, changed, diffs.length, onlyInSides.onlyInA.length, onlyInSides.onlyInB.length, removed],
@@ -56,7 +56,7 @@ function TextDiffTool() {
       <ActionBar>
         <CheckboxControl label="Ignore whitespace" checked={ignoreWhitespace} onChange={setIgnoreWhitespace} />
         <SegmentedTabs compact ariaLabel="Text diff view" options={textDiffViewOptions} value={view} onChange={setView} />
-        <CopyButton title={view === 'only' ? 'Copy only-in-A/B values' : 'Copy diff'} value={view === 'only' ? onlyText : diffText} />
+        <CopyButton title={view === 'only' ? 'Copy only values' : 'Copy diff'} value={view === 'only' ? onlyText : diffText} />
       </ActionBar>
       <MetricsGrid items={metricsItems} />
       {viewContent[view]}
