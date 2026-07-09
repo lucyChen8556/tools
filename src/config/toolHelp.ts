@@ -32,6 +32,7 @@ export const toolHelp: Record<ToolId, ToolHelp> = {
         title: 'Features',
         items: [
           'Marks each line as added, removed, changed, or unchanged.',
+          'Only A/B view compares each side as a deduped value list and separates values that appear on only one side.',
           'Optional Ignore whitespace mode compares cleaner content when spacing noise is not important.',
           'Shows line-level review output in the page and exposes a Copy diff action for sharing the result.',
         ],

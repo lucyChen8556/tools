@@ -1,10 +1,18 @@
 import type { DiffOp } from '@/types';
 
 const textDiffDefaults = {
-  oldText: 'Release note: Fixed login timeout.\nEmail title: Welcome back',
-  newText: 'Release note: Fixed session timeout.\nEmail title: Welcome back\nCTA: Continue',
+  oldText: 'A\nB\nC\nD',
+  newText: 'A\nA\nE\nC',
   ignoreWhitespace: false,
+  view: 'diff' as TextDiffView,
 };
+
+const textDiffViewOptions = [
+  { label: 'Diff', value: 'diff' },
+  { label: 'Only A/B', value: 'only' },
+] as const;
+
+type TextDiffView = (typeof textDiffViewOptions)[number]['value'];
 
 function normalizeLines(value: string, ignoreWhitespace: boolean) {
   return value.replace(/\r\n/g, '\n').split('\n').map((line) => (ignoreWhitespace ? line.trim() : line));
@@ -66,4 +74,31 @@ export function diffLines(oldText: string, newText: string, ignoreWhitespace: bo
   return compacted;
 }
 
-export { textDiffDefaults };
+function getUniqueLines(lines: string[]) {
+  return Array.from(new Set(lines.filter((line) => line.length > 0)));
+}
+
+function getOnlyInSides(oldText: string, newText: string, ignoreWhitespace: boolean) {
+  const oldLines = getUniqueLines(normalizeLines(oldText, ignoreWhitespace));
+  const newLines = getUniqueLines(normalizeLines(newText, ignoreWhitespace));
+  const oldLineSet = new Set(oldLines);
+  const newLineSet = new Set(newLines);
+
+  return {
+    onlyInA: oldLines.filter((line) => !newLineSet.has(line)),
+    onlyInB: newLines.filter((line) => !oldLineSet.has(line)),
+  };
+}
+
+function formatOnlyInSides(onlyInA: string[], onlyInB: string[]) {
+  return [
+    'Only in A',
+    ...(onlyInA.length > 0 ? onlyInA.map((line) => `- ${line}`) : ['- None']),
+    '',
+    'Only in B',
+    ...(onlyInB.length > 0 ? onlyInB.map((line) => `+ ${line}`) : ['+ None']),
+  ].join('\n');
+}
+
+export { formatOnlyInSides, getOnlyInSides, textDiffDefaults, textDiffViewOptions };
+export type { TextDiffView };

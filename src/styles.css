@@ -844,6 +844,30 @@
     @apply mt-1 bg-green-50 text-green-700;
   }
 
+  .text-diff-only-grid {
+    @apply grid gap-4 lg:grid-cols-2;
+  }
+
+  .text-diff-only-column {
+    @apply overflow-hidden rounded-lg border border-ink-200 bg-white;
+  }
+
+  .text-diff-only-heading {
+    @apply flex items-center justify-between border-b border-ink-200 bg-ink-50 px-3 py-2 text-sm;
+  }
+
+  .text-diff-only-heading span {
+    @apply rounded-full bg-white px-2 py-0.5 text-xs font-semibold text-ink-500;
+  }
+
+  .text-diff-only-actions {
+    @apply flex items-center gap-2;
+  }
+
+  .text-diff-only-list {
+    @apply max-h-[520px] overflow-auto;
+  }
+
   .empty-state {
     @apply grid min-h-36 place-items-center bg-white p-4 text-sm font-medium text-ink-500;
   }
