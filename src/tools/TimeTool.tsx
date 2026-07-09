@@ -83,10 +83,7 @@ function TimeTool() {
             onChange={(nextFormat) => nextFormat !== 'custom' && setCustomFormat(nextFormat)}
           />
           <TextInputField label="Custom format" value={customFormat} onChange={setCustomFormat} compact />
-          <ToolbarButton title="Use current time" variant="primary" onClick={() => setValue(String(Date.now()))}>
-            <Clock3 size={16} />
-            <span>Now</span>
-          </ToolbarButton>
+          <ToolbarButton title="Use current time" variant="primary" icon={<Clock3 size={16} />} label="Now" onClick={() => setValue(String(Date.now()))} />
         </div>
       </ToolSection>
 
@@ -119,10 +116,7 @@ function TimeTool() {
           right={{ label: 'Batch output', value: batchOutput, onChange: setBatchOutput }}
         />
         <ActionBar>
-          <ToolbarButton title="Convert batch timestamps" variant="primary" onClick={formatBatch}>
-            <Clock3 size={16} />
-            <span>Convert batch</span>
-          </ToolbarButton>
+          <ToolbarButton title="Convert batch timestamps" variant="primary" icon={<Clock3 size={16} />} label="Convert batch" onClick={formatBatch} />
           <CopyButton title="Copy batch output" value={batchOutput} />
         </ActionBar>
         <MetricsGrid items={batchMetricsItems} />

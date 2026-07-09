@@ -53,10 +53,7 @@ function HashTool() {
       <MetricsGrid items={metricsItems} />
       <CopyableRows rows={results.map((result) => ({ label: result.algorithm, value: result.value }))} />
       <ActionBar>
-        <ToolbarButton title="Use sample text" variant="primary" onClick={() => setInput(hashDefaults.input)}>
-          <Fingerprint size={16} />
-          <span>Sample</span>
-        </ToolbarButton>
+        <ToolbarButton title="Use sample text" variant="primary" icon={<Fingerprint size={16} />} label="Sample" onClick={() => setInput(hashDefaults.input)} />
         <CopyButton title="Copy all hashes" value={results.map((result) => `${result.algorithm}: ${result.value}`).join('\n')} label="Copy all" />
       </ActionBar>
     </section>

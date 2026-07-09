@@ -17,10 +17,7 @@ function ManualColorSection({ manualColor, onAdd, onManualColorChange }: ManualC
       <div className="season-color-entry">
         <input className="color-picker" type="color" value={normalizeHex(manualColor) ?? seasonColorDefaults.color} onChange={(event) => onManualColorChange(event.target.value)} title="Pick color" />
         <TextInputField label="HEX" value={manualColor} onChange={onManualColorChange} compact />
-        <ToolbarButton title="Add manual color" variant="primary" onClick={onAdd}>
-          <Plus size={16} />
-          <span>Add</span>
-        </ToolbarButton>
+        <ToolbarButton title="Add manual color" variant="primary" icon={<Plus size={16} />} label="Add" onClick={onAdd} />
       </div>
     </ToolSection>
   );

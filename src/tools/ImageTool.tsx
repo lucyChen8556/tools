@@ -169,12 +169,11 @@ function ImageTool() {
           />
         </div>
         <div className="section-actions">
-          <ToolbarButton title="Compress image" variant="primary" disabled={!file} onClick={() => void compressImage()}>
-            <ImageDown size={16} />
-            <span>Compress</span>
-          </ToolbarButton>
+          <ToolbarButton title="Compress image" variant="primary" icon={<ImageDown size={16} />} label="Compress" disabled={!file} onClick={() => void compressImage()} />
           <ToolbarButton
             title="Download image"
+            icon={<Download size={16} />}
+            label="Download"
             disabled={!resultUrl}
             onClick={() => {
               if (resultUrl) {
@@ -183,18 +182,9 @@ function ImageTool() {
                   .then((blob) => downloadBlob(blob, `${fileName.replace(/\.[^.]+$/, '') || 'image'}-compressed.${selectedFormat.extension}`));
               }
             }}
-          >
-            <Download size={16} />
-            <span>Download</span>
-          </ToolbarButton>
-          <ToolbarButton title="Reset compression options" onClick={resetOptions}>
-            <Eraser size={16} />
-            <span>Reset</span>
-          </ToolbarButton>
-          <ToolbarButton title="Clear image" onClick={clearImage} disabled={!file && !resultUrl}>
-            <Eraser size={16} />
-            <span>Clear</span>
-          </ToolbarButton>
+          />
+          <ToolbarButton title="Reset compression options" icon={<Eraser size={16} />} label="Reset" onClick={resetOptions} />
+          <ToolbarButton title="Clear image" icon={<Eraser size={16} />} label="Clear" onClick={clearImage} disabled={!file && !resultUrl} />
         </div>
       </ToolSection>
 

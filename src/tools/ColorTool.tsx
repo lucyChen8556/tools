@@ -213,14 +213,13 @@ function ColorTool() {
             />
             <ToolbarButton
               title="Swap foreground and background"
+              icon={<Repeat2 size={16} />}
+              label="Swap"
               onClick={() => {
                 setForeground(background);
                 setBackground(foreground);
               }}
-            >
-              <Repeat2 size={16} />
-              <span>Swap</span>
-            </ToolbarButton>
+            />
           </div>
 
           <div className="contrast-panel">

@@ -34,10 +34,7 @@ function NumberTool() {
       <MetricsGrid items={metricsItems} />
       <CopyableRows rows={rows} />
       <ActionBar>
-        <ToolbarButton title="Reset sample" variant="primary" onClick={() => setInput(numberDefaults.input)}>
-          <RotateCcw size={16} />
-          <span>Sample</span>
-        </ToolbarButton>
+        <ToolbarButton title="Reset sample" variant="primary" icon={<RotateCcw size={16} />} label="Sample" onClick={() => setInput(numberDefaults.input)} />
       </ActionBar>
     </section>
   );

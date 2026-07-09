@@ -14,10 +14,7 @@ function CopyableRows({ rows }: { rows: CopyableRow[] }) {
         <div className="hash-row" key={row.label}>
           <strong>{row.label}</strong>
           <code>{row.value}</code>
-          <ToolbarButton title={`Copy ${row.label}`} onClick={() => copyText(row.value)}>
-            <Copy size={15} />
-            <span>Copy</span>
-          </ToolbarButton>
+          <ToolbarButton title={`Copy ${row.label}`} icon={<Copy size={15} />} label="Copy" onClick={() => copyText(row.value)} />
         </div>
       ))}
     </div>

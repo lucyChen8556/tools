@@ -91,22 +91,10 @@ function UrlTool() {
       <ToolSection title="Query builder">
         <DataTable columns={queryColumns} rows={queryRows} getRowKey={(row) => row.id} emptyMessage="No query parameters" />
         <ActionBar>
-          <ToolbarButton title="Add query parameter" variant="primary" onClick={addRow} disabled={!parsed.url}>
-            <Plus size={16} />
-            <span>Add param</span>
-          </ToolbarButton>
-          <ToolbarButton title="Sort query parameters" onClick={sortRows} disabled={!parsed.url || queryRows.length < 2}>
-            <ArrowDownAZ size={16} />
-            <span>Sort params</span>
-          </ToolbarButton>
-          <ToolbarButton title="Remove empty query parameters" onClick={removeEmptyRows} disabled={!parsed.url || queryRows.length === 0}>
-            <Trash2 size={16} />
-            <span>Remove empty</span>
-          </ToolbarButton>
-          <ToolbarButton title="Apply rebuilt URL to input" onClick={() => setInput(rebuilt)} disabled={!rebuilt}>
-            <Check size={16} />
-            <span>Apply URL</span>
-          </ToolbarButton>
+          <ToolbarButton title="Add query parameter" variant="primary" icon={<Plus size={16} />} label="Add param" onClick={addRow} disabled={!parsed.url} />
+          <ToolbarButton title="Sort query parameters" icon={<ArrowDownAZ size={16} />} label="Sort params" onClick={sortRows} disabled={!parsed.url || queryRows.length < 2} />
+          <ToolbarButton title="Remove empty query parameters" icon={<Trash2 size={16} />} label="Remove empty" onClick={removeEmptyRows} disabled={!parsed.url || queryRows.length === 0} />
+          <ToolbarButton title="Apply rebuilt URL to input" icon={<Check size={16} />} label="Apply URL" onClick={() => setInput(rebuilt)} disabled={!rebuilt} />
           <CopyButton title="Copy rebuilt URL" value={rebuilt} label="Copy URL" />
         </ActionBar>
         <TextInputField label="Rebuilt URL" value={rebuilt || '-'} readOnly />

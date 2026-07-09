@@ -49,18 +49,9 @@ function TextCleanerTool() {
         ))}
       </div>
       <ActionBar className="cleaner-actions">
-        <ToolbarButton title="Run selected cleaners" variant="primary" onClick={() => clean(selectedActions)} disabled={selectedActions.length === 0}>
-          <Eraser size={16} />
-          <span>Run selected</span>
-        </ToolbarButton>
-        <ToolbarButton title="Select default cleaners" onClick={() => setSelectedActions(defaultCleanerActions)}>
-          <Check size={16} />
-          <span>Defaults</span>
-        </ToolbarButton>
-        <ToolbarButton title="Clear selected cleaners" onClick={() => setSelectedActions([])}>
-          <Eraser size={16} />
-          <span>Clear rules</span>
-        </ToolbarButton>
+        <ToolbarButton title="Run selected cleaners" variant="primary" icon={<Eraser size={16} />} label="Run selected" onClick={() => clean(selectedActions)} disabled={selectedActions.length === 0} />
+        <ToolbarButton title="Select default cleaners" icon={<Check size={16} />} label="Defaults" onClick={() => setSelectedActions(defaultCleanerActions)} />
+        <ToolbarButton title="Clear selected cleaners" icon={<Eraser size={16} />} label="Clear rules" onClick={() => setSelectedActions([])} />
         <ApplyTextButton value={output} onApply={setInput} label="Apply output" variant="primary" />
         <CopyButton title="Copy output" value={output} />
       </ActionBar>

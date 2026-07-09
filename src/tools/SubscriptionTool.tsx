@@ -71,10 +71,7 @@ function SubscriptionTool() {
       <ToolSection title="Cost">
         <MetricsGrid items={metricsItems} />
         <ActionBar>
-          <ToolbarButton title="Reset sample" variant="primary" onClick={resetSample}>
-            <RotateCcw size={16} />
-            <span>Sample</span>
-          </ToolbarButton>
+          <ToolbarButton title="Reset sample" variant="primary" icon={<RotateCcw size={16} />} label="Sample" onClick={resetSample} />
           <CopyButton title="Copy subscription summary" value={summary} label="Copy summary" />
         </ActionBar>
         <div className="notice warning">

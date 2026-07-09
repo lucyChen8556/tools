@@ -89,26 +89,17 @@ function JsonTool() {
         {mode === 'format' && (
           <>
             <SegmentedTabs compact ariaLabel="Format target" options={formatTargetOptions} value={formatTarget} onChange={setFormatTarget} />
-            <ToolbarButton title="Format selected JSON" variant="primary" onClick={() => runFormat(formatTarget)}>
-              <FileJson size={16} />
-              <span>Format</span>
-            </ToolbarButton>
+            <ToolbarButton title="Format selected JSON" variant="primary" icon={<FileJson size={16} />} label="Format" onClick={() => runFormat(formatTarget)} />
           </>
         )}
         {mode === 'compare' && (
           <>
             <SelectField label="Merge" value={mergeMode} options={jsonMergeModeOptions} onChange={setMergeMode} />
-            <ToolbarButton title="Create merged JSON" variant="primary" onClick={runMerge}>
-              <Repeat2 size={16} />
-              <span>Merge</span>
-            </ToolbarButton>
+            <ToolbarButton title="Create merged JSON" variant="primary" icon={<Repeat2 size={16} />} label="Merge" onClick={runMerge} />
             <ToolbarButton title="Swap inputs" onClick={() => {
               setLeft(right);
               setRight(left);
-            }}>
-              <ArrowDownUp size={16} />
-              <span>Swap</span>
-            </ToolbarButton>
+            }} icon={<ArrowDownUp size={16} />} label="Swap" />
           </>
         )}
         <CopyButton title="Copy result" value={jsonResult} />

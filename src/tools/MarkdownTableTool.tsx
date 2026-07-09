@@ -35,10 +35,7 @@ function MarkdownTableTool() {
     <section className="tool-surface">
       <SplitTextAreas left={{ label: 'Input', value: input, onChange: setInput }} right={{ label: 'Output', value: output, onChange: setOutput }} />
       <ActionBar>
-        <ToolbarButton title="Format markdown table" variant="primary" onClick={format}>
-          <Table2 size={16} />
-          <span>Format table</span>
-        </ToolbarButton>
+        <ToolbarButton title="Format markdown table" variant="primary" icon={<Table2 size={16} />} label="Format table" onClick={format} />
         <ApplyTextButton value={output} onApply={setInput} />
         <CopyButton title="Copy formatted table" value={output} />
       </ActionBar>

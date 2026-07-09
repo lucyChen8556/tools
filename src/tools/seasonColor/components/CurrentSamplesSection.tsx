@@ -16,10 +16,7 @@ function CurrentSamplesSection({ onClear, onRemove, swatches }: CurrentSamplesSe
     <ToolSection title="Current samples">
       <SampleList swatches={swatches} onRemove={onRemove} />
       <ActionBar>
-        <ToolbarButton title="Clear all colors" onClick={onClear} disabled={swatches.length === 0}>
-          <Trash2 size={16} />
-          <span>Clear all</span>
-        </ToolbarButton>
+        <ToolbarButton title="Clear all colors" icon={<Trash2 size={16} />} label="Clear all" onClick={onClear} disabled={swatches.length === 0} />
       </ActionBar>
     </ToolSection>
   );

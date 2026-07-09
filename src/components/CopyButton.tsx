@@ -10,12 +10,7 @@ type CopyButtonProps = {
 };
 
 function CopyButton({ value, label = 'Copy', title = 'Copy', disabled }: CopyButtonProps) {
-  return (
-    <ToolbarButton title={title} onClick={() => copyText(value)} disabled={disabled ?? !value}>
-      <Copy size={16} />
-      <span>{label}</span>
-    </ToolbarButton>
-  );
+  return <ToolbarButton title={title} icon={<Copy size={16} />} label={label} onClick={() => copyText(value)} disabled={disabled ?? !value} />;
 }
 
 export { CopyButton };

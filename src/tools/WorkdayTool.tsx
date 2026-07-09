@@ -89,14 +89,8 @@ function WorkdayTool() {
       <ToolSection title="Holidays">
         <div className="inline-controls wide holiday-controls">
           <TextInputField label="Custom holiday" type="date" value={holidayDate} onChange={setHolidayDate} lang="en-US" compact />
-          <ToolbarButton title="Add custom holiday" variant="primary" onClick={addHoliday} disabled={!holidayDate}>
-            <Plus size={16} />
-            <span>Add holiday</span>
-          </ToolbarButton>
-          <ToolbarButton title="Clear custom holidays" onClick={() => setHolidayDates([])} disabled={holidayDates.length === 0}>
-            <X size={16} />
-            <span>Clear holidays</span>
-          </ToolbarButton>
+          <ToolbarButton title="Add custom holiday" variant="primary" icon={<Plus size={16} />} label="Add holiday" onClick={addHoliday} disabled={!holidayDate} />
+          <ToolbarButton title="Clear custom holidays" icon={<X size={16} />} label="Clear holidays" onClick={() => setHolidayDates([])} disabled={holidayDates.length === 0} />
         </div>
         {holidayDates.length ? (
           <div className="holiday-list" aria-label="Selected custom holidays">
@@ -128,14 +122,8 @@ function WorkdayTool() {
           <TextInputField label="Date value" value={result.deadline || '-'} readOnly />
         </div>
         <ActionBar>
-          <ToolbarButton title="Set start date to today" variant="primary" onClick={useToday}>
-            <CalendarDays size={16} />
-            <span>Today</span>
-          </ToolbarButton>
-          <ToolbarButton title="Load sample deadline calculation" onClick={useSample}>
-            <RotateCcw size={16} />
-            <span>Sample</span>
-          </ToolbarButton>
+          <ToolbarButton title="Set start date to today" variant="primary" icon={<CalendarDays size={16} />} label="Today" onClick={useToday} />
+          <ToolbarButton title="Load sample deadline calculation" icon={<RotateCcw size={16} />} label="Sample" onClick={useSample} />
           <CopyButton title="Copy deadline summary" value={summary} label="Copy summary" />
         </ActionBar>
       </ToolSection>

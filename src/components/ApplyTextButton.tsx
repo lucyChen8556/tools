@@ -16,12 +16,7 @@ function ApplyTextButton({
   title = 'Apply output to input',
   variant = 'secondary',
 }: ApplyTextButtonProps) {
-  return (
-    <ToolbarButton title={title} variant={variant} onClick={() => onApply(value)} disabled={!value}>
-      <Repeat2 size={16} />
-      <span>{label}</span>
-    </ToolbarButton>
-  );
+  return <ToolbarButton title={title} variant={variant} icon={<Repeat2 size={16} />} label={label} onClick={() => onApply(value)} disabled={!value} />;
 }
 
 export { ApplyTextButton };

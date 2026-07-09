@@ -75,21 +75,12 @@ function RandomizerTool() {
           <TextInputField label="Group count" value={groupCount} onChange={setGroupCount} compact />
         </div>
         <ActionBar>
-          <ToolbarButton title="Run randomizer" variant="primary" onClick={runRandomizer} disabled={items.length === 0}>
-            <Dices size={16} />
-            <span>Randomize</span>
-          </ToolbarButton>
+          <ToolbarButton title="Run randomizer" variant="primary" icon={<Dices size={16} />} label="Randomize" onClick={runRandomizer} disabled={items.length === 0} />
           <ToolbarButton title="Shuffle list" onClick={() => {
             setMode('shuffle');
             setOutput(formatNumberedList(shuffleItems(items)));
-          }} disabled={items.length === 0}>
-            <Shuffle size={16} />
-            <span>Quick shuffle</span>
-          </ToolbarButton>
-          <ToolbarButton title="Reset sample" onClick={resetSample}>
-            <RotateCcw size={16} />
-            <span>Sample</span>
-          </ToolbarButton>
+          }} icon={<Shuffle size={16} />} label="Quick shuffle" disabled={items.length === 0} />
+          <ToolbarButton title="Reset sample" icon={<RotateCcw size={16} />} label="Sample" onClick={resetSample} />
           <CopyButton title="Copy randomizer result" value={output} />
         </ActionBar>
       </ToolSection>

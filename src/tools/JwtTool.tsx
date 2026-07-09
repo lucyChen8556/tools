@@ -44,16 +44,10 @@ function JwtTool() {
       <TextAreaField label="JWT" value={token} onChange={setToken} spellCheck={false} />
 
       <ActionBar>
-        <ToolbarButton title="Decode JWT" variant="primary" onClick={runDecode}>
-          <KeyRound size={16} />
-          <span>Decode</span>
-        </ToolbarButton>
+        <ToolbarButton title="Decode JWT" variant="primary" icon={<KeyRound size={16} />} label="Decode" onClick={runDecode} />
         <CopyButton title="Copy header JSON" value={decoded?.headerText ?? ''} label="Header" disabled={!decoded} />
         <CopyButton title="Copy payload JSON" value={decoded?.payloadText ?? ''} label="Payload" disabled={!decoded} />
-        <ToolbarButton title="Clear JWT" disabled={!token && !decoded && !error} onClick={clearJwt}>
-          <Eraser size={16} />
-          <span>Clear</span>
-        </ToolbarButton>
+        <ToolbarButton title="Clear JWT" icon={<Eraser size={16} />} label="Clear" disabled={!token && !decoded && !error} onClick={clearJwt} />
       </ActionBar>
 
       <div className="notice warning">

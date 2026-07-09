@@ -60,10 +60,7 @@ function TextTool() {
         <CheckboxControl label="Dedupe trims key" checked={dedupeTrimKey} onChange={setDedupeTrimKey} />
       </div>
       <ActionBar>
-        <ToolbarButton title="Run selected transforms" variant="primary" onClick={run}>
-          <CaseSensitive size={16} />
-          <span>Run selected</span>
-        </ToolbarButton>
+        <ToolbarButton title="Run selected transforms" variant="primary" icon={<CaseSensitive size={16} />} label="Run selected" onClick={run} />
         <ApplyTextButton value={output} onApply={setInput} />
         <CopyButton title="Copy output" value={output} />
       </ActionBar>

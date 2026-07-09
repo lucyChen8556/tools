@@ -36,42 +36,15 @@ function ImageMaskActionBar({
 }: ImageMaskActionBarProps) {
   return (
     <ActionBar>
-      <ToolbarButton title="Fit image to canvas" onClick={fitImage} disabled={!activeImage || zoom === 1}>
-        <RotateCcw size={16} />
-        <span>Fit</span>
-      </ToolbarButton>
-      <ToolbarButton title="Undo last mask" onClick={undoMask} disabled={!activeImage?.masks.length}>
-        <Undo2 size={16} />
-        <span>Undo</span>
-      </ToolbarButton>
-      <ToolbarButton title="Clear masks from current image" onClick={clearMasks} disabled={!activeImage?.masks.length}>
-        <Trash2 size={16} />
-        <span>Clear masks</span>
-      </ToolbarButton>
-      <ToolbarButton title="Duplicate selected mask" onClick={duplicateSelectedMask} disabled={!selectedMask}>
-        <Copy size={16} />
-        <span>Duplicate</span>
-      </ToolbarButton>
-      <ToolbarButton title="Delete selected mask" onClick={deleteSelectedMask} disabled={selectedMaskIndex === null}>
-        <Trash2 size={16} />
-        <span>Delete selected</span>
-      </ToolbarButton>
-      <ToolbarButton title="Reset image mask tool to empty" onClick={resetImages} disabled={!images.length}>
-        <Trash2 size={16} />
-        <span>Clean all</span>
-      </ToolbarButton>
-      <ToolbarButton title="Apply current regions to all images" onClick={applyMasksToAll} disabled={!activeImage?.masks.length || images.length < 2}>
-        <ImagePlus size={16} />
-        <span>Apply to all</span>
-      </ToolbarButton>
-      <ToolbarButton title="Export current masked image" variant="primary" onClick={() => activeImage && exportImage(activeImage)} disabled={!activeImage}>
-        <Download size={16} />
-        <span>Export current</span>
-      </ToolbarButton>
-      <ToolbarButton title="Export all masked images" variant="primary" onClick={() => images.forEach((image, index) => window.setTimeout(() => exportImage(image), index * imageMaskInteractionConfig.exportBatchDelayMs))} disabled={!images.length}>
-        <Download size={16} />
-        <span>Export batch</span>
-      </ToolbarButton>
+      <ToolbarButton title="Fit image to canvas" icon={<RotateCcw size={16} />} label="Fit" onClick={fitImage} disabled={!activeImage || zoom === 1} />
+      <ToolbarButton title="Undo last mask" icon={<Undo2 size={16} />} label="Undo" onClick={undoMask} disabled={!activeImage?.masks.length} />
+      <ToolbarButton title="Clear masks from current image" icon={<Trash2 size={16} />} label="Clear masks" onClick={clearMasks} disabled={!activeImage?.masks.length} />
+      <ToolbarButton title="Duplicate selected mask" icon={<Copy size={16} />} label="Duplicate" onClick={duplicateSelectedMask} disabled={!selectedMask} />
+      <ToolbarButton title="Delete selected mask" icon={<Trash2 size={16} />} label="Delete selected" onClick={deleteSelectedMask} disabled={selectedMaskIndex === null} />
+      <ToolbarButton title="Reset image mask tool to empty" icon={<Trash2 size={16} />} label="Clean all" onClick={resetImages} disabled={!images.length} />
+      <ToolbarButton title="Apply current regions to all images" icon={<ImagePlus size={16} />} label="Apply to all" onClick={applyMasksToAll} disabled={!activeImage?.masks.length || images.length < 2} />
+      <ToolbarButton title="Export current masked image" variant="primary" icon={<Download size={16} />} label="Export current" onClick={() => activeImage && exportImage(activeImage)} disabled={!activeImage} />
+      <ToolbarButton title="Export all masked images" variant="primary" icon={<Download size={16} />} label="Export batch" onClick={() => images.forEach((image, index) => window.setTimeout(() => exportImage(image), index * imageMaskInteractionConfig.exportBatchDelayMs))} disabled={!images.length} />
     </ActionBar>
   );
 }

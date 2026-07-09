@@ -33,10 +33,7 @@ function EncodeTool() {
       <SplitTextAreas left={{ label: 'Input', value: input, onChange: setInput }} right={{ label: 'Output', value: output, onChange: setOutput }} />
       <ActionBar>
         {codecActions.map((action) => (
-          <ToolbarButton key={action.id} title={action.label} onClick={() => run(action.transform)}>
-            <Code2 size={16} />
-            <span>{action.label}</span>
-          </ToolbarButton>
+          <ToolbarButton key={action.id} title={action.label} icon={<Code2 size={16} />} label={action.label} onClick={() => run(action.transform)} />
         ))}
         <CopyButton title="Copy output" value={output} />
       </ActionBar>

@@ -147,14 +147,8 @@ function ExpenseTool() {
           />
           <MetricsGrid items={quickMetricsItems} />
           <ActionBar>
-            <ToolbarButton title="Use detailed total for quick split" onClick={() => setQuickTotal(result.total.toFixed(2))}>
-              <ReceiptText size={16} />
-              <span>Use detailed total</span>
-            </ToolbarButton>
-            <ToolbarButton title="Reset sample" onClick={resetSample}>
-              <RotateCcw size={16} />
-              <span>Sample</span>
-            </ToolbarButton>
+            <ToolbarButton title="Use detailed total for quick split" icon={<ReceiptText size={16} />} label="Use detailed total" onClick={() => setQuickTotal(result.total.toFixed(2))} />
+            <ToolbarButton title="Reset sample" icon={<RotateCcw size={16} />} label="Sample" onClick={resetSample} />
             <CopyButton title="Copy quick split" value={quickSummary} label="Copy quick split" />
           </ActionBar>
         </ToolSection>
@@ -175,14 +169,8 @@ function ExpenseTool() {
           <ToolSection title="People">
             <DataTable columns={participantColumns} rows={result.rows} getRowKey={(participant) => participant.id} />
             <ActionBar>
-              <ToolbarButton title="Add person" variant="primary" onClick={addParticipant}>
-                <Plus size={16} />
-                <span>Add person</span>
-              </ToolbarButton>
-              <ToolbarButton title="Reset sample" onClick={resetSample}>
-                <RotateCcw size={16} />
-                <span>Sample</span>
-              </ToolbarButton>
+              <ToolbarButton title="Add person" variant="primary" icon={<Plus size={16} />} label="Add person" onClick={addParticipant} />
+              <ToolbarButton title="Reset sample" icon={<RotateCcw size={16} />} label="Sample" onClick={resetSample} />
               <CopyButton title="Copy split summary" value={summary} label="Copy summary" />
             </ActionBar>
           </ToolSection>

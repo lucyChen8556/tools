@@ -116,22 +116,10 @@ function TextMaskPanel() {
       </div>
       {error ? <div className="notice error">{error}</div> : null}
       <ActionBar>
-        <ToolbarButton title="Mask selected sensitive values" variant="primary" onClick={mask} disabled={selectedRuleIds.length === 0 && !customEnabled}>
-          <ShieldCheck size={16} />
-          <span>Mask selected</span>
-        </ToolbarButton>
-        <ToolbarButton title="Select default mask rules" onClick={() => setSelectedRuleIds(defaultTextMaskRuleIds)}>
-          <Check size={16} />
-          <span>Defaults</span>
-        </ToolbarButton>
-        <ToolbarButton title="Reset sample" onClick={resetSample}>
-          <ShieldCheck size={16} />
-          <span>Sample</span>
-        </ToolbarButton>
-        <ToolbarButton title="Reset text mask tool to empty" onClick={cleanAll} disabled={!input && !output && totalMatches === 0}>
-          <Trash2 size={16} />
-          <span>Clean all</span>
-        </ToolbarButton>
+        <ToolbarButton title="Mask selected sensitive values" variant="primary" icon={<ShieldCheck size={16} />} label="Mask selected" onClick={mask} disabled={selectedRuleIds.length === 0 && !customEnabled} />
+        <ToolbarButton title="Select default mask rules" icon={<Check size={16} />} label="Defaults" onClick={() => setSelectedRuleIds(defaultTextMaskRuleIds)} />
+        <ToolbarButton title="Reset sample" icon={<ShieldCheck size={16} />} label="Sample" onClick={resetSample} />
+        <ToolbarButton title="Reset text mask tool to empty" icon={<Trash2 size={16} />} label="Clean all" onClick={cleanAll} disabled={!input && !output && totalMatches === 0} />
         <ApplyTextButton value={output} onApply={setInput} label="Apply output" />
         <CopyButton title="Copy masked output" value={output} />
       </ActionBar>

@@ -27,14 +27,8 @@ function SwatchInputSection({
     <ToolSection title="Swatch input">
       <TextAreaField label="Paste swatches" value={bulkInput} onChange={onBulkInputChange} spellCheck={false} />
       <ActionBar>
-        <ToolbarButton title="Parse swatches and analyze" variant="primary" onClick={onAnalyze}>
-          <Sparkles size={16} />
-          <span>Analyze</span>
-        </ToolbarButton>
-        <ToolbarButton title="Load sample swatches" onClick={onLoadSample}>
-          <RotateCcw size={16} />
-          <span>Sample</span>
-        </ToolbarButton>
+        <ToolbarButton title="Parse swatches and analyze" variant="primary" icon={<Sparkles size={16} />} label="Analyze" onClick={onAnalyze} />
+        <ToolbarButton title="Load sample swatches" icon={<RotateCcw size={16} />} label="Sample" onClick={onLoadSample} />
       </ActionBar>
       <p className="season-hint">{status}</p>
       <QuickPaletteGrid onSelect={onQuickPaletteSelect} />

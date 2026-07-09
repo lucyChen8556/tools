@@ -35,14 +35,8 @@ function PhotoExtractionSection({
       <p className="season-hint">{photoStatus}</p>
       <PhotoSwatchEditor swatches={photoSwatches} onChange={onUpdatePhotoGroup} />
       <ActionBar>
-        <ToolbarButton title="Use extracted photo swatches" variant="primary" disabled={loading || photoSwatches.length === 0} onClick={onApplyPhotoSwatches}>
-          <Sparkles size={16} />
-          <span>Use photo colors</span>
-        </ToolbarButton>
-        <ToolbarButton title="Clear photo" onClick={onClearPhoto}>
-          <Trash2 size={16} />
-          <span>Clear photo</span>
-        </ToolbarButton>
+        <ToolbarButton title="Use extracted photo swatches" variant="primary" icon={<Sparkles size={16} />} label="Use photo colors" disabled={loading || photoSwatches.length === 0} onClick={onApplyPhotoSwatches} />
+        <ToolbarButton title="Clear photo" icon={<Trash2 size={16} />} label="Clear photo" onClick={onClearPhoto} />
       </ActionBar>
     </ToolSection>
   );
