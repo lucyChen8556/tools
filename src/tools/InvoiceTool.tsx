@@ -1,14 +1,14 @@
 import { useMemo, useState } from 'react';
 import { ReceiptText, RotateCcw } from 'lucide-react';
-import { CopyButton } from '../components/CopyButton';
-import { SelectField } from '../components/SelectField';
-import { TextInputField } from '../components/TextInputField';
-import { ActionBar, MetricsGrid } from '../components/ToolLayout';
-import type { ToolMetric } from '../components/ToolLayout';
-import { ToolSection } from '../components/ToolSection';
-import { ToolbarButton } from '../components/ToolbarButton';
-import { invoiceRoundingOptions, type InvoiceRoundingMode } from '../config/options';
-import { formatMoney, formatNumber, readNumber } from '../utils/numberFormat';
+import { CopyButton } from '@/components/CopyButton';
+import { SelectField } from '@/components/SelectField';
+import { TextInputField } from '@/components/TextInputField';
+import { ActionBar, MetricsGrid } from '@/components/ToolLayout';
+import type { ToolMetric } from '@/components/ToolLayout';
+import { ToolSection } from '@/components/ToolSection';
+import { ToolbarButton } from '@/components/ToolbarButton';
+import { invoiceRoundingOptions, type InvoiceRoundingMode } from '@/config/options';
+import { formatMoney, formatNumber, readNumber } from '@/utils/numberFormat';
 import { calculateInvoice, formatSignedMoney, invoiceDefaults } from './invoice/invoiceUtils';
 
 function InvoiceTool() {

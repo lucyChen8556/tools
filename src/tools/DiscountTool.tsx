@@ -1,12 +1,12 @@
 import { useMemo, useState } from 'react';
 import { ReceiptText, RotateCcw } from 'lucide-react';
-import { CopyButton } from '../components/CopyButton';
-import { TextInputControls } from '../components/TextInputControls';
-import { ActionBar, MetricsGrid } from '../components/ToolLayout';
-import type { ToolMetric } from '../components/ToolLayout';
-import { ToolSection } from '../components/ToolSection';
-import { ToolbarButton } from '../components/ToolbarButton';
-import { formatMoney, formatNumber } from '../utils/numberFormat';
+import { CopyButton } from '@/components/CopyButton';
+import { TextInputControls } from '@/components/TextInputControls';
+import { ActionBar, MetricsGrid } from '@/components/ToolLayout';
+import type { ToolMetric } from '@/components/ToolLayout';
+import { ToolSection } from '@/components/ToolSection';
+import { ToolbarButton } from '@/components/ToolbarButton';
+import { formatMoney, formatNumber } from '@/utils/numberFormat';
 import { calculateDiscount, discountDefaults } from './discount/discountUtils';
 
 function DiscountTool() {

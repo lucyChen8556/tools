@@ -1,6 +1,6 @@
-import { CopyButton } from '../../../components/CopyButton';
-import { ActionBar } from '../../../components/ToolLayout';
-import { ToolSection } from '../../../components/ToolSection';
+import { CopyButton } from '@/components/CopyButton';
+import { ActionBar } from '@/components/ToolLayout';
+import { ToolSection } from '@/components/ToolSection';
 
 type StyleGuidanceSectionProps = {
   avoidance: string;

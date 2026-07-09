@@ -1,5 +1,5 @@
 import { Trash2 } from 'lucide-react';
-import { EmptyState } from '../../../components/EmptyState';
+import { EmptyState } from '@/components/EmptyState';
 import { groupMeta } from '../seasonColorData';
 import type { SeasonSwatch } from '../seasonColorTypes';
 

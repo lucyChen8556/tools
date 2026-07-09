@@ -1,5 +1,5 @@
-import type { InvoiceRoundingMode } from '../../config/options';
-import { formatMoney, readNumber } from '../../utils/numberFormat';
+import type { InvoiceRoundingMode } from '@/config/options';
+import { formatMoney, readNumber } from '@/utils/numberFormat';
 
 type InvoiceInput = {
   subtotal: string;

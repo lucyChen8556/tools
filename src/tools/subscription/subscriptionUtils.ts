@@ -1,4 +1,4 @@
-import { readNumber } from '../../utils/numberFormat';
+import { readNumber } from '@/utils/numberFormat';
 
 const billingOptions = [
   { label: 'Monthly', value: 'monthly' },

@@ -1,4 +1,4 @@
-import { EmptyState } from '../../components/EmptyState';
+import { EmptyState } from '@/components/EmptyState';
 import type { RegexRule } from './types';
 import { PatternBank } from './PatternBank';
 import { RegexReference } from './RegexReference';

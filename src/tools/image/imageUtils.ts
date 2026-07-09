@@ -1,4 +1,4 @@
-import type { OutputFormat } from '../../config/options';
+import type { OutputFormat } from '@/config/options';
 
 type ImageCompressionStats = {
   original: number;

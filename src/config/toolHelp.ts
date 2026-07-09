@@ -1,4 +1,4 @@
-import type { ToolId } from '../types';
+import type { ToolId } from '@/types';
 
 type ToolHelp = {
   overview: string;

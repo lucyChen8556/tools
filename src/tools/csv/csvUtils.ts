@@ -1,4 +1,4 @@
-import type { CsvDelimiterId } from '../../config/options';
+import type { CsvDelimiterId } from '@/config/options';
 
 const csvDefaults = {
   input: 'key,zhTW,enUS\nsave,儲存,Save\ncancel,取消,Cancel',

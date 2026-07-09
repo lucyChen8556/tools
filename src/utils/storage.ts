@@ -1,5 +1,5 @@
-import type { ToolId } from '../types';
-import { tools } from '../config/tools';
+import type { ToolId } from '@/types';
+import { tools } from '@/config/tools';
 
 export function readStoredToolId(key: string, fallback: ToolId): ToolId {
   const value = localStorage.getItem(key);

@@ -1,9 +1,9 @@
 import type { ReactNode } from 'react';
 import { ChevronDown, Info, Menu, Search, Shuffle, Star, StarOff, X } from 'lucide-react';
 import { useState } from 'react';
-import type { ToolId } from '../types';
-import { tools } from '../config/tools';
-import { toolHelp } from '../config/toolHelp';
+import type { ToolId } from '@/types';
+import { tools } from '@/config/tools';
+import { toolHelp } from '@/config/toolHelp';
 import { ToolHelpDialog } from './ToolHelpDialog';
 
 export function AppShell({

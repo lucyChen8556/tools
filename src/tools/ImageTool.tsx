@@ -1,20 +1,20 @@
 import { ChangeEvent, useMemo, useState } from 'react';
 import { Download, Eraser, ImageDown } from 'lucide-react';
-import { EmptyState } from '../components/EmptyState';
-import { Field } from '../components/Field';
-import { SelectField } from '../components/SelectField';
-import { TextInputField } from '../components/TextInputField';
-import { MetricsGrid } from '../components/ToolLayout';
-import type { ToolMetric } from '../components/ToolLayout';
-import { ToolSection } from '../components/ToolSection';
-import { ToolbarButton } from '../components/ToolbarButton';
+import { EmptyState } from '@/components/EmptyState';
+import { Field } from '@/components/Field';
+import { SelectField } from '@/components/SelectField';
+import { TextInputField } from '@/components/TextInputField';
+import { MetricsGrid } from '@/components/ToolLayout';
+import type { ToolMetric } from '@/components/ToolLayout';
+import { ToolSection } from '@/components/ToolSection';
+import { ToolbarButton } from '@/components/ToolbarButton';
 import {
   compressionPresetOptions,
   outputFormatOptions,
   type CompressionPreset,
   type OutputFormat,
-} from '../config/options';
-import { downloadBlob } from '../utils/file';
+} from '@/config/options';
+import { downloadBlob } from '@/utils/file';
 import { compressImagePreview, readImageFileAsDataUrl } from './image/imageUtils';
 
 function ImageTool() {

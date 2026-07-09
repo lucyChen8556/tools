@@ -1,4 +1,4 @@
-import { ToolSection } from '../../../components/ToolSection';
+import { ToolSection } from '@/components/ToolSection';
 import { seasonData } from '../seasonColorData';
 import type { SeasonAnalysis } from '../seasonColorTypes';
 

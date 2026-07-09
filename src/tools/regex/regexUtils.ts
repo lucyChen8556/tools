@@ -1,4 +1,4 @@
-import type { RegexCaptureGroup, RegexMatchResult } from '../../types';
+import type { RegexCaptureGroup, RegexMatchResult } from '@/types';
 
 export type RegexTokenKind =
   | 'literal'

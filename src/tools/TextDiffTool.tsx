@@ -1,8 +1,8 @@
 import { useMemo, useState } from 'react';
-import { CheckboxControl } from '../components/CheckboxControl';
-import { CopyButton } from '../components/CopyButton';
-import { ActionBar, MetricsGrid, SplitTextAreas } from '../components/ToolLayout';
-import type { ToolMetric } from '../components/ToolLayout';
+import { CheckboxControl } from '@/components/CheckboxControl';
+import { CopyButton } from '@/components/CopyButton';
+import { ActionBar, MetricsGrid, SplitTextAreas } from '@/components/ToolLayout';
+import type { ToolMetric } from '@/components/ToolLayout';
 import { diffLines, textDiffDefaults } from './textDiff/textDiffUtils';
 
 function TextDiffTool() {

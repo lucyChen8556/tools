@@ -1,10 +1,10 @@
 import { useMemo, useState } from 'react';
 import { Eraser, KeyRound, ShieldAlert } from 'lucide-react';
-import { CopyButton } from '../components/CopyButton';
-import { TextAreaField } from '../components/TextAreaField';
-import { ActionBar, MetricsGrid } from '../components/ToolLayout';
-import type { ToolMetric } from '../components/ToolLayout';
-import { ToolbarButton } from '../components/ToolbarButton';
+import { CopyButton } from '@/components/CopyButton';
+import { TextAreaField } from '@/components/TextAreaField';
+import { ActionBar, MetricsGrid } from '@/components/ToolLayout';
+import type { ToolMetric } from '@/components/ToolLayout';
+import { ToolbarButton } from '@/components/ToolbarButton';
 import { decodeJwt, getJwtAlgorithm, getJwtType, sampleJwt, type DecodedJwt } from './jwt/jwtUtils';
 
 function JwtTool() {

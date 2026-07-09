@@ -1,7 +1,7 @@
 import { Trash2 } from 'lucide-react';
-import { ActionBar } from '../../../components/ToolLayout';
-import { ToolSection } from '../../../components/ToolSection';
-import { ToolbarButton } from '../../../components/ToolbarButton';
+import { ActionBar } from '@/components/ToolLayout';
+import { ToolSection } from '@/components/ToolSection';
+import { ToolbarButton } from '@/components/ToolbarButton';
 import type { SeasonSwatch } from '../seasonColorTypes';
 import { SampleList } from './SampleList';
 

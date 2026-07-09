@@ -1,7 +1,7 @@
 import type { PointerEventHandler, RefObject, WheelEventHandler } from 'react';
-import { EmptyState } from '../../components/EmptyState';
-import { Field } from '../../components/Field';
-import { SegmentedTabs } from '../../components/SegmentedTabs';
+import { EmptyState } from '@/components/EmptyState';
+import { Field } from '@/components/Field';
+import { SegmentedTabs } from '@/components/SegmentedTabs';
 import { imageMaskCopy, imageMaskModeOptions, imageMaskStrengthConfig, imageMaskZoomConfig, type ImageMaskMode, type MaskImage } from './constants';
 
 type ImageMaskLayoutProps = {

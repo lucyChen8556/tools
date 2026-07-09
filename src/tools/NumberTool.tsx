@@ -1,11 +1,11 @@
 import { useMemo, useState } from 'react';
 import { RotateCcw } from 'lucide-react';
-import { CopyableRows } from '../components/CopyableRows';
-import { SelectField } from '../components/SelectField';
-import { TextInputField } from '../components/TextInputField';
-import { ActionBar, MetricsGrid } from '../components/ToolLayout';
-import type { ToolMetric } from '../components/ToolLayout';
-import { ToolbarButton } from '../components/ToolbarButton';
+import { CopyableRows } from '@/components/CopyableRows';
+import { SelectField } from '@/components/SelectField';
+import { TextInputField } from '@/components/TextInputField';
+import { ActionBar, MetricsGrid } from '@/components/ToolLayout';
+import type { ToolMetric } from '@/components/ToolLayout';
+import { ToolbarButton } from '@/components/ToolbarButton';
 import { baseOptions, buildNumberRows, numberDefaults, parseBigInt, type BaseMode } from './number/numberUtils';
 
 function NumberTool() {

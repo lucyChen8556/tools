@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
-import { EmptyState } from '../components/EmptyState';
-import { SegmentedTabs } from '../components/SegmentedTabs';
+import { EmptyState } from '@/components/EmptyState';
+import { SegmentedTabs } from '@/components/SegmentedTabs';
 import { CurrentSamplesSection } from './seasonColor/components/CurrentSamplesSection';
 import { ManualColorSection } from './seasonColor/components/ManualColorSection';
 import { PhotoExtractionSection } from './seasonColor/components/PhotoExtractionSection';

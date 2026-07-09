@@ -1,11 +1,11 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Fingerprint } from 'lucide-react';
-import { CopyableRows } from '../components/CopyableRows';
-import { CopyButton } from '../components/CopyButton';
-import { TextAreaField } from '../components/TextAreaField';
-import { ActionBar, MetricsGrid } from '../components/ToolLayout';
-import type { ToolMetric } from '../components/ToolLayout';
-import { ToolbarButton } from '../components/ToolbarButton';
+import { CopyableRows } from '@/components/CopyableRows';
+import { CopyButton } from '@/components/CopyButton';
+import { TextAreaField } from '@/components/TextAreaField';
+import { ActionBar, MetricsGrid } from '@/components/ToolLayout';
+import type { ToolMetric } from '@/components/ToolLayout';
+import { ToolbarButton } from '@/components/ToolbarButton';
 import { buildHashResults, hashAlgorithms, hashDefaults, type HashResult } from './hash/hashUtils';
 
 function HashTool() {

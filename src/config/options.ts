@@ -1,4 +1,4 @@
-import type { JsonMergeMode } from '../types';
+import type { JsonMergeMode } from '@/types';
 
 type SelectOption<T extends string = string> = {
   label: string;

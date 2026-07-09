@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { Code2 } from 'lucide-react';
-import { CopyButton } from '../components/CopyButton';
-import { ActionBar, SplitTextAreas } from '../components/ToolLayout';
-import { ToolbarButton } from '../components/ToolbarButton';
+import { CopyButton } from '@/components/CopyButton';
+import { ActionBar, SplitTextAreas } from '@/components/ToolLayout';
+import { ToolbarButton } from '@/components/ToolbarButton';
 import { decodeHtml, encodeDefaults, escapeHtml, fromBase64, toBase64 } from './encode/codecUtils';
 
 const codecActions = [

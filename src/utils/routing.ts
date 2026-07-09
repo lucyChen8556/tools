@@ -1,5 +1,5 @@
-import { tools } from '../config/tools';
-import type { ToolId } from '../types';
+import { tools } from '@/config/tools';
+import type { ToolId } from '@/types';
 
 function isToolId(value: string | null | undefined): value is ToolId {
   return tools.some((tool) => tool.id === value);

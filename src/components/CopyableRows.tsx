@@ -1,5 +1,5 @@
 import { Copy } from 'lucide-react';
-import { copyText } from '../utils/clipboard';
+import { copyText } from '@/utils/clipboard';
 import { ToolbarButton } from './ToolbarButton';
 
 type CopyableRow = {

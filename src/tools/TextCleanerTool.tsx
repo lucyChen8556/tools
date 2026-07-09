@@ -1,11 +1,11 @@
 import { useMemo, useState } from 'react';
 import { Check, Eraser } from 'lucide-react';
-import { ApplyTextButton } from '../components/ApplyTextButton';
-import { CheckboxControl } from '../components/CheckboxControl';
-import { CopyButton } from '../components/CopyButton';
-import { ActionBar, MetricsGrid, SplitTextAreas } from '../components/ToolLayout';
-import type { ToolMetric } from '../components/ToolLayout';
-import { ToolbarButton } from '../components/ToolbarButton';
+import { ApplyTextButton } from '@/components/ApplyTextButton';
+import { CheckboxControl } from '@/components/CheckboxControl';
+import { CopyButton } from '@/components/CopyButton';
+import { ActionBar, MetricsGrid, SplitTextAreas } from '@/components/ToolLayout';
+import type { ToolMetric } from '@/components/ToolLayout';
+import { ToolbarButton } from '@/components/ToolbarButton';
 import { cleanerActions, cleanText, defaultCleanerActions, normalizeLineEndings, textCleanerSample, type CleanerActionId } from './textCleaner/textCleanerUtils';
 
 function TextCleanerTool() {

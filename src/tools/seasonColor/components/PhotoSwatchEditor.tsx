@@ -1,4 +1,4 @@
-import { SelectField } from '../../../components/SelectField';
+import { SelectField } from '@/components/SelectField';
 import { groupMeta, photoEditableGroups } from '../seasonColorData';
 import type { ColorGroup, SeasonSwatch } from '../seasonColorTypes';
 

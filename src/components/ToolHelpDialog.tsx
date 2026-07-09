@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import type { ReactNode } from 'react';
 import { X } from 'lucide-react';
-import type { ToolHelp } from '../config/toolHelp';
+import type { ToolHelp } from '@/config/toolHelp';
 
 type ToolHelpDialogProps = {
   group: string;

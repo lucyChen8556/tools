@@ -1,7 +1,7 @@
 import { Plus } from 'lucide-react';
-import { TextInputField } from '../../../components/TextInputField';
-import { ToolSection } from '../../../components/ToolSection';
-import { ToolbarButton } from '../../../components/ToolbarButton';
+import { TextInputField } from '@/components/TextInputField';
+import { ToolSection } from '@/components/ToolSection';
+import { ToolbarButton } from '@/components/ToolbarButton';
 import { seasonColorDefaults } from '../seasonColorData';
 import { normalizeHex } from '../seasonColorUtils';
 

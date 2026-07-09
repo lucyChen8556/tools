@@ -1,9 +1,9 @@
 import { useMemo } from 'react';
-import { EmptyState } from '../../components/EmptyState';
-import { TextAreaField } from '../../components/TextAreaField';
-import { MetricsGrid } from '../../components/ToolLayout';
-import type { ToolMetric } from '../../components/ToolLayout';
-import type { RegexMatchResult } from '../../types';
+import { EmptyState } from '@/components/EmptyState';
+import { TextAreaField } from '@/components/TextAreaField';
+import { MetricsGrid } from '@/components/ToolLayout';
+import type { ToolMetric } from '@/components/ToolLayout';
+import type { RegexMatchResult } from '@/types';
 import type { HighlightSegment } from './types';
 
 type TestColumnProps = {

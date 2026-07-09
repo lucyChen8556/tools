@@ -1,13 +1,13 @@
 import { useMemo, useState } from 'react';
 import { Dices, RotateCcw, Shuffle } from 'lucide-react';
-import { CopyButton } from '../components/CopyButton';
-import { SelectField } from '../components/SelectField';
-import { TextInputField } from '../components/TextInputField';
-import { ActionBar, MetricsGrid, SplitTextAreas } from '../components/ToolLayout';
-import type { ToolMetric } from '../components/ToolLayout';
-import { ToolSection } from '../components/ToolSection';
-import { ToolbarButton } from '../components/ToolbarButton';
-import { readNumber } from '../utils/numberFormat';
+import { CopyButton } from '@/components/CopyButton';
+import { SelectField } from '@/components/SelectField';
+import { TextInputField } from '@/components/TextInputField';
+import { ActionBar, MetricsGrid, SplitTextAreas } from '@/components/ToolLayout';
+import type { ToolMetric } from '@/components/ToolLayout';
+import { ToolSection } from '@/components/ToolSection';
+import { ToolbarButton } from '@/components/ToolbarButton';
+import { readNumber } from '@/utils/numberFormat';
 import {
   formatGroups,
   formatNumberedList,

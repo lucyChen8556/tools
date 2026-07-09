@@ -1,12 +1,12 @@
 import { useMemo, useState } from 'react';
 import { Ruler } from 'lucide-react';
-import { CopyableRows } from '../components/CopyableRows';
-import { SelectField } from '../components/SelectField';
-import { TextInputField } from '../components/TextInputField';
-import { TextInputControls } from '../components/TextInputControls';
-import { MetricsGrid } from '../components/ToolLayout';
-import type { ToolMetric } from '../components/ToolLayout';
-import { ToolSection } from '../components/ToolSection';
+import { CopyableRows } from '@/components/CopyableRows';
+import { SelectField } from '@/components/SelectField';
+import { TextInputField } from '@/components/TextInputField';
+import { TextInputControls } from '@/components/TextInputControls';
+import { MetricsGrid } from '@/components/ToolLayout';
+import type { ToolMetric } from '@/components/ToolLayout';
+import { ToolSection } from '@/components/ToolSection';
 import {
   buildClamp,
   buildCssUnitRows,

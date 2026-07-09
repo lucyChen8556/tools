@@ -1,4 +1,4 @@
-import { ToolSection } from '../../../components/ToolSection';
+import { ToolSection } from '@/components/ToolSection';
 import type { getSeasonView } from '../seasonColorUtils';
 import type { SeasonAnalysis, SeasonKey } from '../seasonColorTypes';
 import { CategorizedPalette } from './CategorizedPalette';

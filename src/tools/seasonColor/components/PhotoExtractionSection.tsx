@@ -1,7 +1,7 @@
 import { ImageUp, Sparkles, Trash2 } from 'lucide-react';
-import { ActionBar } from '../../../components/ToolLayout';
-import { ToolSection } from '../../../components/ToolSection';
-import { ToolbarButton } from '../../../components/ToolbarButton';
+import { ActionBar } from '@/components/ToolLayout';
+import { ToolSection } from '@/components/ToolSection';
+import { ToolbarButton } from '@/components/ToolbarButton';
 import type { ColorGroup, SeasonSwatch } from '../seasonColorTypes';
 import { PhotoSwatchEditor } from './PhotoSwatchEditor';
 

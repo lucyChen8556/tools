@@ -1,14 +1,14 @@
 import { useMemo, useState } from 'react';
 import { CalendarDays, Plus, RotateCcw, X } from 'lucide-react';
-import { CheckboxControl } from '../components/CheckboxControl';
-import { CopyButton } from '../components/CopyButton';
-import { EmptyState } from '../components/EmptyState';
-import { SelectField } from '../components/SelectField';
-import { TextInputField } from '../components/TextInputField';
-import { ActionBar, MetricsGrid } from '../components/ToolLayout';
-import type { ToolMetric } from '../components/ToolLayout';
-import { ToolSection } from '../components/ToolSection';
-import { ToolbarButton } from '../components/ToolbarButton';
+import { CheckboxControl } from '@/components/CheckboxControl';
+import { CopyButton } from '@/components/CopyButton';
+import { EmptyState } from '@/components/EmptyState';
+import { SelectField } from '@/components/SelectField';
+import { TextInputField } from '@/components/TextInputField';
+import { ActionBar, MetricsGrid } from '@/components/ToolLayout';
+import type { ToolMetric } from '@/components/ToolLayout';
+import { ToolSection } from '@/components/ToolSection';
+import { ToolbarButton } from '@/components/ToolbarButton';
 import {
   addHolidayDate,
   calculateWorkdayDeadline,

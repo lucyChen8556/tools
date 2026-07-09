@@ -1,14 +1,14 @@
 import { useMemo, useState } from 'react';
 import { Repeat2 } from 'lucide-react';
-import { CopyButton } from '../components/CopyButton';
-import { EmptyState } from '../components/EmptyState';
-import { SegmentedTabs } from '../components/SegmentedTabs';
-import { TextAreaField } from '../components/TextAreaField';
-import { TextInputField } from '../components/TextInputField';
-import { ActionBar, MetricsGrid } from '../components/ToolLayout';
-import type { ToolMetric } from '../components/ToolLayout';
-import { ToolSection } from '../components/ToolSection';
-import { ToolbarButton } from '../components/ToolbarButton';
+import { CopyButton } from '@/components/CopyButton';
+import { EmptyState } from '@/components/EmptyState';
+import { SegmentedTabs } from '@/components/SegmentedTabs';
+import { TextAreaField } from '@/components/TextAreaField';
+import { TextInputField } from '@/components/TextInputField';
+import { ActionBar, MetricsGrid } from '@/components/ToolLayout';
+import type { ToolMetric } from '@/components/ToolLayout';
+import { ToolSection } from '@/components/ToolSection';
+import { ToolbarButton } from '@/components/ToolbarButton';
 import {
   colorDefaults,
   colorToolTabs,

@@ -1,13 +1,13 @@
 import { useMemo, useState } from 'react';
 import { CaseSensitive } from 'lucide-react';
-import { ApplyTextButton } from '../components/ApplyTextButton';
-import { CheckboxControl } from '../components/CheckboxControl';
-import { CopyButton } from '../components/CopyButton';
-import { SelectField } from '../components/SelectField';
-import { ActionBar, MetricsGrid, SplitTextAreas } from '../components/ToolLayout';
-import type { ToolMetric } from '../components/ToolLayout';
-import { ToolbarButton } from '../components/ToolbarButton';
-import { textCaseOptions, type TextCaseMode } from '../config/options';
+import { ApplyTextButton } from '@/components/ApplyTextButton';
+import { CheckboxControl } from '@/components/CheckboxControl';
+import { CopyButton } from '@/components/CopyButton';
+import { SelectField } from '@/components/SelectField';
+import { ActionBar, MetricsGrid, SplitTextAreas } from '@/components/ToolLayout';
+import type { ToolMetric } from '@/components/ToolLayout';
+import { ToolbarButton } from '@/components/ToolbarButton';
+import { textCaseOptions, type TextCaseMode } from '@/config/options';
 import { countDuplicateLines, runTextTransforms, textProcessorDefaults, textTransforms, type TextTransformId } from './textProcessor/textProcessorUtils';
 
 function TextTool() {

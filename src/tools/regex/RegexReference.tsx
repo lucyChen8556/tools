@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { ChevronDown, Search } from 'lucide-react';
-import { EmptyState } from '../../components/EmptyState';
+import { EmptyState } from '@/components/EmptyState';
 import { regexReferenceGroups } from './reference';
 
 type RegexReferenceProps = {

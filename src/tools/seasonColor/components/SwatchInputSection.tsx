@@ -1,8 +1,8 @@
 import { RotateCcw, Sparkles } from 'lucide-react';
-import { ActionBar } from '../../../components/ToolLayout';
-import { ToolSection } from '../../../components/ToolSection';
-import { ToolbarButton } from '../../../components/ToolbarButton';
-import { TextAreaField } from '../../../components/TextAreaField';
+import { ActionBar } from '@/components/ToolLayout';
+import { ToolSection } from '@/components/ToolSection';
+import { ToolbarButton } from '@/components/ToolbarButton';
+import { TextAreaField } from '@/components/TextAreaField';
 import type { SeasonKey } from '../seasonColorTypes';
 import { QuickPaletteGrid } from './QuickPaletteGrid';
 

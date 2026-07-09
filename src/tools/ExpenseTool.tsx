@@ -1,15 +1,15 @@
 import { useMemo, useState } from 'react';
 import { Plus, ReceiptText, RotateCcw, Trash2 } from 'lucide-react';
-import { CopyButton } from '../components/CopyButton';
-import { DataTable } from '../components/DataTable';
-import type { DataTableColumn } from '../components/DataTable';
-import { SegmentedTabs } from '../components/SegmentedTabs';
-import { TextInputControls } from '../components/TextInputControls';
-import { ActionBar, MetricsGrid } from '../components/ToolLayout';
-import type { ToolMetric } from '../components/ToolLayout';
-import { ToolSection } from '../components/ToolSection';
-import { ToolbarButton } from '../components/ToolbarButton';
-import { formatMoney, readNumber } from '../utils/numberFormat';
+import { CopyButton } from '@/components/CopyButton';
+import { DataTable } from '@/components/DataTable';
+import type { DataTableColumn } from '@/components/DataTable';
+import { SegmentedTabs } from '@/components/SegmentedTabs';
+import { TextInputControls } from '@/components/TextInputControls';
+import { ActionBar, MetricsGrid } from '@/components/ToolLayout';
+import type { ToolMetric } from '@/components/ToolLayout';
+import { ToolSection } from '@/components/ToolSection';
+import { ToolbarButton } from '@/components/ToolbarButton';
+import { formatMoney, readNumber } from '@/utils/numberFormat';
 import {
   calculateDetailedSplit,
   calculateQuickSplit,

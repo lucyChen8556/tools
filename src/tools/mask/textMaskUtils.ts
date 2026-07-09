@@ -1,4 +1,4 @@
-import type { MaskMode } from '../../config/options';
+import type { MaskMode } from '@/config/options';
 import { textMaskRules, type TextMaskRule, type TextMaskRuleId, type TextMaskStats } from './constants';
 
 function createEmptyStats() {

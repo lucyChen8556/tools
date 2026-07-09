@@ -1,4 +1,4 @@
-import type { TextCaseMode } from '../../config/options';
+import type { TextCaseMode } from '@/config/options';
 
 type TextTransformId = 'trim' | 'sort' | 'dedupe';
 

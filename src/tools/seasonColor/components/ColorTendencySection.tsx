@@ -1,4 +1,4 @@
-import { ToolSection } from '../../../components/ToolSection';
+import { ToolSection } from '@/components/ToolSection';
 import type { getSeasonView } from '../seasonColorUtils';
 
 type SeasonView = ReturnType<typeof getSeasonView>;

@@ -1,6 +1,6 @@
 import { Copy, Download, ImagePlus, RotateCcw, Trash2, Undo2 } from 'lucide-react';
-import { ActionBar } from '../../components/ToolLayout';
-import { ToolbarButton } from '../../components/ToolbarButton';
+import { ActionBar } from '@/components/ToolLayout';
+import { ToolbarButton } from '@/components/ToolbarButton';
 import { imageMaskInteractionConfig, type ImageMask, type MaskImage } from './constants';
 
 type ImageMaskActionBarProps = {

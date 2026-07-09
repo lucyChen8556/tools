@@ -23,7 +23,7 @@ import {
   Table2,
   Type,
 } from 'lucide-react';
-import type { ToolId } from '../types';
+import type { ToolId } from '@/types';
 
 export const tools: Array<{
   id: ToolId;

@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
-import { AppShell } from './components/AppShell';
-import { getToolContent } from './config/toolContent';
-import { starterFavorites } from './config/tools';
-import type { ToolId } from './types';
-import { readStoredToolId, readStoredToolList, writeStorage } from './utils/storage';
-import { readToolIdFromLocation, writeToolRoute } from './utils/routing';
+import { AppShell } from '@/components/AppShell';
+import { getToolContent } from '@/config/toolContent';
+import { starterFavorites } from '@/config/tools';
+import type { ToolId } from '@/types';
+import { readStoredToolId, readStoredToolList, writeStorage } from '@/utils/storage';
+import { readToolIdFromLocation, writeToolRoute } from '@/utils/routing';
 
 export function App() {
   const [activeTool, setActiveToolState] = useState<ToolId>(() => readToolIdFromLocation(window.location) ?? readStoredToolId('tools-hub.active', 'json'));

@@ -1,4 +1,4 @@
-import type { JsonValue } from '../../types';
+import type { JsonValue } from '@/types';
 
 export type JwtClaimInfo = {
   label: string;

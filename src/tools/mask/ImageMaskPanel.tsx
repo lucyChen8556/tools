@@ -1,8 +1,8 @@
 import { useMemo, useState } from 'react';
 import type { DragEvent } from 'react';
 import { ImagePlus } from 'lucide-react';
-import { MetricsGrid } from '../../components/ToolLayout';
-import type { ToolMetric } from '../../components/ToolLayout';
+import { MetricsGrid } from '@/components/ToolLayout';
+import type { ToolMetric } from '@/components/ToolLayout';
 import { ImageMaskActionBar } from './ImageMaskActionBar';
 import { ImageMaskLayout } from './ImageMaskLayout';
 import { imageMaskCopy } from './constants';

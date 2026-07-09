@@ -1,4 +1,4 @@
-import type { DiffOp } from '../../types';
+import type { DiffOp } from '@/types';
 
 const textDiffDefaults = {
   oldText: 'Release note: Fixed login timeout.\nEmail title: Welcome back',

@@ -1,10 +1,10 @@
 import { useMemo, useState } from 'react';
-import { CopyButton } from '../components/CopyButton';
-import { DataTable } from '../components/DataTable';
-import type { DataTableColumn } from '../components/DataTable';
-import { SelectField } from '../components/SelectField';
-import { SplitTextAreas } from '../components/ToolLayout';
-import { csvDelimiterOptions, type CsvDelimiterId } from '../config/options';
+import { CopyButton } from '@/components/CopyButton';
+import { DataTable } from '@/components/DataTable';
+import type { DataTableColumn } from '@/components/DataTable';
+import { SelectField } from '@/components/SelectField';
+import { SplitTextAreas } from '@/components/ToolLayout';
+import { csvDelimiterOptions, type CsvDelimiterId } from '@/config/options';
 import { csvDefaults, csvRowsToObjects, parseCsv } from './csv/csvUtils';
 
 function CsvTool() {

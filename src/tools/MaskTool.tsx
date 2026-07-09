@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { SegmentedTabs } from '../components/SegmentedTabs';
+import { SegmentedTabs } from '@/components/SegmentedTabs';
 import { ImageMaskPanel } from './mask/ImageMaskPanel';
 import { TextMaskPanel } from './mask/TextMaskPanel';
 import { maskToolTabs, type MaskToolTab } from './mask/constants';

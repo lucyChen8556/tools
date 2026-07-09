@@ -1,4 +1,4 @@
-import type { JsonDiff, JsonMergeMode, JsonValue } from '../../types';
+import type { JsonDiff, JsonMergeMode, JsonValue } from '@/types';
 
 export function cleanJsonInput(input: string) {
   return input

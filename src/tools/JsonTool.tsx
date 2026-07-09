@@ -1,15 +1,15 @@
 import { useMemo, useState } from 'react';
 import { ArrowDownUp, FileJson, Repeat2 } from 'lucide-react';
-import { CopyButton } from '../components/CopyButton';
-import { EmptyState } from '../components/EmptyState';
-import { SegmentedTabs } from '../components/SegmentedTabs';
-import { SelectField } from '../components/SelectField';
-import { TextAreaField } from '../components/TextAreaField';
-import { ActionBar, MetricsGrid, SplitTextAreas } from '../components/ToolLayout';
-import type { ToolMetric } from '../components/ToolLayout';
-import { ToolbarButton } from '../components/ToolbarButton';
-import { jsonMergeModeOptions } from '../config/options';
-import type { JsonDiff, JsonMergeMode } from '../types';
+import { CopyButton } from '@/components/CopyButton';
+import { EmptyState } from '@/components/EmptyState';
+import { SegmentedTabs } from '@/components/SegmentedTabs';
+import { SelectField } from '@/components/SelectField';
+import { TextAreaField } from '@/components/TextAreaField';
+import { ActionBar, MetricsGrid, SplitTextAreas } from '@/components/ToolLayout';
+import type { ToolMetric } from '@/components/ToolLayout';
+import { ToolbarButton } from '@/components/ToolbarButton';
+import { jsonMergeModeOptions } from '@/config/options';
+import type { JsonDiff, JsonMergeMode } from '@/types';
 import { formatTargetOptions, jsonModeOptions, sampleLeftJson, sampleRightJson, type JsonFormatTarget, type JsonToolMode } from './json/constants';
 import { compactJson, diffJson, formatJson, mergeJsonByDiff, parseJson, pathLabel, sortJson } from './json/jsonUtils';
 

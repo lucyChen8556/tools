@@ -1,13 +1,13 @@
 import { useEffect, useMemo, useState } from 'react';
 import { ArrowDownAZ, Check, Plus, Trash2 } from 'lucide-react';
-import { CopyButton } from '../components/CopyButton';
-import { DataTable } from '../components/DataTable';
-import type { DataTableColumn } from '../components/DataTable';
-import { TextInputField } from '../components/TextInputField';
-import { ActionBar, MetricsGrid } from '../components/ToolLayout';
-import type { ToolMetric } from '../components/ToolLayout';
-import { ToolSection } from '../components/ToolSection';
-import { ToolbarButton } from '../components/ToolbarButton';
+import { CopyButton } from '@/components/CopyButton';
+import { DataTable } from '@/components/DataTable';
+import type { DataTableColumn } from '@/components/DataTable';
+import { TextInputField } from '@/components/TextInputField';
+import { ActionBar, MetricsGrid } from '@/components/ToolLayout';
+import type { ToolMetric } from '@/components/ToolLayout';
+import { ToolSection } from '@/components/ToolSection';
+import { ToolbarButton } from '@/components/ToolbarButton';
 import { buildUrl, parseUrl, removeEmptyQueryRows, rowsFromUrl, sortQueryRows, urlDefaults, type QueryRow } from './url/urlUtils';
 
 function UrlTool() {
