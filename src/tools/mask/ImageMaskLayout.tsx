@@ -1,4 +1,5 @@
 import type { PointerEventHandler, RefObject, WheelEventHandler } from 'react';
+import { EmptyState } from '../../components/EmptyState';
 import { Field } from '../../components/Field';
 import { SegmentedTabs } from '../../components/SegmentedTabs';
 import { imageMaskCopy, imageMaskModeOptions, imageMaskStrengthConfig, imageMaskZoomConfig, type ImageMaskMode, type MaskImage } from './constants';
@@ -55,7 +56,7 @@ function ImageMaskLayout({
           <span>{images.length} images</span>
         </div>
         {images.length === 0 ? (
-          <div className="empty-state compact">{imageMaskCopy.noImages}</div>
+          <EmptyState compact>{imageMaskCopy.noImages}</EmptyState>
         ) : (
           images.map((image) => (
             <button className={`image-mask-item ${image.id === activeId ? 'active' : ''}`} key={image.id} type="button" onClick={() => selectImage(image)}>
@@ -74,7 +75,7 @@ function ImageMaskLayout({
               <span>{activeImage.masks.length} regions</span>
             </div>
             {activeImage.masks.length === 0 ? (
-              <div className="empty-state compact">{imageMaskCopy.noRegions}</div>
+              <EmptyState compact>{imageMaskCopy.noRegions}</EmptyState>
             ) : (
               activeImage.masks.map((mask, index) => (
                 <button className={`image-mask-region ${selectedMaskIndex === index ? 'active' : ''}`} key={`${mask.x}-${mask.y}-${index}`} type="button" onClick={() => selectMask(index)}>
@@ -108,10 +109,7 @@ function ImageMaskLayout({
 
         <div className={`image-mask-canvas-shell ${activeImage && zoom > 1 ? 'zoomed' : ''}`} ref={shellRef} onWheel={handleWheel}>
           {!activeImage && (
-            <div className="empty-state">
-              <strong>{imageMaskCopy.emptyTitle}</strong>
-              <span>{imageMaskCopy.emptyDescription}</span>
-            </div>
+            <EmptyState title={imageMaskCopy.emptyTitle} description={imageMaskCopy.emptyDescription} />
           )}
           <canvas
             aria-label="Image masking canvas"

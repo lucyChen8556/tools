@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { ArrowDownUp, FileJson, Repeat2 } from 'lucide-react';
 import { CopyButton } from '../components/CopyButton';
+import { EmptyState } from '../components/EmptyState';
 import { SegmentedTabs } from '../components/SegmentedTabs';
 import { SelectField } from '../components/SelectField';
 import { TextAreaField } from '../components/TextAreaField';
@@ -120,7 +121,7 @@ function JsonTool() {
           <MetricsGrid items={compareMetricsItems} />
           <div className="diff-list">
             {compareState.diffs.length === 0 ? (
-              <div className="empty-state">No differences</div>
+              <EmptyState>No differences</EmptyState>
             ) : (
               compareState.diffs.slice(0, 80).map((diff, index) => (
                 <div className={`diff-row ${diff.type}`} key={`${pathLabel(diff.path)}-${index}`}>

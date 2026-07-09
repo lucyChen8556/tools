@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { EmptyState } from '../components/EmptyState';
 import { SegmentedTabs } from '../components/SegmentedTabs';
 import { CurrentSamplesSection } from './seasonColor/components/CurrentSamplesSection';
 import { ManualColorSection } from './seasonColor/components/ManualColorSection';
@@ -142,7 +143,7 @@ function SeasonColorTool() {
               view={view}
             />
           ) : (
-            <div className="empty-state">Analyze swatches or choose a quick sample to generate your season palette.</div>
+            <EmptyState>Analyze swatches or choose a quick sample to generate your season palette.</EmptyState>
           )}
         </div>
       </div>

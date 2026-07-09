@@ -1,3 +1,4 @@
+import { EmptyState } from '../../components/EmptyState';
 import type { RegexRule } from './types';
 import { PatternBank } from './PatternBank';
 import { RegexReference } from './RegexReference';
@@ -65,7 +66,7 @@ function AnalysisColumn({
         </div>
         <div className="regex-explanation-list">
           {rules.length === 0 ? (
-            <div className="empty-state">Enter a pattern to see rule explanations</div>
+            <EmptyState>Enter a pattern to see rule explanations</EmptyState>
           ) : (
             rules.map((rule, index) => (
               <button

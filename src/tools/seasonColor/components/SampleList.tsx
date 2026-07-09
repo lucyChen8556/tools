@@ -1,4 +1,5 @@
 import { Trash2 } from 'lucide-react';
+import { EmptyState } from '../../../components/EmptyState';
 import { groupMeta } from '../seasonColorData';
 import type { SeasonSwatch } from '../seasonColorTypes';
 
@@ -8,7 +9,7 @@ type SampleListProps = {
 };
 
 function SampleList({ swatches, onRemove }: SampleListProps) {
-  if (swatches.length === 0) return <div className="empty-state compact">No colors yet</div>;
+  if (swatches.length === 0) return <EmptyState compact>No colors yet</EmptyState>;
 
   return (
     <div className="season-sample-list">

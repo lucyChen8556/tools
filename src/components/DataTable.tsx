@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { EmptyState } from './EmptyState';
 
 type DataTableColumn<Row> = {
   header: ReactNode;
@@ -29,7 +30,9 @@ function DataTable<Row>({ columns, rows, emptyMessage = 'No rows', getRowKey }: 
         <tbody>
           {rows.length === 0 ? (
             <tr>
-              <td colSpan={Math.max(columns.length, 1)}>{emptyMessage}</td>
+              <td colSpan={Math.max(columns.length, 1)}>
+                <EmptyState compact>{emptyMessage}</EmptyState>
+              </td>
             </tr>
           ) : (
             rows.map((row, rowIndex) => (

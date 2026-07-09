@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { EmptyState } from '../../components/EmptyState';
 import { TextAreaField } from '../../components/TextAreaField';
 import { MetricsGrid } from '../../components/ToolLayout';
 import type { ToolMetric } from '../../components/ToolLayout';
@@ -47,7 +48,7 @@ function TestColumn({ error, flags, hasPattern, highlightedSample, matches, rule
             <span>{matches.length}</span>
           </div>
           {matches.length === 0 ? (
-            <div className="empty-state">No matches</div>
+            <EmptyState>No matches</EmptyState>
           ) : (
             matches.map((match, index) => (
               <div className="match-row" key={`${match.index}-${index}`}>

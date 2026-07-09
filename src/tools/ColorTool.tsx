@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { Repeat2 } from 'lucide-react';
 import { CopyButton } from '../components/CopyButton';
+import { EmptyState } from '../components/EmptyState';
 import { SegmentedTabs } from '../components/SegmentedTabs';
 import { TextAreaField } from '../components/TextAreaField';
 import { TextInputField } from '../components/TextInputField';
@@ -78,7 +79,7 @@ function ColorTool() {
           <TextAreaField label="Colors" value={paletteInput} onChange={setPaletteInput} spellCheck={false} />
           <div className="palette-grid" aria-label="Generated color swatches">
             {palette.colors.length === 0 ? (
-              <div className="empty-state compact">No valid colors found</div>
+              <EmptyState compact>No valid colors found</EmptyState>
             ) : (
               palette.colors.map((paletteColor) => (
                 <button

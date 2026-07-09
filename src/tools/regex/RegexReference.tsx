@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { ChevronDown, Search } from 'lucide-react';
+import { EmptyState } from '../../components/EmptyState';
 import { regexReferenceGroups } from './reference';
 
 type RegexReferenceProps = {
@@ -44,7 +45,7 @@ function RegexReference({ open, setOpen }: RegexReferenceProps) {
               />
             </label>
             {filteredGroups.length === 0 ? (
-              <div className="empty-state">No reference items found</div>
+              <EmptyState>No reference items found</EmptyState>
             ) : (
               filteredGroups.map((group) => (
                 <section className="regex-reference-group" key={group.id}>

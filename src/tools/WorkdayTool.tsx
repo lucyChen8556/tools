@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { CalendarDays, Plus, RotateCcw, X } from 'lucide-react';
 import { CheckboxControl } from '../components/CheckboxControl';
 import { CopyButton } from '../components/CopyButton';
+import { EmptyState } from '../components/EmptyState';
 import { SelectField } from '../components/SelectField';
 import { TextInputField } from '../components/TextInputField';
 import { ActionBar, MetricsGrid } from '../components/ToolLayout';
@@ -113,7 +114,7 @@ function WorkdayTool() {
             ))}
           </div>
         ) : (
-          <div className="empty-state compact">No custom holidays selected</div>
+          <EmptyState compact>No custom holidays selected</EmptyState>
         )}
         {result.invalidHolidays.length ? <div className="notice error">{`Invalid holidays: ${result.invalidHolidays.join(', ')}`}</div> : null}
       </ToolSection>

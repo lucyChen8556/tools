@@ -1,5 +1,6 @@
 import { ChangeEvent, useMemo, useState } from 'react';
 import { Download, Eraser, ImageDown } from 'lucide-react';
+import { EmptyState } from '../components/EmptyState';
 import { Field } from '../components/Field';
 import { SelectField } from '../components/SelectField';
 import { TextInputField } from '../components/TextInputField';
@@ -203,8 +204,8 @@ function ImageTool() {
 
       <ToolSection title="Preview">
         <div className="image-preview-grid">
-          <div>{preview ? <img src={preview} alt="Original preview" /> : <div className="empty-state">Original</div>}</div>
-          <div>{resultUrl ? <img src={resultUrl} alt="Compressed preview" /> : <div className="empty-state">Compressed</div>}</div>
+          <div>{preview ? <img src={preview} alt="Original preview" /> : <EmptyState>Original</EmptyState>}</div>
+          <div>{resultUrl ? <img src={resultUrl} alt="Compressed preview" /> : <EmptyState>Compressed</EmptyState>}</div>
         </div>
       </ToolSection>
     </section>
