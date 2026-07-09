@@ -6,11 +6,15 @@ import { maskToolTabs, type MaskToolTab } from './mask/constants';
 
 function MaskTool() {
   const [tab, setTab] = useState<MaskToolTab>('text');
+  const tabContent = {
+    text: <TextMaskPanel />,
+    image: <ImageMaskPanel />,
+  };
 
   return (
     <section className="tool-surface">
       <SegmentedTabs ariaLabel="Mask tool mode" options={maskToolTabs} value={tab} onChange={setTab} />
-      {tab === 'text' ? <TextMaskPanel /> : <ImageMaskPanel />}
+      {tabContent[tab]}
     </section>
   );
 }

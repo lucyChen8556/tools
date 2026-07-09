@@ -3,9 +3,8 @@ import { EmptyState } from '@/components/EmptyState';
 import { SegmentedTabs } from '@/components/SegmentedTabs';
 import { CurrentSamplesSection } from './seasonColor/components/CurrentSamplesSection';
 import { ManualColorSection } from './seasonColor/components/ManualColorSection';
-import { PhotoExtractionSection } from './seasonColor/components/PhotoExtractionSection';
 import { SeasonResultContent } from './seasonColor/components/SeasonResultContent';
-import { SwatchInputSection } from './seasonColor/components/SwatchInputSection';
+import { SeasonSourceInputSection } from './seasonColor/components/SeasonSourceInputSection';
 import { quickPalettes, seasonColorDefaults, seasonData } from './seasonColor/seasonColorData';
 import {
   analyzeSwatches,
@@ -105,27 +104,16 @@ function SeasonColorTool() {
 
       <div className="season-layout">
         <div className="season-input-column">
-          {sourceMode === 'swatches' ? (
-            <SwatchInputSection
-              bulkInput={bulkInput}
-              onAnalyze={applyBulkInput}
-              onBulkInputChange={setBulkInput}
-              onLoadSample={loadExample}
-              onQuickPaletteSelect={loadQuickPalette}
-              status={status}
-            />
-          ) : (
-            <PhotoExtractionSection
-              loading={photo.loading}
-              onApplyPhotoSwatches={photo.applyPhotoSwatches}
-              onClearPhoto={photo.clearPhoto}
-              onLoadPhoto={photo.loadPhoto}
-              onUpdatePhotoGroup={photo.updatePhotoGroup}
-              photoStatus={photo.photoStatus}
-              photoSwatches={photo.photoSwatches}
-              photoUrl={photo.photoUrl}
-            />
-          )}
+          <SeasonSourceInputSection
+            bulkInput={bulkInput}
+            onAnalyze={applyBulkInput}
+            onBulkInputChange={setBulkInput}
+            onLoadSample={loadExample}
+            onQuickPaletteSelect={loadQuickPalette}
+            photo={photo}
+            sourceMode={sourceMode}
+            status={status}
+          />
 
           <ManualColorSection manualColor={manualColor} onAdd={addManualColor} onManualColorChange={setManualColor} />
 
