@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
 import { ArrowDownAZ, Check, Plus, Trash2 } from 'lucide-react';
 import { CopyButton } from '../components/CopyButton';
+import { DataTable } from '../components/DataTable';
+import type { DataTableColumn } from '../components/DataTable';
 import { TextInputField } from '../components/TextInputField';
 import { ActionBar, MetricsGrid } from '../components/ToolLayout';
 import type { ToolMetric } from '../components/ToolLayout';
@@ -47,6 +49,28 @@ function UrlTool() {
     setQueryRows(removeEmptyQueryRows);
   }
 
+  const queryColumns: Array<DataTableColumn<QueryRow>> = [
+    {
+      key: 'key',
+      header: 'Key',
+      cell: (row) => <input value={row.key} onChange={(event) => updateRow(row.id, 'key', event.target.value)} placeholder="key" />,
+    },
+    {
+      key: 'value',
+      header: 'Value',
+      cell: (row) => <input value={row.value} onChange={(event) => updateRow(row.id, 'value', event.target.value)} placeholder="value" />,
+    },
+    {
+      key: 'action',
+      header: 'Action',
+      cell: (row) => (
+        <button className="icon-button" type="button" onClick={() => removeRow(row.id)} title="Remove parameter">
+          <Trash2 size={15} />
+        </button>
+      ),
+    },
+  ];
+
   return (
     <section className="tool-surface">
       <ToolSection title="Input">
@@ -65,40 +89,7 @@ function UrlTool() {
         </div>
       </ToolSection>
       <ToolSection title="Query builder">
-        <div className="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Key</th>
-                <th>Value</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {queryRows.length === 0 ? (
-                <tr>
-                  <td colSpan={3}>No query parameters</td>
-                </tr>
-              ) : (
-                queryRows.map((row) => (
-                  <tr key={row.id}>
-                    <td>
-                      <input value={row.key} onChange={(event) => updateRow(row.id, 'key', event.target.value)} placeholder="key" />
-                    </td>
-                    <td>
-                      <input value={row.value} onChange={(event) => updateRow(row.id, 'value', event.target.value)} placeholder="value" />
-                    </td>
-                    <td>
-                      <button className="icon-button" type="button" onClick={() => removeRow(row.id)} title="Remove parameter">
-                        <Trash2 size={15} />
-                      </button>
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
+        <DataTable columns={queryColumns} rows={queryRows} getRowKey={(row) => row.id} emptyMessage="No query parameters" />
         <ActionBar>
           <ToolbarButton title="Add query parameter" variant="primary" onClick={addRow} disabled={!parsed.url}>
             <Plus size={16} />

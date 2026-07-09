@@ -1,6 +1,8 @@
 import { useMemo, useState } from 'react';
 import { Plus, ReceiptText, RotateCcw, Trash2 } from 'lucide-react';
 import { CopyButton } from '../components/CopyButton';
+import { DataTable } from '../components/DataTable';
+import type { DataTableColumn } from '../components/DataTable';
 import { SegmentedTabs } from '../components/SegmentedTabs';
 import { TextInputControls } from '../components/TextInputControls';
 import { ActionBar, MetricsGrid } from '../components/ToolLayout';
@@ -98,6 +100,37 @@ function ExpenseTool() {
     setParticipants(defaultParticipants);
   }
 
+  const participantColumns: Array<DataTableColumn<(typeof result.rows)[number]>> = [
+    {
+      key: 'name',
+      header: 'Name',
+      cell: (participant) => (
+        <input value={participant.name} onChange={(event) => updateParticipant(participant.id, 'name', event.target.value)} />
+      ),
+    },
+    {
+      key: 'shares',
+      header: 'Shares',
+      cell: (participant) => (
+        <input value={participant.shares} onChange={(event) => updateParticipant(participant.id, 'shares', event.target.value)} />
+      ),
+    },
+    {
+      key: 'amount',
+      header: 'Amount',
+      cell: (participant) => formatMoney(participant.amount, currency),
+    },
+    {
+      key: 'action',
+      header: 'Action',
+      cell: (participant) => (
+        <button className="icon-button" type="button" title="Remove person" onClick={() => removeParticipant(participant.id)} disabled={participants.length <= 1}>
+          <Trash2 size={15} />
+        </button>
+      ),
+    },
+  ];
+
   return (
     <section className="tool-surface">
       <SegmentedTabs ariaLabel="Split mode" options={splitModeOptions} value={mode} onChange={setMode} />
@@ -140,36 +173,7 @@ function ExpenseTool() {
           </ToolSection>
 
           <ToolSection title="People">
-            <div className="table-wrap">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Name</th>
-                    <th>Shares</th>
-                    <th>Amount</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {result.rows.map((participant) => (
-                    <tr key={participant.id}>
-                      <td>
-                        <input value={participant.name} onChange={(event) => updateParticipant(participant.id, 'name', event.target.value)} />
-                      </td>
-                      <td>
-                        <input value={participant.shares} onChange={(event) => updateParticipant(participant.id, 'shares', event.target.value)} />
-                      </td>
-                      <td>{formatMoney(participant.amount, currency)}</td>
-                      <td>
-                        <button className="icon-button" type="button" title="Remove person" onClick={() => removeParticipant(participant.id)} disabled={participants.length <= 1}>
-                          <Trash2 size={15} />
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+            <DataTable columns={participantColumns} rows={result.rows} getRowKey={(participant) => participant.id} />
             <ActionBar>
               <ToolbarButton title="Add person" variant="primary" onClick={addParticipant}>
                 <Plus size={16} />
